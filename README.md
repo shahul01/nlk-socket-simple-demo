@@ -3,8 +3,6 @@
 ## Socket demo created with React and Node
 
 
-<br /><br /><hr /><br /><br />
-
 ## To Run
   Use the following commands on these 2 folders.
 
@@ -21,5 +19,9 @@
   npm i
   npm run start
 ```
+
+## Screenshots
+### Home
+![home](/client/assets/screenshots/home.png)
 
 <br /><br /><hr /><br /><br />
