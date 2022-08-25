@@ -1,0 +1,1 @@
+export const consoleLine = '-'.repeat(process.stdout?.columns);
