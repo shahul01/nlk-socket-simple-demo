@@ -3,6 +3,7 @@ import { Server } from 'socket.io';
 import express from 'express';
 import http from 'http';
 import indexRouter from './routes/indexRoutes';
+import { socketEventsDict } from './helpers/socketEvents';
 import { consoleLine } from './helpers/misc';
 
 const app = express();
@@ -20,8 +21,9 @@ app.use(cors());
 app.use(indexRouter);
 
 
-io.on('connection', (socket) => {
+io.on(socketEventsDict['connection'], (socket) => {
   console.log(`socket.id: `, socket.id);
+  // socket.on(socketEventsDict[''], () => {});
 
 });
 
