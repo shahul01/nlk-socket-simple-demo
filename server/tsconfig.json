@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "es5",
     "module": "commonjs",
     "strict": true,
@@ -8,5 +9,17 @@
     // "noImplicitReturns": true,
     // "noFallthroughCasesInSwitch": true,
     "esModuleInterop": true,
-  }
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "types": [
+      "Node"
+    ],
+  },
+  "exclude": [
+    "node_modules",
+  ],
+  "include": [
+    "**/*.ts",
+    "**/*.js"
+  ]
 }
