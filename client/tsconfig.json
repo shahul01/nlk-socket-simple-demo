@@ -20,16 +20,16 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "paths": {
-      "@components": ["src/components/*"],
-      "@features": ["src/features/*"],
-      "@pages": ["src/pages/*"],
-      "@styles": ["src/styles/*"],
-      "@types": ["src/types/*"],
-    }
+    // "paths": {
+    //   "@components": ["src/components"],
+    //   "@features": ["src/features"],
+    //   "@pages": ["src/pages"],
+    //   "@styles": ["src/styles"],
+    //   "@types": ["src/types"],
+    // }
   },
   "include": [
     "src"
   ],
-  "extends": "./tsconfig.paths.json"
+  // "extends": "./tsconfig.paths.json"
 }

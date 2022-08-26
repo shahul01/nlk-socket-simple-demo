@@ -1,12 +1,21 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React from 'react';
+import Home from './pages/Home/Home';
+import Chat from './pages/Chat/Chat';
 import './styles/App.sass';
 
 const App = () => {
 
   return (
-    <h1 className='text-3xl font-bold underline'>
-      Hello World
-    </h1>
+    <>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={ <Home /> } />
+          <Route path="/chat" element={ <Chat /> } />
+
+        </Routes>
+      </BrowserRouter>
+    </>
   )
 
 };

@@ -23,5 +23,7 @@
 ## Screenshots
 ### Home
 ![home](/client/assets/screenshots/home.png)
+### Chat
+![chat](/client/assets/screenshots/chat.png)
 
 <br /><br /><hr /><br /><br />
