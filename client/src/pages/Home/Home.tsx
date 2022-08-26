@@ -1,11 +1,19 @@
+import { Link } from 'react-router-dom';
 import React from 'react';
 
-function Home() {
+const Home = () => {
   return (
-    <h1 className='text-3xl font-bold underline'>
-      Home 🙋‍♂️
-    </h1>
+    <div>
+      <h1 className='text-3xl font-bold'>
+        Home 🙋‍♂️
+      </h1>
+      <br /><hr /><br />
+      <Link to="/chat" className="underline text-violet-700">
+        Go to Chat
+      </Link>
+
+    </div>
   )
-}
+};
 
 export default Home;
