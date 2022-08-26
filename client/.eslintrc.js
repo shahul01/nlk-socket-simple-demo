@@ -23,6 +23,7 @@ module.exports = {
     '@typescript-eslint/no-unused-vars': ['off'],
     '@typescript-eslint/no-var-requires': 'off',
     '@typescript-eslint/no-empty-interface': 'off',
+    '@typescript-eslint/no-extra-semi': 'off',
     'react/prop-types': 'off',
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',

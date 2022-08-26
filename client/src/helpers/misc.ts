@@ -1,0 +1,1 @@
+export const uuid = () => Math.ceil(Math.random()*1000);
