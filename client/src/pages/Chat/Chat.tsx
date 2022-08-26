@@ -7,18 +7,18 @@ import { uuid } from '../../helpers/misc';
 import { ESocketEventsDict } from '../../types/global';
 
 interface IChatProps {
-  socket: Socket
+  socket: Socket;
 }
 
 const Chat: FC<IChatProps> = (props) => {
 
   const tempData:IMessageProps[] = [
-    // {
-    //   id: 1,
-    //   fromSelf: true,
-    //   username: 'Me',
-    //   messageText: 'Hello'
-    // },
+    {
+      id: 1,
+      fromSelf: true,
+      username: 'Me',
+      messageText: 'Hello'
+    },
     {
       id: 2,
       fromSelf: false,
@@ -26,18 +26,31 @@ const Chat: FC<IChatProps> = (props) => {
       messageText: 'Hi'
     }
   ];
-  const [messageList, setMessageList] = useState<IMessageProps[]>(tempData);
-  // const [ newMessageText, setNewMessageText ] = useState('');
 
+  const [messageList, setMessageList] = useState<IMessageProps[]>([]);
+
+  // @ts-expect-error: err
   useEffect(() => {
+    let messageDataHolder:IMessageProps = {
+      id: uuid(),
+      fromSelf: false,
+      username : '',
+      messageText : ''
+    };
+
+    const handleServerMessageEvent = () => {
+      handleAddMessageToList(false, messageDataHolder);
+    };
+
     props.socket.on(ESocketEventsDict['serverMessage'], (message) => {
-      console.log('message from Server :>> ', message);
-      handleAddMessageToList(false, message)
+      messageDataHolder = message;
+      handleServerMessageEvent();
     });
 
-    // return () => Socket.off(ESocketEventsDict['serverMessage', handleAddMessageToList()]);
+    // @ts-expect-error: err
+    return () => props.socket.off('serverMessage', handleServerMessageEvent())
 
-  }, [props.socket]);
+  }, []);
 
   function getMessageData(fromSelf:boolean, data:string|IMessageProps):IMessageProps {
 
@@ -74,7 +87,7 @@ const Chat: FC<IChatProps> = (props) => {
 
   };
 
-  function handleAddMessageToList(fromSelf:boolean, data:string|IMessageProps) {
+  function handleAddMessageToList(fromSelf:boolean, data:IMessageProps|string):void {
 
     const newMessageData = getMessageData(fromSelf, data);
 
@@ -82,7 +95,10 @@ const Chat: FC<IChatProps> = (props) => {
 
     if (dataNotEmpty) {
       setMessageList(prev => [...prev, newMessageData]);
+      console.log('messageList handleAddMessageToList', messageList);
     };
+
+    return;
 
   };
 
