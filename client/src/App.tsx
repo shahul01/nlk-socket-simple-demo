@@ -4,9 +4,6 @@ import Home from './pages/Home/Home';
 import Chat from './pages/Chat/Chat';
 import './styles/App.sass';
 
-// interface ISocket extends Socket {
-// }
-
 const port = 'http://localhost:8000';
 const socket: Socket = io(port);
 

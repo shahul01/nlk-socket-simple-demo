@@ -32,24 +32,58 @@ const Chat: FC<IChatProps> = (props) => {
   useEffect(() => {
     props.socket.on(ESocketEventsDict['serverMessage'], (message) => {
       console.log('message from Server :>> ', message);
-    })
+      handleAddMessageToList(false, message)
+    });
+
+    // return () => Socket.off(ESocketEventsDict['serverMessage', handleAddMessageToList()]);
+
   }, [props.socket]);
 
-  function newMessageData(messageText:string):IMessageProps {
+  function getMessageData(fromSelf:boolean, data:string|IMessageProps):IMessageProps {
 
-    return {
+    let messageData = {
       id: uuid(),
       fromSelf: true,
-      username: 'Sh',
-      messageText: messageText
+      username : '',
+      messageText : ''
     };
+
+    if (fromSelf && typeof(data) === 'string') {
+
+      messageData = {
+        id: uuid(),
+        fromSelf: fromSelf,
+        username: 'Sh',
+        messageText: data
+
+      };
+
+    } else if (typeof(data) === 'object' && 'id' in data) {
+
+      messageData = {
+        id: data.id,
+        fromSelf: data.fromSelf,
+        username: data.username,
+        messageText: data.messageText
+
+      }
+
+    };
+
+    return messageData;
 
   };
 
-  function handleAddMessageToList(messageText:string) {
-    console.log('handleAddMessageToList messageText', messageText);
-    const newData = newMessageData(messageText);
-    setMessageList(prev => [...prev, newData]);
+  function handleAddMessageToList(fromSelf:boolean, data:string|IMessageProps) {
+
+    const newMessageData = getMessageData(fromSelf, data);
+
+    const dataNotEmpty = Object.keys(newMessageData)?.length;
+
+    if (dataNotEmpty) {
+      setMessageList(prev => [...prev, newMessageData]);
+    };
+
   };
 
   return (
@@ -58,9 +92,7 @@ const Chat: FC<IChatProps> = (props) => {
       <br /><hr /><br />
       <Messages messageList={messageList} />
       <InputBtn
-        // newMessageText={newMessageText}
-        // setNewMessageText={setNewMessageText}
-        onNewMessage={handleAddMessageToList}
+        onNewMessage={(messageText)=>handleAddMessageToList(true, messageText)}
       />
     </div>
   )

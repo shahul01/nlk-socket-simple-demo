@@ -35,6 +35,14 @@ app.use(indexRouter);
 io.on(ESocketEventsDict['connection'], (socket) => {
   console.log(`Connected: `, socket.id);
 
+  // COMMT: to test
+  socket.emit('serverMessage', {
+    id: 892,
+    fromSelf: false,
+    username: 'server',
+    messageText: 'Hello from socket'
+  });
+
 
   // COMMT: Emit back serverMessage
   socket.on(
@@ -43,7 +51,7 @@ io.on(ESocketEventsDict['connection'], (socket) => {
 
       const serverMessageData = {
         id: data?.id,
-        message: data?.message
+        messageText: data?.messageText
       };
 
       socket.emit(
