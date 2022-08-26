@@ -1,10 +1,13 @@
+import { Socket } from 'socket.io-client';
 import { FC, useEffect, useState } from 'react';
 import InputBtn from '../../components/InputBtn/InputBtn';
 import Messages from '../../components/Messages/Messages';
 import { IMessageProps } from '../../components/Message/Message';
 import { uuid } from '../../helpers/misc';
+import { ESocketEventsDict } from '../../types/global';
 
 interface IChatProps {
+  socket: Socket
 }
 
 const Chat: FC<IChatProps> = (props) => {
@@ -25,6 +28,12 @@ const Chat: FC<IChatProps> = (props) => {
   ];
   const [messageList, setMessageList] = useState<IMessageProps[]>(tempData);
   // const [ newMessageText, setNewMessageText ] = useState('');
+
+  useEffect(() => {
+    props.socket.on(ESocketEventsDict['serverMessage'], (message) => {
+      console.log('message from Server :>> ', message);
+    })
+  }, [props.socket]);
 
   function newMessageData(messageText:string):IMessageProps {
 
