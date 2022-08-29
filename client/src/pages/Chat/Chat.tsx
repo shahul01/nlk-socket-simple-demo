@@ -29,7 +29,6 @@ const Chat: FC<IChatProps> = (props) => {
 
   const [messageList, setMessageList] = useState<IMessageProps[]>([]);
 
-  // @ts-expect-error: err
   useEffect(() => {
     let messageDataHolder:IMessageProps = {
       id: uuid(),
@@ -39,16 +38,19 @@ const Chat: FC<IChatProps> = (props) => {
     };
 
     const handleServerMessageEvent = () => {
-      handleAddMessageToList(false, messageDataHolder);
+      return handleAddMessageToList(false, messageDataHolder);
     };
 
     props.socket.on(ESocketEventsDict['serverMessage'], (message) => {
+      if (message.fromSelf) return console.log('returns');
       messageDataHolder = message;
-      handleServerMessageEvent();
+      return handleServerMessageEvent();
     });
 
-    // @ts-expect-error: err
-    return () => props.socket.off('serverMessage', handleServerMessageEvent())
+    return () => {
+      // @ts-expect-error: useEffect return type clashes with socket type
+      props.socket.off(ESocketEventsDict['serverMessage'], handleServerMessageEvent())
+    };
 
   }, []);
 
@@ -79,7 +81,7 @@ const Chat: FC<IChatProps> = (props) => {
         username: data.username,
         messageText: data.messageText
 
-      }
+      };
 
     };
 
@@ -90,13 +92,25 @@ const Chat: FC<IChatProps> = (props) => {
   function handleAddMessageToList(fromSelf:boolean, data:IMessageProps|string):void {
 
     const newMessageData = getMessageData(fromSelf, data);
+    console.log('newMessageData', newMessageData);
 
     const dataNotEmpty = Object.keys(newMessageData)?.length;
 
     if (dataNotEmpty) {
       setMessageList(prev => [...prev, newMessageData]);
-      console.log('messageList handleAddMessageToList', messageList);
     };
+
+    // COMMT: send to server and other clients and get its sent status
+    if (dataNotEmpty && fromSelf) {
+      props.socket.emit(
+        ESocketEventsDict['clientMessage'],
+        newMessageData,
+        (err:string) => {
+          if (err) console.error('Error :>> ', err)
+        }
+      )
+    };
+
 
     return;
 

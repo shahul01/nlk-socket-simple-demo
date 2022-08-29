@@ -16,7 +16,7 @@ const Message: FC<IMessageProps> = (props) => {
           {props.messageText}
         </div>
       ) : (
-        <div className='from-others text-green-600'>
+        <div className='from-others text-pink-600'>
           {props.messageText}
         </div>
       )}

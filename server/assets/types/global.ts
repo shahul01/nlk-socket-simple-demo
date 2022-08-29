@@ -14,5 +14,7 @@ export enum ESocketEventsDict {
 
 export interface IServerMessageData {
   id: number;
+  fromSelf: boolean;
+  username: string;
   messageText: string;
 }

@@ -40,26 +40,36 @@ io.on(ESocketEventsDict['connection'], (socket) => {
     id: 892,
     fromSelf: false,
     username: 'server',
-    messageText: 'Hello from socket'
+    messageText: 'Welcome!'
   });
 
 
-  // COMMT: Emit back serverMessage
+  // COMMT: Emit back clientMessage to other clients
   socket.on(
     ESocketEventsDict['clientMessage'],
-    ( data: IServerMessageData, callback: () => void ) => {
+    ( data: IServerMessageData, callback: (arg:string|null)=>void ) => {
 
       const serverMessageData = {
         id: data?.id,
+        fromSelf: false,
+        username: data?.username,
         messageText: data?.messageText
       };
 
-      socket.emit(
-        ESocketEventsDict['serverMessage'],
-        serverMessageData
-      );
+      try {
+        socket.broadcast.emit(
+          ESocketEventsDict['serverMessage'],
+          serverMessageData
+        );
 
-      callback();
+        console.log(`serverMessageData: `, serverMessageData);
+
+        callback(null);
+      } catch (err) {
+        console.log(`Error: `, err);
+        callback(JSON?.stringify(err));
+      };
+
 
   });
 
