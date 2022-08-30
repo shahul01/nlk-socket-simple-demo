@@ -1,0 +1,58 @@
+@use 'variables.scss' as *;
+@use 'maps.scss' as *;
+
+@forward 'variables.scss';
+@forward 'maps.scss';
+
+
+h1 {
+  color: $color;
+}
+
+// COMMT: flexbox basic
+@function get-flex($str) {
+  $str-part-1: '';
+  $str-part-2: '';
+  $str-part-3: '';
+
+  $idx: str-index($str, '_');
+
+  @while $idx != null {
+
+    $str-part-1: str-slice($str, 1, $idx - 1);
+    $new-str: str-slice($str, $idx+1, str-length($str));
+    $new-idx: str-index($new-str, '_');
+    $str-part-2: str-slice($new-str, 1, $new-idx - 1);
+    $str-part-3: str-slice($new-str, $new-idx + 1, str-length($new-str));
+
+    @return $str-part-1, $str-part-2, $str-part-3;
+  }
+  @return ($str-part-1, $str-part-2, $str-part-3);
+}
+
+@mixin use-flex($str) {
+  $curr-flex-list: get-flex($str);
+  display: #{nth($curr-flex-list, 1)};
+  justify-content: #{nth($curr-flex-list, 2)};
+  align-items: flex-#{nth($curr-flex-list, 3)};
+}
+
+// COMMT:
+// loop through flex-key-map
+// use get-flex() on each key as str param
+// output them as each css scope
+// use them in style class
+@each $str in $flex-key-map {
+
+  $curr-flex-list: get-flex($str);
+
+  .#{$str} {
+    display: #{nth($curr-flex-list, 1)};
+    justify-content: #{nth($curr-flex-list, 2)};
+    align-items: flex-#{nth($curr-flex-list, 3)};
+  }
+
+}
+
+
+

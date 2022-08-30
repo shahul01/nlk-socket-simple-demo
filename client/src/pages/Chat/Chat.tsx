@@ -5,6 +5,7 @@ import Messages from '../../components/Messages/Messages';
 import { IMessageProps } from '../../components/Message/Message';
 import { uuid } from '../../helpers/misc';
 import { ESocketEventsDict } from '../../types/global';
+import './Chat.scss';
 
 interface IChatProps {
   socket: Socket;
@@ -120,10 +121,12 @@ const Chat: FC<IChatProps> = (props) => {
     <div>
       <p>Chat</p>
       <br /><hr /><br />
-      <Messages messageList={messageList} />
-      <InputBtn
-        onNewMessage={(messageText)=>handleAddMessageToList(true, messageText)}
-      />
+      <div className='messages-input-container'>
+        <Messages messageList={messageList} />
+        <InputBtn
+          onNewMessage={(messageText)=>handleAddMessageToList(true, messageText)}
+        />
+      </div>
     </div>
   )
 };

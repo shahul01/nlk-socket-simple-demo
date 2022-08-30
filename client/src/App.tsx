@@ -2,7 +2,7 @@ import io, { Socket } from 'socket.io-client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Home from './pages/Home/Home';
 import Chat from './pages/Chat/Chat';
-import './styles/App.sass';
+import './styles/App.scss';
 
 const port = 'http://localhost:8000';
 const socket: Socket = io(port);
