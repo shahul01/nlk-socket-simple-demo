@@ -9,7 +9,11 @@ h1 {
   color: $color;
 }
 
-// COMMT: flexbox basic
+/*
+ * ### Flex Box ###
+*/
+
+// COMMT: To be used with @mixin use-flex
 @function get-flex($str) {
   $str-part-1: '';
   $str-part-2: '';
@@ -30,6 +34,7 @@ h1 {
   @return ($str-part-1, $str-part-2, $str-part-3);
 }
 
+// COMMT: To be used directly on .scss with @include or via @each loop
 @mixin use-flex($str) {
   $curr-flex-list: get-flex($str);
   display: #{nth($curr-flex-list, 1)};
@@ -39,17 +44,14 @@ h1 {
 
 // COMMT:
 // loop through flex-key-map
-// use get-flex() on each key as str param
-// output them as each css scope
-// use them in style class
+// use @mixin get-flex() on each key, with key as str param
+// output them as css class
+// use them in style class with tailwind @apply or directly on .tsx classNames
+
 @each $str in $flex-key-map {
 
-  $curr-flex-list: get-flex($str);
-
   .#{$str} {
-    display: #{nth($curr-flex-list, 1)};
-    justify-content: #{nth($curr-flex-list, 2)};
-    align-items: flex-#{nth($curr-flex-list, 3)};
+    @include use-flex($str);
   }
 
 }
