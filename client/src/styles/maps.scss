@@ -1,5 +1,8 @@
-$flex-key-map: (
+$flex_key_map: (
   'flex_left_start', 'flex_left_center', 'flex_left_end',
-  'flex_center_center', 'flex_center_start', 'flex_center_end',
-  'flex_right_end', 'flex_right_start', 'flex_right_center'
+  'flex_center_start', 'flex_center_center', 'flex_center_end',
+  'flex_right_start', 'flex_right_center', 'flex_right_end',
+  'flex_space-between_start', 'flex_space-between_center', 'flex_space-between_end',
+  'flex_space-around_start', 'flex_space-around_center', 'flex_space-around_end',
+  'flex_space-evenly_start', 'flex_space-evenly_center', 'flex_space-evenly_end'
 );

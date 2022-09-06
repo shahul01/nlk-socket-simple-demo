@@ -1,4 +1,5 @@
 import { FC, useEffect, useState } from 'react';
+import styles from './InputBtn.module.scss';
 
 interface IInputBtnProps {
   onNewMessage: (e:string) => void;
@@ -14,7 +15,7 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
   };
 
   return (
-    <div className='flex justify-center align-middle'>
+    <div className={styles['input-btn-container']}>
       <input
         type="text"
         value={newMessageText}

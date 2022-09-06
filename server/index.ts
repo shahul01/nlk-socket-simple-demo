@@ -57,6 +57,8 @@ io.on(ESocketEventsDict['connection'], (socket) => {
       };
 
       try {
+
+        // io.to(user.room).emit
         socket.broadcast.emit(
           ESocketEventsDict['serverMessage'],
           serverMessageData

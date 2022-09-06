@@ -26,6 +26,7 @@ h1 {
     $str-part-1: str-slice($str, 1, $idx - 1);
     $new-str: str-slice($str, $idx+1, str-length($str));
     $new-idx: str-index($new-str, '_');
+
     $str-part-2: str-slice($new-str, 1, $new-idx - 1);
     $str-part-3: str-slice($new-str, $new-idx + 1, str-length($new-str));
 
@@ -46,7 +47,7 @@ h1 {
 // loop through flex-key-map
 // use @mixin get-flex() on each key, with key as str param
 // output them as css class
-// use them in style class with tailwind @apply or directly on .tsx classNames
+// use them in style class with tailwind @apply OR directly on .tsx classNames
 
 @each $str in $flex-key-map {
 
@@ -55,6 +56,3 @@ h1 {
   }
 
 }
-
-
-

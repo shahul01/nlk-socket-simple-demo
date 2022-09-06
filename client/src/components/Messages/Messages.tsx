@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import Message, { IMessageProps } from '../Message/Message';
+import styles from './Messages.module.scss';
 
 interface IMessagesProps {
   messageList: IMessageProps[]
@@ -8,7 +9,7 @@ interface IMessagesProps {
 const Messages: FC<IMessagesProps> = (props) => {
 
   return (
-    <div>
+    <div className={styles['messages-container']}>
       {props.messageList?.map(currList => (
         <div key={currList.id}>
           <Message
