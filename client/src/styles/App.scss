@@ -40,7 +40,13 @@ h1 {
   $curr-flex-list: get-flex($str);
   display: #{nth($curr-flex-list, 1)};
   justify-content: #{nth($curr-flex-list, 2)};
-  align-items: flex-#{nth($curr-flex-list, 3)};
+  $item: nth($curr-flex-list, 3);
+  @debug "$item: #{$item}";
+  @if $item == center {
+    align-items: #{$item};
+  } @else {
+    align-items: flex-#{$item};
+  }
 }
 
 // COMMT:

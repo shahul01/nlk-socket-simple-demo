@@ -1,3 +1,4 @@
 .messages-container {
-  height: 55%;
+  // height: 55%;
+  @apply overflow-auto;
 }

@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io-client';
-import { FC, useEffect, useState } from 'react';
+import { FC, useEffect, useRef, useState } from 'react';
 import InputBtn from '../../components/InputBtn/InputBtn';
 import Messages from '../../components/Messages/Messages';
 import { IMessageProps } from '../../components/Message/Message';
@@ -28,8 +28,11 @@ const Chat: FC<IChatProps> = (props) => {
     }
   ];
 
-  const [messageList, setMessageList] = useState<IMessageProps[]>([]);
+  const [ messageList, setMessageList ] = useState<IMessageProps[]>([]);
+  const [ onNewMessage, setOnNewMessage ] = useState(0);
 
+  // COMMT: Listen to socket and send new messages from the sent client to non sent client's messageList
+  // COMMT: - via handleAddMessageToList()
   useEffect(() => {
     let messageDataHolder:IMessageProps = {
       id: uuid(),
@@ -39,11 +42,11 @@ const Chat: FC<IChatProps> = (props) => {
     };
 
     const handleServerMessageEvent = () => {
-      return handleAddMessageToList(false, messageDataHolder);
+      return handleAddMessageToList(messageDataHolder.fromSelf, messageDataHolder);
     };
 
     props.socket.on(ESocketEventsDict['serverMessage'], (message) => {
-      if (message.fromSelf) return console.log('returns');
+      if (message.fromSelf) return console.log('Client message directly added already.');
       messageDataHolder = message;
       return handleServerMessageEvent();
     });
@@ -90,6 +93,7 @@ const Chat: FC<IChatProps> = (props) => {
 
   };
 
+  // COMMT: get text from sent client and socket to add to messageList
   function handleAddMessageToList(fromSelf:boolean, data:IMessageProps|string):void {
 
     const newMessageData = getMessageData(fromSelf, data);
@@ -112,6 +116,7 @@ const Chat: FC<IChatProps> = (props) => {
       )
     };
 
+    setOnNewMessage(prev => prev+1);
 
     return;
 
@@ -122,7 +127,7 @@ const Chat: FC<IChatProps> = (props) => {
       <p>Chat</p>
       <br /><hr /><br />
       <div className='messages-input-container'>
-        <Messages messageList={messageList} />
+        <Messages messageList={messageList} onNewMessage={onNewMessage} />
         <InputBtn
           onNewMessage={(messageText)=>handleAddMessageToList(true, messageText)}
         />
