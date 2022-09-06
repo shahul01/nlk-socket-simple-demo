@@ -13,11 +13,11 @@ const Message: FC<IMessageProps> = (props) => {
   return (
     <div className={styles['message-container']}>
       {props.fromSelf ? (
-        <div className='from-self text-blue-600'>
+        <div className={styles['from-self']}>
           {props.messageText}
         </div>
       ) : (
-        <div className='from-others text-pink-600'>
+        <div className={styles['from-others']}>
           {props.messageText}
         </div>
       )}

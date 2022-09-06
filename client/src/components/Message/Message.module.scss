@@ -1,4 +1,20 @@
 .message-container {
   @apply m-2;
+}
 
+@mixin text {
+  @apply rounded-md;
+  @apply py-2 px-4;
+}
+
+.from-self {
+  @include text;
+  @apply ml-16;
+  @apply text-slate-100 bg-blue-500;
+}
+
+.from-others{
+  @include text;
+  @apply mr-16;
+  @apply text-slate-100 bg-pink-500;
 }

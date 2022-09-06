@@ -99,6 +99,9 @@ const Chat: FC<IChatProps> = (props) => {
     const newMessageData = getMessageData(fromSelf, data);
     console.log('newMessageData', newMessageData);
 
+
+    if (newMessageData.messageText === '') return;
+
     const dataNotEmpty = Object.keys(newMessageData)?.length;
 
     if (dataNotEmpty) {
