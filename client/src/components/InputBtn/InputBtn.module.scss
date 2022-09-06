@@ -1,5 +1,35 @@
 @use '../../styles/App.scss';
 
 .input-btn-container {
-  @apply flex_center_center;
+  @apply flex_space-between_center;
+  // @apply p-2;
+  width: 100%;
+}
+
+@mixin input-btn {
+  @apply p-2;
+}
+
+.input-btn-container > input {
+  @include input-btn;
+  background-color: #ddd;
+}
+
+.input-btn-container > input:hover,
+.input-btn-container > input:focus
+{
+  outline: none;
+}
+
+.input-btn-container > button {
+  @include input-btn;
+  width: 100%;
+  background-color: #ddd;
+  @apply border border-l-gray-400;
+}
+
+.input-btn-container > button:hover,
+.input-btn-container > button:focus
+{
+  outline: none;
 }

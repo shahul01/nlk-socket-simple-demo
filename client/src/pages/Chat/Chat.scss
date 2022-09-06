@@ -5,12 +5,12 @@
   // @include use-flex('flex_left_start');
 
   // COMMT: using tailwind @apply on sass loop + mixin;
-  @apply flex_space-between_start;
+  @apply flex_space-between_start; // tailwind + sass
 
-  flex-direction: column;
+  @apply mx-4;
+  flex-direction: column; // raw css
   // height: 100vh;
   height: 34rem;
   width: 17rem;
   @apply border border-sky-800;
-
 }
