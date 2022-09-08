@@ -1,4 +1,6 @@
 // ### Socket  ###
+export type TFrom = 'self' | 'others' | 'admin';
+
 export enum ESocketEventsDict {
   "connection" = "connection",
   "joinRoom" = "joinRoom",
@@ -14,7 +16,7 @@ export enum ESocketEventsDict {
 
 export interface IServerMessageData {
   id: number;
-  fromSelf: boolean;
+  from: TFrom;
   username: string;
   messageText: string;
 }

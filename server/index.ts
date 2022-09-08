@@ -38,7 +38,7 @@ io.on(ESocketEventsDict['connection'], (socket) => {
   // COMMT: to test
   socket.emit('serverMessage', {
     id: 892,
-    fromSelf: false,
+    from: 'others', // admin
     username: 'server',
     messageText: 'Welcome!'
   });
@@ -51,8 +51,7 @@ io.on(ESocketEventsDict['connection'], (socket) => {
 
       const serverMessageData = {
         id: data?.id,
-        fromSelf: false,
-        // from: self | others | server/admin
+        from: 'others',
         username: data?.username,
         messageText: data?.messageText
       };

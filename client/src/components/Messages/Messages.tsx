@@ -1,9 +1,10 @@
 import { FC, useLayoutEffect, useEffect, useRef, useState } from 'react';
-import Message, { IMessageProps } from '../Message/Message';
+import Message from '../Message/Message';
+import { IClientMessageData } from '../../types/global';
 import styles from './Messages.module.scss';
 
 interface IMessagesProps {
-  messageList: IMessageProps[];
+  messageList: IClientMessageData[];
   onNewMessage: number;
 }
 
@@ -34,7 +35,7 @@ const Messages: FC<IMessagesProps> = (props) => {
         <div className={styles['message-parent-container']} key={currList?.id}>
           <Message
             id={currList?.id}
-            fromSelf={currList?.fromSelf}
+            from={currList?.from}
             username={currList?.username}
             messageText={currList?.messageText}
           />

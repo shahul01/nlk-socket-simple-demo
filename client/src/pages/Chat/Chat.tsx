@@ -2,9 +2,8 @@ import { Socket } from 'socket.io-client';
 import { FC, useEffect, useRef, useState } from 'react';
 import InputBtn from '../../components/InputBtn/InputBtn';
 import Messages from '../../components/Messages/Messages';
-import { IMessageProps } from '../../components/Message/Message';
 import { uuid } from '../../helpers/misc';
-import { ESocketEventsDict } from '../../types/global';
+import { ESocketEventsDict, IClientMessageData, TFrom } from '../../types/global';
 import './Chat.scss';
 
 interface IChatProps {
@@ -13,65 +12,65 @@ interface IChatProps {
 
 const Chat: FC<IChatProps> = (props) => {
 
-  const tempData:IMessageProps[] = [
+  const tempData:IClientMessageData[] = [
     {
       id: 1,
-      fromSelf: true,
+      from: 'self',
       username: 'Me',
       messageText: 'Hello'
     },
     {
       id: 2,
-      fromSelf: false,
+      from: 'others',
       username: 'Others1',
       messageText: 'Hi'
     }
   ];
 
-  const [ messageList, setMessageList ] = useState<IMessageProps[]>([]);
+  const [ messageList, setMessageList ] = useState<IClientMessageData[]>([]);
   const [ onNewMessage, setOnNewMessage ] = useState(0);
 
   // COMMT: Listen to socket and send new messages from the sent client to non sent client's messageList
   // COMMT: - via handleAddMessageToList()
   useEffect(() => {
-    let messageDataHolder:IMessageProps = {
+    let messageDataHolder:IClientMessageData = {
       id: uuid(),
-      fromSelf: false,
+      from: 'others',
       username : '',
       messageText : ''
     };
 
     const handleServerMessageEvent = () => {
-      return handleAddMessageToList(messageDataHolder.fromSelf, messageDataHolder);
+      return handleAddMessageToList(messageDataHolder.from, messageDataHolder);
     };
 
     props.socket.on(ESocketEventsDict['serverMessage'], (message) => {
-      if (message.fromSelf) return console.log('Client message directly added already.');
+      if (message.from === 'self') return console.log('Client message directly added already.');
       messageDataHolder = message;
       return handleServerMessageEvent();
     });
 
     return () => {
       // @ts-expect-error: useEffect return type clashes with socket type
-      props.socket.off(ESocketEventsDict['serverMessage'], handleServerMessageEvent())
+      props.socket?.off(ESocketEventsDict['serverMessage'], handleServerMessageEvent())
     };
 
   }, []);
 
-  function getMessageData(fromSelf:boolean, data:string|IMessageProps):IMessageProps {
+  function getMessageData(from:TFrom, data:string|IClientMessageData):IClientMessageData {
 
-    let messageData = {
+    let messageData: IClientMessageData = {
       id: uuid(),
-      fromSelf: true,
+      from: 'self',
       username : '',
       messageText : ''
     };
 
-    if (fromSelf && typeof(data) === 'string') {
+    if (from === 'self' && typeof(data) === 'string') {
 
       messageData = {
         id: uuid(),
-        fromSelf: fromSelf,
+        from: from,
         username: 'Sh',
         messageText: data
 
@@ -81,7 +80,7 @@ const Chat: FC<IChatProps> = (props) => {
 
       messageData = {
         id: data.id,
-        fromSelf: data.fromSelf,
+        from: data.from,
         username: data.username,
         messageText: data.messageText
 
@@ -94,9 +93,9 @@ const Chat: FC<IChatProps> = (props) => {
   };
 
   // COMMT: get text from sent client and socket to add to messageList
-  function handleAddMessageToList(fromSelf:boolean, data:IMessageProps|string):void {
+  function handleAddMessageToList(from:TFrom, data:IClientMessageData|string):void {
 
-    const newMessageData = getMessageData(fromSelf, data);
+    const newMessageData = getMessageData(from, data);
     console.log('newMessageData', newMessageData);
 
 
@@ -109,7 +108,7 @@ const Chat: FC<IChatProps> = (props) => {
     };
 
     // COMMT: send to server and other clients and get its sent status
-    if (dataNotEmpty && fromSelf) {
+    if (dataNotEmpty && from === 'self') {
       props.socket.emit(
         ESocketEventsDict['clientMessage'],
         newMessageData,
@@ -132,7 +131,7 @@ const Chat: FC<IChatProps> = (props) => {
       <div className='messages-input-container'>
         <Messages messageList={messageList} onNewMessage={onNewMessage} />
         <InputBtn
-          onNewMessage={(messageText)=>handleAddMessageToList(true, messageText)}
+          onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
         />
       </div>
     </div>
