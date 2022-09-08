@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "socket.io client",
   "main": "./src/index.ts",
+  "private": true,
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",

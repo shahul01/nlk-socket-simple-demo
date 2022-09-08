@@ -52,6 +52,7 @@ io.on(ESocketEventsDict['connection'], (socket) => {
       const serverMessageData = {
         id: data?.id,
         fromSelf: false,
+        // from: self | others | server/admin
         username: data?.username,
         messageText: data?.messageText
       };

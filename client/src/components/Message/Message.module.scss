@@ -3,8 +3,9 @@
 }
 
 @mixin text {
-  @apply rounded-md;
   @apply py-2 px-4;
+  word-wrap: break-word;
+  @apply rounded-md;
 }
 
 .from-self {
