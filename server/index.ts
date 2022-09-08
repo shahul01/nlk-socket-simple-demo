@@ -35,14 +35,14 @@ app.use(indexRouter);
 io.on(ESocketEventsDict['connection'], (socket) => {
   console.log(`Connected: `, socket.id);
 
-  // COMMT: to test
   socket.emit('serverMessage', {
-    id: 892,
+    id: 123456, // TODO: string and uuid with num+string
     from: 'admin',
-    username: 'server',
+    username: 'admin',
     messageText: 'Welcome!'
   });
 
+  // COMMT:
 
   // COMMT: Emit back clientMessage to other clients
   socket.on(
@@ -73,7 +73,8 @@ io.on(ESocketEventsDict['connection'], (socket) => {
       };
 
 
-  });
+    }
+  );
 
 });
 

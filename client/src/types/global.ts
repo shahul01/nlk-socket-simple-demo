@@ -1,6 +1,7 @@
 // ### Socket  ###
 export type TFrom = 'self' | 'others' | 'admin';
 
+// COMMT: enum for autocomplete
 export enum ESocketEventsDict {
   "connection" = "connection",
   "joinRoom" = "joinRoom",

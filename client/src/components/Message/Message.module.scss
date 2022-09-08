@@ -9,9 +9,9 @@
 }
 
 .from-admin {
-  @include text;
-  text-align: center;
-  @apply text-slate-100 bg-gray-500;
+  @include text; // sass
+  text-align: center; // raw css
+  @apply text-slate-100 bg-gray-500; // tailwind
 }
 
 .from-self {
