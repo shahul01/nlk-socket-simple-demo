@@ -6,15 +6,19 @@ const Message: FC<IClientMessageData> = (props) => {
 
   return (
     <div className={styles['message-container']}>
-      {props.from === 'self' ? (
+      {props.from === 'admin' ? (
+        <div className={styles['from-admin']}>
+          {props.messageText}
+        </div>
+      ) : props.from === 'self' ? (
         <div className={styles['from-self']}>
           {props.messageText}
         </div>
-      ) : props.from === 'others' ? (
+      ) : (
         <div className={styles['from-others']}>
           {props.messageText}
         </div>
-      ) : ''}
+      )}
     </div>
   )
 };

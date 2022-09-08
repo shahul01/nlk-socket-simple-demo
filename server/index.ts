@@ -38,7 +38,7 @@ io.on(ESocketEventsDict['connection'], (socket) => {
   // COMMT: to test
   socket.emit('serverMessage', {
     id: 892,
-    from: 'others', // admin
+    from: 'admin',
     username: 'server',
     messageText: 'Welcome!'
   });
