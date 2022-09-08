@@ -35,8 +35,8 @@ app.use(indexRouter);
 io.on(ESocketEventsDict['connection'], (socket) => {
   console.log(`Connected: `, socket.id);
 
-  socket.emit('serverMessage', {
-    id: 123456, // TODO: string and uuid with num+string
+  socket.emit(ESocketEventsDict['serverMessage'], {
+    id: 123456, // TODO: string type and uuid with num+string
     from: 'admin',
     username: 'admin',
     messageText: 'Welcome!'

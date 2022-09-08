@@ -15,6 +15,12 @@ export enum ESocketEventsDict {
   "reconnect" = "reconnect"
 }
 
+export interface IUser {
+  id: string;
+  name: string;
+  room: string;
+}
+
 export interface IServerMessageData {
   id: number;
   from: TFrom;
