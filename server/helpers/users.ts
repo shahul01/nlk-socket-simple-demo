@@ -3,7 +3,7 @@ import { IUser } from "assets/types/global";
 const users: IUser[] = [];
 
 
-const addUser = ({ id, name, room }: IUser) => {
+export const addUser = ({ id, name, room }: IUser) => {
   name = name.trim().toLowerCase();
   room = room.trim().toLowerCase();
 

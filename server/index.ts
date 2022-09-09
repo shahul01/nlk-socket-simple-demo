@@ -3,6 +3,9 @@
  *
  *  Basic:
  *    Client message → Server → Server message → All clients
+ *
+ *  Events Added: joinRoom, clientMessage
+ *
 */
 
 
@@ -12,9 +15,10 @@ import { Server } from 'socket.io';
 import express from 'express';
 import http from 'http';
 import indexRouter from './routes/indexRoutes';
+import { addUser } from './helpers/users';
 // import { socketEventsDict } from './helpers/socketEvents';
-import { consoleLine } from './helpers/misc';
-import { ESocketEventsDict, IServerMessageData } from './assets/types/global';
+import { consoleLine, uuid } from './helpers/misc';
+import { ESocketEventsDict, IUser, IServerMessageData } from './assets/types/global';
 
 // COMMT: Setup
 const app = express();
@@ -35,14 +39,51 @@ app.use(indexRouter);
 io.on(ESocketEventsDict['connection'], (socket) => {
   console.log(`Connected: `, socket.id);
 
-  socket.emit(ESocketEventsDict['serverMessage'], {
-    id: 123456, // TODO: string type and uuid with num+string
-    from: 'admin',
-    username: 'admin',
-    messageText: 'Welcome!'
-  });
+  // socket.emit(ESocketEventsDict['serverMessage'], {
+  //   id: 123456, // TODO: string type and uuid with num+string
+  //   from: 'admin',
+  //   username: 'admin',
+  //   messageText: 'Welcome!'
+  // });
 
-  // COMMT:
+  // COMMT: Emit this whenever a user joins
+  socket.on(
+    ESocketEventsDict['joinRoom'],
+    ({ name, room }: IUser, callback: (arg:string|null)=>void) => {
+
+      try {
+        const { error, user } = addUser({ id: socket?.id, name, room });
+
+        if (error) return callback(error);
+
+        // COMMT: Important code
+        socket.join(user?.room);
+
+        socket.emit(ESocketEventsDict['serverMessage'], {
+          id: uuid(), // TODO: string type and uuid with num+string
+          from: 'admin',
+          username: 'admin',
+          messageText: `Welcome to ${user?.room} room, user ${user?.name}`
+        });
+
+        socket.broadcast
+          .to(user?.room)
+          .emit(ESocketEventsDict['serverMessage'], {
+            id: uuid(),
+            from: 'admin',
+            username: 'admin',
+            messageText: `New User ${name} has joined.`
+          });
+
+        // COMMT: TODO: send users in room to client
+
+        callback(null);
+      } catch (err) {
+        console.error(`Error: `, err);
+        callback(JSON?.stringify(err));
+      }
+    }
+  );
 
   // COMMT: Emit back clientMessage to other clients
   socket.on(
@@ -68,7 +109,7 @@ io.on(ESocketEventsDict['connection'], (socket) => {
 
         callback(null);
       } catch (err) {
-        console.log(`Error: `, err);
+        console.error(`Error: `, err);
         callback(JSON?.stringify(err));
       };
 

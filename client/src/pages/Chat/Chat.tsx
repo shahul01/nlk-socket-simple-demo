@@ -29,6 +29,27 @@ const Chat: FC<IChatProps> = (props) => {
 
   const [ messageList, setMessageList ] = useState<IClientMessageData[]>([]);
   const [ onNewMessage, setOnNewMessage ] = useState(0);
+  const name = 'doe';
+  const room = 'default';
+  const users = [];
+
+  // COMMT: Join Room
+  useEffect(() => {
+    props.socket.emit(
+      ESocketEventsDict['joinRoom'],
+      {name, room},
+      (err: string|null) => {
+        if (err) console.error(err)
+      }
+    );
+
+    return () => {
+      // // @ts-expect-error: useEffect return type clashes with socket type
+      // props.socket?.off(ESocketEventsDict['joinRoom'], handleJoinRoom());
+
+    };
+
+  }, []);
 
   // COMMT: Listen to socket and send new messages from the sent client to non sent client's messageList
   // COMMT: - via handleAddMessageToList()
@@ -96,10 +117,10 @@ const Chat: FC<IChatProps> = (props) => {
   function handleAddMessageToList(from:TFrom, data:IClientMessageData|string):void {
 
     const newMessageData = getMessageData(from, data);
-    console.log('newMessageData', newMessageData);
-
 
     if (newMessageData.messageText === '') return;
+
+    console.log('newMessageData', newMessageData);
 
     const dataNotEmpty = Object.keys(newMessageData)?.length;
 
@@ -112,7 +133,7 @@ const Chat: FC<IChatProps> = (props) => {
       props.socket.emit(
         ESocketEventsDict['clientMessage'],
         newMessageData,
-        (err:string) => {
+        (err:string|null) => {
           if (err) console.error('Error :>> ', err)
         }
       )
