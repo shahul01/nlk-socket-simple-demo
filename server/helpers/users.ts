@@ -20,4 +20,9 @@ export const addUser = ({ id, name, room }: IUser) => {
   return { user }
 };
 
-module.exports = { addUser };
+export const removeUser = (socketId:string) => {
+  const idx = users.findIndex(currUser => currUser.id === socketId);
+  if (idx !== -1) return users.splice(idx, 1)?.[0];
+};
+
+module.exports = { addUser, removeUser };

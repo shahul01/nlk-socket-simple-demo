@@ -29,7 +29,7 @@ const Chat: FC<IChatProps> = (props) => {
 
   const [ messageList, setMessageList ] = useState<IClientMessageData[]>([]);
   const [ onNewMessage, setOnNewMessage ] = useState(0);
-  const name = 'doe';
+  const name = `user-${uuid()}`;
   const room = 'default';
   const users = [];
 
@@ -39,13 +39,14 @@ const Chat: FC<IChatProps> = (props) => {
       ESocketEventsDict['joinRoom'],
       {name, room},
       (err: string|null) => {
-        if (err) console.error(err)
+        if (err) console.error('Error: ',err)
       }
     );
 
     return () => {
+      // handleJoinRoom()
       // // @ts-expect-error: useEffect return type clashes with socket type
-      // props.socket?.off(ESocketEventsDict['joinRoom'], handleJoinRoom());
+      props.socket?.off(ESocketEventsDict['joinRoom']);
 
     };
 
@@ -134,7 +135,7 @@ const Chat: FC<IChatProps> = (props) => {
         ESocketEventsDict['clientMessage'],
         newMessageData,
         (err:string|null) => {
-          if (err) console.error('Error :>> ', err)
+          if (err) console.error('Error: ', err)
         }
       )
     };

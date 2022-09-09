@@ -15,7 +15,7 @@ import { Server } from 'socket.io';
 import express from 'express';
 import http from 'http';
 import indexRouter from './routes/indexRoutes';
-import { addUser } from './helpers/users';
+import { addUser, removeUser } from './helpers/users';
 // import { socketEventsDict } from './helpers/socketEvents';
 import { consoleLine, uuid } from './helpers/misc';
 import { ESocketEventsDict, IUser, IServerMessageData } from './assets/types/global';
@@ -100,7 +100,9 @@ io.on(ESocketEventsDict['connection'], (socket) => {
       try {
 
         // io.to(user.room).emit
-        socket.broadcast.emit(
+        socket.broadcast
+        // .to(user.room)
+        .emit(
           ESocketEventsDict['serverMessage'],
           serverMessageData
         );
@@ -115,6 +117,17 @@ io.on(ESocketEventsDict['connection'], (socket) => {
 
 
     }
+  );
+
+  // COMMT: Disconnect user on leaving / refreshing
+  socket.on(
+    ESocketEventsDict['disconnect'],
+    (user:IUser ) => {
+      socket
+        .to(user?.room)
+        .emit(`User ${user?.name} has left`)
+    },
+    removeUser(socket.id)
   );
 
 });
