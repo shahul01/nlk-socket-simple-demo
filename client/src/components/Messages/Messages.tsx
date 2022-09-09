@@ -37,6 +37,7 @@ const Messages: FC<IMessagesProps> = (props) => {
             id={currList?.id}
             from={currList?.from}
             username={currList?.username}
+            room={currList?.room}
             messageText={currList?.messageText}
           />
         </div>

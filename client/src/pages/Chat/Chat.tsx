@@ -17,19 +17,21 @@ const Chat: FC<IChatProps> = (props) => {
       id: 1,
       from: 'self',
       username: 'Me',
+      room: 'default',
       messageText: 'Hello'
     },
     {
       id: 2,
       from: 'others',
       username: 'Others1',
+      room: 'default',
       messageText: 'Hi'
     }
   ];
 
   const [ messageList, setMessageList ] = useState<IClientMessageData[]>([]);
   const [ onNewMessage, setOnNewMessage ] = useState(0);
-  const name = `user-${uuid()}`;
+  const name = `user-${uuid(3)}`;
   const room = 'default';
   const users = [];
 
@@ -56,9 +58,10 @@ const Chat: FC<IChatProps> = (props) => {
   // COMMT: - via handleAddMessageToList()
   useEffect(() => {
     let messageDataHolder:IClientMessageData = {
-      id: uuid(),
+      id: uuid(6),
       from: 'others',
       username : '',
+      room: room,
       messageText : ''
     };
 
@@ -82,18 +85,20 @@ const Chat: FC<IChatProps> = (props) => {
   function getMessageData(from:TFrom, data:string|IClientMessageData):IClientMessageData {
 
     let messageData: IClientMessageData = {
-      id: uuid(),
+      id: uuid(6),
       from: 'self',
-      username : '',
+      username: '',
+      room: room,
       messageText : ''
     };
 
     if (from === 'self' && typeof(data) === 'string') {
 
       messageData = {
-        id: uuid(),
+        id: uuid(6),
         from: from,
         username: 'Sh',
+        room: room,
         messageText: data
 
       };
@@ -104,6 +109,7 @@ const Chat: FC<IChatProps> = (props) => {
         id: data.id,
         from: data.from,
         username: data.username,
+        room: room,
         messageText: data.messageText
 
       };

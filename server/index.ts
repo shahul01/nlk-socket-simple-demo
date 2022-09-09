@@ -36,15 +36,8 @@ app.use(cors());
 app.use(indexRouter);
 
 // COMMT: Socket IO - Main code
-io.on(ESocketEventsDict['connection'], (socket) => {
+io.on(ESocketEventsDict['connect'], (socket) => {
   console.log(`Connected: `, socket.id);
-
-  // socket.emit(ESocketEventsDict['serverMessage'], {
-  //   id: 123456, // TODO: string type and uuid with num+string
-  //   from: 'admin',
-  //   username: 'admin',
-  //   messageText: 'Welcome!'
-  // });
 
   // COMMT: Emit this whenever a user joins
   socket.on(
@@ -60,27 +53,27 @@ io.on(ESocketEventsDict['connection'], (socket) => {
         socket.join(user?.room);
 
         socket.emit(ESocketEventsDict['serverMessage'], {
-          id: uuid(), // TODO: string type and uuid with num+string
+          id: uuid(6), // TODO: uuid num+string
           from: 'admin',
           username: 'admin',
           messageText: `Welcome to ${user?.room} room, user ${user?.name}`
         });
 
-        socket.broadcast
+        socket
           .to(user?.room)
           .emit(ESocketEventsDict['serverMessage'], {
-            id: uuid(),
+            id: uuid(6),
             from: 'admin',
             username: 'admin',
-            messageText: `New User ${name} has joined.`
+            messageText: `New user ${name} has joined.`
           });
 
-        // COMMT: TODO: send users in room to client
-
         callback(null);
+
       } catch (err) {
         console.error(`Error: `, err);
         callback(JSON?.stringify(err));
+
       }
     }
   );
@@ -90,18 +83,17 @@ io.on(ESocketEventsDict['connection'], (socket) => {
     ESocketEventsDict['clientMessage'],
     ( data: IServerMessageData, callback: (arg:string|null)=>void ) => {
 
-      const serverMessageData = {
-        id: data?.id,
-        from: 'others',
-        username: data?.username,
-        messageText: data?.messageText
-      };
-
       try {
+        const serverMessageData = {
+          id: data?.id,
+          from: 'others',
+          username: data?.username,
+          room: data?.room,
+          messageText: data?.messageText
+        };
 
-        // io.to(user.room).emit
-        socket.broadcast
-        // .to(user.room)
+        socket
+        .to(data.room)
         .emit(
           ESocketEventsDict['serverMessage'],
           serverMessageData
@@ -110,9 +102,11 @@ io.on(ESocketEventsDict['connection'], (socket) => {
         console.log(`serverMessageData: `, serverMessageData);
 
         callback(null);
+
       } catch (err) {
         console.error(`Error: `, err);
         callback(JSON?.stringify(err));
+
       };
 
 

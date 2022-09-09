@@ -3,7 +3,7 @@ export type TFrom = 'self' | 'others' | 'admin';
 
 // COMMT: enum for autocomplete
 export enum ESocketEventsDict {
-  "connection" = "connection",
+  "connect" = "connect",
   "joinRoom" = "joinRoom",
   "ping" = "ping",
   "pong" = "pong",
@@ -25,5 +25,6 @@ export interface IServerMessageData {
   id: number;
   from: TFrom;
   username: string;
+  room?: string;
   messageText: string;
 }
