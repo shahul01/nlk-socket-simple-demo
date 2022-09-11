@@ -57,7 +57,7 @@ io.on(ESocketEventsDict['connect'], (socket) => {
             id: uuid(6), // TODO: uuid num+string
             from: 'admin',
             username: 'admin',
-            messageText: `Welcome to ${user?.room} room, user ${user?.name}`
+            messageText: `Welcome to ${user?.room} room, ${user?.name}.`
           });
 
         socket
@@ -66,7 +66,7 @@ io.on(ESocketEventsDict['connect'], (socket) => {
             id: uuid(6),
             from: 'admin',
             username: 'admin',
-            messageText: `New user ${name} has joined.`
+            messageText: `A new user '${name}' has joined.`
           });
 
         callback('name', name);

@@ -36,8 +36,9 @@ const Chat: FC<IChatProps> = (props) => {
   const [ isTyping, setIsTyping ] = useState(true);
   const [ isTypingText, setIsTypingText ] = useState(false);
   const [ lastTypingTime, setLastTypingTime ] = useState(new Date().getTime());
+  const [ typingUser, setTypingUser ] = useState('');
   const typingTime = 400; // COMMT: in ms
-  const name = `user-${uuid(3)}`;
+  const name = useRef(`user-${uuid(3)}`);
   const room = 'default';
   const users = [];
   const [tempCount, setTempCount] = useState(0);
@@ -47,9 +48,9 @@ const Chat: FC<IChatProps> = (props) => {
   useEffect(() => {
     props.socket.emit(
       ESocketEventsDict['joinRoom'],
-      {name, room},
+      {name:name.current, room},
       (type: 'name'|'error', callbackMessage: string) => {
-        if (type === 'name' && callbackMessage === name) {
+        if (type === 'name' && callbackMessage === name.current) {
           // console.log('### CONN ###', name)
           // setIsTyping(true);
           setIsConnected(true);
@@ -82,7 +83,7 @@ const Chat: FC<IChatProps> = (props) => {
       setIsTyping(true);
       props.socket.emit(
         ESocketEventsDict['clientTyping'],
-        {name, room}
+        {name:name.current, room}
       );
     };
     setLastTypingTime(new Date().getTime());
@@ -94,7 +95,7 @@ const Chat: FC<IChatProps> = (props) => {
       if (isTyping && timeDiff >= typingTime) {
         props.socket.emit(
           ESocketEventsDict['stopTyping'],
-          {name, room}
+          {name:name.current, room}
         );
         if (tempCount <= 3) setIsTyping(false) ;
         setTempCount(p=>p+1);
@@ -120,8 +121,11 @@ const Chat: FC<IChatProps> = (props) => {
   useEffect(() => {
     props.socket.on(
       ESocketEventsDict['serverTyping'], (callbackMessage:string) => {
-        console.log('callbackMessage :>> ', callbackMessage);
-        if (callbackMessage !== name) setIsTypingText(true);
+        // console.log('callbackMessage :>> ', callbackMessage);
+        if (callbackMessage !== name.current) {
+          setIsTypingText(true)
+          setTypingUser(callbackMessage);
+        };
       }
     )
 
@@ -235,7 +239,7 @@ const Chat: FC<IChatProps> = (props) => {
       <div className='messages-input-container'>
         <Messages messageList={messageList} onNewMessage={onNewMessage} />
         <div>
-          {isTypingText ? <p>A user is typing...</p> : ''}
+          {isTypingText ? <p>{typingUser || 'A user'} is typing...</p> : ''}
         </div>
         <InputBtn
           onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
