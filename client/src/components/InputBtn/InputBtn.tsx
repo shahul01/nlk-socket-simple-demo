@@ -1,8 +1,9 @@
-import { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import styles from './InputBtn.module.scss';
 
 interface IInputBtnProps {
   onNewMessage: (e:string) => void;
+  setOnTyping: (arg:number) => void;
 }
 
 const InputBtn: FC<IInputBtnProps> = (props) => {
@@ -14,12 +15,19 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
     return setNewMessageText('');
   };
 
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setNewMessageText(e.target?.value);
+    // @ts-expect-error: Argument '(prev: number) => number' vs parameter 'number'
+    props.setOnTyping((prev: number) => prev+1);
+    return;
+  };
+
   return (
     <div className={styles['input-btn-container']}>
       <input
         type="text"
         value={newMessageText}
-        onChange={e=>setNewMessageText(e.target?.value)}
+        onChange={handleChange}
         placeholder="Type here..."
       />
       <button

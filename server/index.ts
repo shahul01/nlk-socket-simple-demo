@@ -42,22 +42,23 @@ io.on(ESocketEventsDict['connect'], (socket) => {
   // COMMT: Emit this whenever a user joins
   socket.on(
     ESocketEventsDict['joinRoom'],
-    ({ name, room }: IUser, callback: (arg:string|null)=>void) => {
+    ({ name, room }: IUser, callback: (argo:string, arg1:string)=>void) => {
 
       try {
         const { error, user } = addUser({ id: socket?.id, name, room });
 
-        if (error) return callback(error);
+        if (error) return callback('error', error);
 
         // COMMT: Important code
         socket.join(user?.room);
 
-        socket.emit(ESocketEventsDict['serverMessage'], {
-          id: uuid(6), // TODO: uuid num+string
-          from: 'admin',
-          username: 'admin',
-          messageText: `Welcome to ${user?.room} room, user ${user?.name}`
-        });
+        socket
+          .emit(ESocketEventsDict['serverMessage'], {
+            id: uuid(6), // TODO: uuid num+string
+            from: 'admin',
+            username: 'admin',
+            messageText: `Welcome to ${user?.room} room, user ${user?.name}`
+          });
 
         socket
           .to(user?.room)
@@ -68,13 +69,28 @@ io.on(ESocketEventsDict['connect'], (socket) => {
             messageText: `New user ${name} has joined.`
           });
 
-        callback(null);
+        callback('name', name);
 
       } catch (err) {
         console.error(`Error: `, err);
-        callback(JSON?.stringify(err));
+        callback('error', JSON?.stringify(err));
 
       }
+    }
+  );
+
+  // COMMT: When user types
+  socket.on(
+    ESocketEventsDict['clientTyping'],
+    ({ name, room }: IUser) => {
+
+      socket
+        .to(room)
+        .emit(
+          ESocketEventsDict['serverTyping'],
+          name
+        )
+
     }
   );
 

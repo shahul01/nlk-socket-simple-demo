@@ -7,7 +7,8 @@ export enum ESocketEventsDict {
   "joinRoom" = "joinRoom",
   "ping" = "ping",
   "pong" = "pong",
-  "typing" = "typing",
+  "clientTyping" = "clientTyping",
+  "serverTyping" = "serverTyping",
   "stopTyping" = "stopTyping",
   "serverMessage" = "serverMessage",
   "clientMessage" = "clientMessage",
@@ -16,7 +17,7 @@ export enum ESocketEventsDict {
 }
 
 export interface IUser {
-  id: string;
+  id?: string;
   name: string;
   room: string;
 }

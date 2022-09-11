@@ -3,7 +3,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import InputBtn from '../../components/InputBtn/InputBtn';
 import Messages from '../../components/Messages/Messages';
 import { uuid } from '../../helpers/misc';
-import { ESocketEventsDict, IClientMessageData, TFrom } from '../../types/global';
+import { TStateCount, TFrom, ESocketEventsDict, IClientMessageData } from '../../types/global';
 import './Chat.scss';
 
 interface IChatProps {
@@ -29,19 +29,32 @@ const Chat: FC<IChatProps> = (props) => {
     }
   ];
 
+  const [ isConnected, setIsConnected ] = useState(false);
   const [ messageList, setMessageList ] = useState<IClientMessageData[]>([]);
   const [ onNewMessage, setOnNewMessage ] = useState(0);
+  const [ onTyping, setOnTyping ] = useState<TStateCount>(0);
+  const [ isTyping, setIsTyping ] = useState(true);
+  const [ isTypingText, setIsTypingText ] = useState(false);
+  const [ lastTypingTime, setLastTypingTime ] = useState(new Date().getTime());
+  const typingTime = 400; // COMMT: in ms
   const name = `user-${uuid(3)}`;
   const room = 'default';
   const users = [];
+  const [tempCount, setTempCount] = useState(0);
 
-  // COMMT: Join Room
+
+  // COMMT: Socket event - Join Room
   useEffect(() => {
     props.socket.emit(
       ESocketEventsDict['joinRoom'],
       {name, room},
-      (err: string|null) => {
-        if (err) console.error('Error: ',err)
+      (type: 'name'|'error', callbackMessage: string) => {
+        if (type === 'name' && callbackMessage === name) {
+          // console.log('### CONN ###', name)
+          // setIsTyping(true);
+          setIsConnected(true);
+        };
+        if (type === 'error') console.error('Error: ', callbackMessage);
       }
     );
 
@@ -53,6 +66,69 @@ const Chat: FC<IChatProps> = (props) => {
     };
 
   }, []);
+
+  // COMMT: Toggle isTyping when this client types
+  // useEffect(() => {
+  //   if (onTyping >=1) {
+  //     setIsTyping(true);
+  //   };
+  // }, [onTyping]);
+
+  // COMMT: Socket Event - send - typing
+  useEffect(() => {
+    console.log('#### Changes ####', isConnected, isTyping);
+    if (!isConnected) return;
+    if (!isTyping) {
+      setIsTyping(true);
+      props.socket.emit(
+        ESocketEventsDict['clientTyping'],
+        {name, room}
+      );
+    };
+    setLastTypingTime(new Date().getTime());
+
+    setTimeout(() => {
+      const currTypingTimer = new Date().getTime();
+      const timeDiff = currTypingTimer - lastTypingTime;
+      console.log('time', timeDiff, typingTime);
+      if (isTyping && timeDiff >= typingTime) {
+        props.socket.emit(
+          ESocketEventsDict['stopTyping'],
+          {name, room}
+        );
+        if (tempCount <= 3) setIsTyping(false) ;
+        setTempCount(p=>p+1);
+        console.log('setIsTyping is set to false')
+      };
+    }, typingTime)
+
+    return () => {
+      props.socket?.off(ESocketEventsDict['clientTyping']);
+    };
+
+  }, [onTyping]);
+
+
+  /*
+
+    on typing -> socket emit event -> server -> other clients ->
+    if typing username != currUsername istyping = true
+
+  */
+
+  // COMMT: props socket event - receive - typing
+  useEffect(() => {
+    props.socket.on(
+      ESocketEventsDict['serverTyping'], (callbackMessage:string) => {
+        console.log('callbackMessage :>> ', callbackMessage);
+        if (callbackMessage !== name) setIsTypingText(true);
+      }
+    )
+
+    return () => {
+      props.socket?.off(ESocketEventsDict['serverTyping']);
+    }
+  }, [onTyping]);
 
   // COMMT: Listen to socket and send new messages from the sent client to non sent client's messageList
   // COMMT: - via handleAddMessageToList()
@@ -158,8 +234,12 @@ const Chat: FC<IChatProps> = (props) => {
       <br /><hr /><br />
       <div className='messages-input-container'>
         <Messages messageList={messageList} onNewMessage={onNewMessage} />
+        <div>
+          {isTypingText ? <p>A user is typing...</p> : ''}
+        </div>
         <InputBtn
           onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
+          setOnTyping={setOnTyping}
         />
       </div>
     </div>

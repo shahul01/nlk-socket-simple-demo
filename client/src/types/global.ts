@@ -1,3 +1,7 @@
+
+// ### React ###
+export type TStateCount = ( (arg0:number)=>number ) | number;
+
 // ### Socket  ###
 export type TFrom = 'self' | 'others' | 'admin';
 
@@ -7,7 +11,8 @@ export enum ESocketEventsDict {
   "joinRoom" = "joinRoom",
   "ping" = "ping",
   "pong" = "pong",
-  "typing" = "typing",
+  "clientTyping" = "clientTyping",
+  "serverTyping" = "serverTyping",
   "stopTyping" = "stopTyping",
   "serverMessage" = "serverMessage",
   "clientMessage" = "clientMessage",
