@@ -33,7 +33,7 @@ const Chat: FC<IChatProps> = (props) => {
   const [ messageList, setMessageList ] = useState<IClientMessageData[]>([]);
   const [ onNewMessage, setOnNewMessage ] = useState(0);
   const [ onTyping, setOnTyping ] = useState<TStateCount>(0);
-  const [ isTyping, setIsTyping ] = useState(true);
+  const [ isTyping, setIsTyping ] = useState(false);
   const [ isTypingText, setIsTypingText ] = useState(false);
   const [ lastTypingTime, setLastTypingTime ] = useState(new Date().getTime());
   const [ typingUser, setTypingUser ] = useState('');
@@ -41,6 +41,7 @@ const Chat: FC<IChatProps> = (props) => {
   const name = useRef(`user-${uuid(3)}`);
   const room = 'default';
   const users = [];
+  const timeout:any = useRef(null);
 
 
   // COMMT: Socket event - Join Room
@@ -68,55 +69,44 @@ const Chat: FC<IChatProps> = (props) => {
   }, []);
 
   // COMMT: Toggle isTyping when this client types
-  // useEffect(() => {
-  //   if (onTyping >=1) {
-  //     setIsTyping(true);
-  //   };
-  // }, [onTyping]);
+  useEffect(() => {
+    setIsTyping(true);
+  }, [onTyping]);
 
   // COMMT: Socket Event - send - typing
   useEffect(() => {
     if (!isConnected) return;
 
-    setLastTypingTime(new Date().getTime());
+    function disableTyping() {
+      setIsTyping(false);
+      props.socket.emit(ESocketEventsDict['stopTyping'], {room});
+    };
+
     if (!isTyping) {
       setIsTyping(true);
       props.socket.emit(
         ESocketEventsDict['clientTyping'],
         {name:name.current, room}
       );
+      timeout.current = setTimeout(disableTyping, 3000);
+    } else {
+      clearTimeout(timeout);
+      timeout.current = setTimeout(disableTyping, 3000);
     };
-
-    setTimeout(() => {
-      const currTypingTime = new Date().getTime();
-      const timeDiff = Math.abs(currTypingTime - lastTypingTime);
-
-      if (isTyping && timeDiff >= typingTime) {
-        props.socket.emit(
-          ESocketEventsDict['stopTyping'],
-          {room}
-        );
-        setIsTyping(false);
-
-      };
-    }, typingTime);
 
     return () => {
       props.socket?.off(ESocketEventsDict['clientTyping']);
       props.socket?.off(ESocketEventsDict['stopTyping']);
     };
 
-  }, [onTyping, lastTypingTime]);
+  }, [isConnected, onTyping, lastTypingTime]);
 
-
+  // COMMT: Socket event - receive - typing
   /*
-
+    COMMT:
     on typing -> socket emit event -> server -> other clients ->
     if typing username != currUsername istyping = true
-
   */
-
-  // COMMT: props socket event - receive - typing
   useEffect(() => {
     props.socket.on(
       ESocketEventsDict['serverTyping'], (callbackMessage:string) => {
@@ -133,6 +123,7 @@ const Chat: FC<IChatProps> = (props) => {
     }
   }, [onTyping]);
 
+  // COMMT: Socket event - receive - stopTyping
   useEffect(() => {
     props.socket.on(
       ESocketEventsDict['stopTyping'], () => {

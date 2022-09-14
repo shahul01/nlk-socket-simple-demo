@@ -103,6 +103,7 @@ io.on(ESocketEventsDict['connect'], (socket) => {
         .emit(
           ESocketEventsDict['stopTyping']
         )
+      console.log('stop typing msg received')
     }
   );
 
