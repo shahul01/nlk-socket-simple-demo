@@ -41,7 +41,6 @@ const Chat: FC<IChatProps> = (props) => {
   const name = useRef(`user-${uuid(3)}`);
   const room = 'default';
   const users = [];
-  const [tempCount, setTempCount] = useState(0);
 
 
   // COMMT: Socket event - Join Room
@@ -77,8 +76,9 @@ const Chat: FC<IChatProps> = (props) => {
 
   // COMMT: Socket Event - send - typing
   useEffect(() => {
-    console.log('#### Changes ####', isConnected, isTyping);
     if (!isConnected) return;
+
+    setLastTypingTime(new Date().getTime());
     if (!isTyping) {
       setIsTyping(true);
       props.socket.emit(
@@ -86,28 +86,27 @@ const Chat: FC<IChatProps> = (props) => {
         {name:name.current, room}
       );
     };
-    setLastTypingTime(new Date().getTime());
 
     setTimeout(() => {
-      const currTypingTimer = new Date().getTime();
-      const timeDiff = currTypingTimer - lastTypingTime;
-      console.log('time', timeDiff, typingTime);
+      const currTypingTime = new Date().getTime();
+      const timeDiff = Math.abs(currTypingTime - lastTypingTime);
+
       if (isTyping && timeDiff >= typingTime) {
         props.socket.emit(
           ESocketEventsDict['stopTyping'],
-          {name:name.current, room}
+          {room}
         );
-        if (tempCount <= 3) setIsTyping(false) ;
-        setTempCount(p=>p+1);
-        console.log('setIsTyping is set to false')
+        setIsTyping(false);
+
       };
-    }, typingTime)
+    }, typingTime);
 
     return () => {
       props.socket?.off(ESocketEventsDict['clientTyping']);
+      props.socket?.off(ESocketEventsDict['stopTyping']);
     };
 
-  }, [onTyping]);
+  }, [onTyping, lastTypingTime]);
 
 
   /*
@@ -133,6 +132,18 @@ const Chat: FC<IChatProps> = (props) => {
       props.socket?.off(ESocketEventsDict['serverTyping']);
     }
   }, [onTyping]);
+
+  useEffect(() => {
+    props.socket.on(
+      ESocketEventsDict['stopTyping'], () => {
+        setIsTypingText(false);
+      }
+    )
+
+    return () => {
+      props.socket?.off(ESocketEventsDict['stopTyping'])
+    };
+  }, []);
 
   // COMMT: Listen to socket and send new messages from the sent client to non sent client's messageList
   // COMMT: - via handleAddMessageToList()

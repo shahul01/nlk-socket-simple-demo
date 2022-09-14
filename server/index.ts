@@ -79,7 +79,7 @@ io.on(ESocketEventsDict['connect'], (socket) => {
     }
   );
 
-  // COMMT: When user types
+  // COMMT: When a user types
   socket.on(
     ESocketEventsDict['clientTyping'],
     ({ name, room }: IUser) => {
@@ -91,6 +91,18 @@ io.on(ESocketEventsDict['connect'], (socket) => {
           name
         )
 
+    }
+  );
+
+  // COMMT: When a user stops typing
+  socket.on(
+    ESocketEventsDict['stopTyping'],
+    ({ 'room': room }: {'room': string}) => {
+      socket
+        .to(room)
+        .emit(
+          ESocketEventsDict['stopTyping']
+        )
     }
   );
 
