@@ -1,9 +1,11 @@
-@use '../../styles/App.scss';
+@use '../../styles/App.scss' as *;
 
 .input-btn-container {
   @apply flex_space-between_center;
   // @apply p-2;
-  width: 100%;
+  // width: 100%;
+  width: $chat-width;
+  max-width: $chat-max-width;
 }
 
 @mixin input-btn {
@@ -13,6 +15,8 @@
 .input-btn-container > input {
   @include input-btn;
   background-color: #ddd;
+  width: 60vw;
+  max-width: $chat-max-width;
 }
 
 .input-btn-container > input:hover,

@@ -1,9 +1,9 @@
 import { Socket } from 'socket.io-client';
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, MutableRefObject, useEffect, useRef, useState } from 'react';
 import InputBtn from '../../components/InputBtn/InputBtn';
 import Messages from '../../components/Messages/Messages';
 import { uuid } from '../../helpers/misc';
-import { TStateCount, TFrom, ESocketEventsDict, IClientMessageData } from '../../types/global';
+import { TStateCount, TFrom, ESocketEventsDict, IClientMessageData, IUser } from '../../types/global';
 import './Chat.scss';
 
 interface IChatProps {
@@ -17,14 +17,12 @@ const Chat: FC<IChatProps> = (props) => {
       id: 1,
       from: 'self',
       username: 'Me',
-      room: 'default',
       messageText: 'Hello'
     },
     {
       id: 2,
       from: 'others',
       username: 'Others1',
-      room: 'default',
       messageText: 'Hi'
     }
   ];
@@ -35,13 +33,12 @@ const Chat: FC<IChatProps> = (props) => {
   const [ onTyping, setOnTyping ] = useState<TStateCount>(0);
   const [ isTyping, setIsTyping ] = useState(false);
   const [ isTypingText, setIsTypingText ] = useState(false);
-  const [ lastTypingTime, setLastTypingTime ] = useState(new Date().getTime());
   const [ typingUser, setTypingUser ] = useState('');
-  const typingTime = 400; // COMMT: in ms
   const name = useRef(`user-${uuid(3)}`);
   const room = 'default';
-  const users = [];
+  const users:IUser[] = [];
   const timeout:any = useRef(null);
+  // const timeout = useRef<NodeJS.Timeout | null>(null);
 
 
   // COMMT: Socket event - Join Room
@@ -99,7 +96,7 @@ const Chat: FC<IChatProps> = (props) => {
       props.socket?.off(ESocketEventsDict['stopTyping']);
     };
 
-  }, [isConnected, onTyping, lastTypingTime]);
+  }, [isConnected, onTyping]);
 
   // COMMT: Socket event - receive - typing
   /*
@@ -143,7 +140,6 @@ const Chat: FC<IChatProps> = (props) => {
       id: uuid(6),
       from: 'others',
       username : '',
-      room: room,
       messageText : ''
     };
 
@@ -164,13 +160,13 @@ const Chat: FC<IChatProps> = (props) => {
 
   }, []);
 
+
   function getMessageData(from:TFrom, data:string|IClientMessageData):IClientMessageData {
 
     let messageData: IClientMessageData = {
       id: uuid(6),
       from: 'self',
       username: '',
-      room: room,
       messageText : ''
     };
 
@@ -180,7 +176,6 @@ const Chat: FC<IChatProps> = (props) => {
         id: uuid(6),
         from: from,
         username: 'Sh',
-        room: room,
         messageText: data
 
       };
@@ -191,7 +186,6 @@ const Chat: FC<IChatProps> = (props) => {
         id: data.id,
         from: data.from,
         username: data.username,
-        room: room,
         messageText: data.messageText
 
       };

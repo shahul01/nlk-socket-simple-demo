@@ -10,7 +10,9 @@
   @apply mx-4;
   flex-direction: column; // raw css
   // height: 100vh;
-  height: 34rem;
-  width: 17rem;
+  height: 80vh;
+  max-height: 34rem;
+  width: $chat-width;
+  max-width: $chat-max-width;
   @apply border border-sky-800;
 }

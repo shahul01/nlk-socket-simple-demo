@@ -26,6 +26,6 @@ export interface IServerMessageData {
   id: number;
   from: TFrom;
   username: string;
-  room?: string;
+  // room?: string;
   messageText: string;
 }

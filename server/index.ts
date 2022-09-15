@@ -15,7 +15,7 @@ import { Server } from 'socket.io';
 import express from 'express';
 import http from 'http';
 import indexRouter from './routes/indexRoutes';
-import { addUser, removeUser } from './helpers/users';
+import { addUser, removeUser, getUser, getUsersInRoom } from './helpers/users';
 // import { socketEventsDict } from './helpers/socketEvents';
 import { consoleLine, uuid } from './helpers/misc';
 import { ESocketEventsDict, IUser, IServerMessageData } from './assets/types/global';
@@ -117,12 +117,13 @@ io.on(ESocketEventsDict['connect'], (socket) => {
           id: data?.id,
           from: 'others',
           username: data?.username,
-          room: data?.room,
           messageText: data?.messageText
         };
 
+        const user:IUser = getUser(socket.id)
+
         socket
-        .to(data.room)
+        .to(user.room)
         .emit(
           ESocketEventsDict['serverMessage'],
           serverMessageData

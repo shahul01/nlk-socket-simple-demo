@@ -25,4 +25,8 @@ export const removeUser = (socketId:string) => {
   if (idx !== -1) return users.splice(idx, 1)?.[0];
 };
 
-module.exports = { addUser, removeUser };
+export const getUser = (id:string):IUser => users.filter(currUser => currUser.id === id)[0];
+
+export const getUsersInRoom = (room:string) => users.filter(currUser => currUser.room === room);
+
+module.exports = { addUser, removeUser, getUser, getUsersInRoom };

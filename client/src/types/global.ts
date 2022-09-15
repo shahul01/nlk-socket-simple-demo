@@ -24,6 +24,12 @@ export interface IClientMessageData {
   id: number;
   from: TFrom;
   username: string;
-  room: string;
+  // room: string;
   messageText: string;
+}
+
+export interface IUser {
+  id?: string;
+  name: string;
+  room: string;
 }
