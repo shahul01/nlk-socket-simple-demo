@@ -1,7 +1,8 @@
 import { Socket } from 'socket.io-client';
-import { FC, MutableRefObject, useEffect, useRef, useState } from 'react';
-import InputBtn from '../../components/InputBtn/InputBtn';
+import { FC, useEffect, useRef, useState } from 'react';
 import Messages from '../../components/Messages/Messages';
+import InputBtn from '../../components/InputBtn/InputBtn';
+import Keyboard from '../../components/Keyboard/Keyboard';
 import { uuid } from '../../helpers/misc';
 import { TStateCount, TFrom, ESocketEventsDict, IClientMessageData, IUser } from '../../types/global';
 import './Chat.scss';
@@ -38,6 +39,8 @@ const Chat: FC<IChatProps> = (props) => {
   const room = 'default';
   const users:IUser[] = [];
   const timeout:any = useRef(null);
+  const isKeyboard = true;
+  const isAuto = false;
   // const timeout = useRef<NodeJS.Timeout | null>(null);
 
 
@@ -241,6 +244,15 @@ const Chat: FC<IChatProps> = (props) => {
           onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
           setOnTyping={setOnTyping}
         />
+        {
+          isKeyboard && !isAuto && (
+            <div>
+              <Keyboard
+
+              />
+            </div>
+          )
+        }
       </div>
     </div>
   )
