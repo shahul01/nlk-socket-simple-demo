@@ -3,9 +3,10 @@ import { FC, useEffect, useRef, useState } from 'react';
 import Messages from '../../components/Messages/Messages';
 import InputBtn from '../../components/InputBtn/InputBtn';
 import Keyboard from '../../components/Keyboard/Keyboard';
+import { keysDict } from '../../helpers/keyboard';
 import { uuid } from '../../helpers/misc';
 import { TStateCount, TFrom, ESocketEventsDict, IClientMessageData, IUser } from '../../types/global';
-import './Chat.scss';
+import styles from './Chat.module.scss';
 
 interface IChatProps {
   socket: Socket;
@@ -231,28 +232,42 @@ const Chat: FC<IChatProps> = (props) => {
 
   };
 
+  function handleClickKey(currKey:string) {
+    // COMMT: TODO: add toggle to symbol KB layout
+    if (keysDict[currKey]==='$') return;
+    // COMMT: TODO: send data
+    if (keysDict[currKey]==='Enter') return;
+
+    console.log(keysDict[currKey]);
+
+
+  };
+
   return (
     <div>
       <p>Chat</p>
       <br /><hr /><br />
-      <div className='messages-input-container'>
-        <Messages messageList={messageList} onNewMessage={onNewMessage} />
-        <div>
-          {isTypingText ? <p>{typingUser || 'A user'} is typing...</p> : ''}
-        </div>
-        <InputBtn
-          onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
-          setOnTyping={setOnTyping}
-        />
-        {
-          isKeyboard && !isAuto && (
-            <div>
-              <Keyboard
 
+      <div className={styles['chat-container']}>
+        <Messages messageList={messageList} onNewMessage={onNewMessage} />
+
+        <div >
+          <div>
+            {isTypingText ? <p>{typingUser || 'A user'} is typing...</p> : ''}
+          </div>
+          <InputBtn
+            onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
+            setOnTyping={setOnTyping}
+          />
+          {
+            isKeyboard && !isAuto && (
+              <Keyboard
+                onClickKey={handleClickKey}
               />
-            </div>
-          )
-        }
+            )
+          }
+        </div>
+
       </div>
     </div>
   )

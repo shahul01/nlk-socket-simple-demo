@@ -2,13 +2,10 @@
 
 .keys-container {
   display: flex;
-  // flex-direction: column;
   flex-wrap: wrap;
   justify-content: space-between;
   align-items: center;
-  // width: 100%;
-  // height: 140%;
-  @apply my-2 mx-2;
+  // @apply my-2 mx-2;
 }
 
 .line-break {
@@ -18,9 +15,7 @@
 .key {
   flex-grow: 1;
   border: 1px solid black;
-  // @apply py-1 px-2;
   padding: 4px 2px;
-  // width: 100%;
   text-align: center;
   @apply cursor-pointer select-none;
 }
