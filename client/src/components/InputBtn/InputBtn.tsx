@@ -3,23 +3,28 @@ import styles from './InputBtn.module.scss';
 
 interface IInputBtnProps {
   onNewMessage: (e:string) => void;
-  setOnTyping: (arg:number) => void;
+  onClickKey: any;
+  setOnTyping: any;
 }
 
 const InputBtn: FC<IInputBtnProps> = (props) => {
   const [ newMessageText, setNewMessageText ] = useState('');
 
-  function handleSubmit() {
-    console.log('newMessageText :>> ', newMessageText);
-    props.onNewMessage(newMessageText);
-    return setNewMessageText('');
+  useEffect(() => {
+    console.log('props.onClickKey :>> ', props.onClickKey);
+    handleChange(false, props.onClickKey);
+  }, [props.onClickKey]);
+
+  function handleChange(isManual:boolean, e: React.ChangeEvent<HTMLInputElement>|string) {
+    if (isManual && typeof(e)!=='string') setNewMessageText(e?.target?.value);
+    if (!isManual) setNewMessageText(prev => prev + e);
+    props.setOnTyping((prev:number) => prev+1);
+    return;
   };
 
-  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    setNewMessageText(e.target?.value);
-    // @ts-expect-error: Argument '(prev: number) => number' vs parameter 'number'
-    props.setOnTyping((prev: number) => prev+1);
-    return;
+  function handleSubmit() {
+    props.onNewMessage(newMessageText);
+    return setNewMessageText('');
   };
 
   return (
@@ -27,7 +32,7 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
       <input
         type="text"
         value={newMessageText}
-        onChange={handleChange}
+        onChange={(e) => handleChange(true, e)}
         placeholder="Type here..."
       />
       <button

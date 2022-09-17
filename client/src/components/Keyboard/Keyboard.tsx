@@ -1,7 +1,7 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
+
 import { FC, useEffect, useState } from 'react';
 import { keysDict } from '../../helpers/keyboard';
+import { uuid } from '../../helpers/misc';
 import styles from './Keyboard.module.scss';
 
 interface IKeyboardProps {
@@ -13,13 +13,18 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
   return (
     <div className={styles['keys-container']} >
       {
-        Object.keys(keysDict)?.map(el => (
+        Object.keys(keysDict)?.map((el, idx) => (
           <>
-            <div key={el} className={styles['key']} onClick={() => props.onClickKey(el)} >
+            <div
+              key={uuid(6)}
+              className={styles['key']}
+              aria-hidden={true}
+              onClick={() => props.onClickKey(el)}
+            >
               {el}
             </div>
             {(el === 'p' || el === 'l' || el === 'm') && (
-              <div className={styles['line-break']}>
+              <div key={uuid(6)} className={styles['line-break']}>
               </div>
             )}
           </>

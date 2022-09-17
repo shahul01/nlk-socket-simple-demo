@@ -42,6 +42,7 @@ const Chat: FC<IChatProps> = (props) => {
   const timeout:any = useRef(null);
   const isKeyboard = true;
   const isAuto = false;
+  const [ clickedKey, setClickedKey ] = useState('');
   // const timeout = useRef<NodeJS.Timeout | null>(null);
 
 
@@ -238,9 +239,9 @@ const Chat: FC<IChatProps> = (props) => {
     // COMMT: TODO: send data
     if (keysDict[currKey]==='Enter') return;
 
-    console.log(keysDict[currKey]);
-
-
+    // console.log('chat', keysDict[currKey]);
+    setClickedKey(keysDict[currKey]);
+    return;
   };
 
   return (
@@ -256,6 +257,7 @@ const Chat: FC<IChatProps> = (props) => {
             {isTypingText ? <p>{typingUser || 'A user'} is typing...</p> : ''}
           </div>
           <InputBtn
+            onClickKey={clickedKey}
             onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
             setOnTyping={setOnTyping}
           />
