@@ -1,39 +1,40 @@
 @use '../../styles/App.scss' as *;
 
+@mixin input-btn {
+  @apply p-2;
+}
+
 .input-btn-container {
   @apply flex_space-between_center;
   // @apply p-2;
   // width: 100%;
   width: $chat-width;
   max-width: $chat-max-width;
-}
 
-@mixin input-btn {
-  @apply p-2;
-}
+  input {
+    @include input-btn;
+    background-color: #ddd;
+    width: 60vw;
+    max-width: $chat-max-width;
+  }
 
-.input-btn-container > input {
-  @include input-btn;
-  background-color: #ddd;
-  width: 60vw;
-  max-width: $chat-max-width;
-}
+  input:hover,
+  input:focus
+  {
+    outline: none;
+  }
 
-.input-btn-container > input:hover,
-.input-btn-container > input:focus
-{
-  outline: none;
-}
+  button {
+    @include input-btn;
+    width: 100%;
+    background-color: #ddd;
+    @apply border border-l-gray-400;
+  }
 
-.input-btn-container > button {
-  @include input-btn;
-  width: 100%;
-  background-color: #ddd;
-  @apply border border-l-gray-400;
-}
+  button:hover,
+  button:focus
+  {
+    outline: none;
+  }
 
-.input-btn-container > button:hover,
-.input-btn-container > button:focus
-{
-  outline: none;
 }
