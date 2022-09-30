@@ -2,7 +2,8 @@ import { Socket } from 'socket.io-client';
 import { FC, useEffect, useRef, useState } from 'react';
 import Messages from '../../components/Messages/Messages';
 import InputBtn from '../../components/InputBtn/InputBtn';
-import Keyboard from '../../components/Keyboard/Keyboard';
+import LinkMock from '../../components/LinkMock/LinkMock';
+// import Keyboard from '../../components/Keyboard/Keyboard';
 import { keysDict } from '../../helpers/keyboard';
 import { uuid } from '../../helpers/misc';
 import { TStateCount, TFrom, ESocketEventsDict, IClientMessageData, IUser } from '../../types/global';
@@ -41,7 +42,7 @@ const Chat: FC<IChatProps> = (props) => {
   const users:IUser[] = [];
   const timeout:any = useRef(null);
   const isKeyboard = true;
-  const isAuto = false;
+  const [ isAuto, setIsAuto ] = useState(false);
   const [ clickedKey, setClickedKey ] = useState('');
   // const timeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -208,7 +209,7 @@ const Chat: FC<IChatProps> = (props) => {
 
     if (newMessageData.messageText === '') return;
 
-    console.log('newMessageData', newMessageData);
+    // console.log('newMessageData', newMessageData);
 
     const dataNotEmpty = Object.keys(newMessageData)?.length;
 
@@ -239,8 +240,18 @@ const Chat: FC<IChatProps> = (props) => {
     // COMMT: TODO: send data
     if (keysDict[currKey]==='Enter') return;
 
-    // console.log('chat', keysDict[currKey]);
-    setClickedKey(keysDict[currKey]);
+    if (currKey.length === 0) {
+      console.log('currKey 1', currKey);
+      setClickedKey(keysDict[currKey]);
+    } else {
+
+      // COMMT: Auto mode
+      setIsAuto(prev => !prev);
+      currKey.split('')?.forEach((el) => {
+        const newVal = keysDict[el] || ' ';
+        setClickedKey(newVal);
+      })
+    }
     return;
   };
 
@@ -260,11 +271,14 @@ const Chat: FC<IChatProps> = (props) => {
             onClickKey={clickedKey}
             onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
             setOnTyping={setOnTyping}
+            isAuto={isAuto}
           />
           {
-            isKeyboard && !isAuto && (
-              <Keyboard
+            //  && !isAuto
+            isKeyboard && (
+              <LinkMock
                 onClickKey={handleClickKey}
+                isAuto={isAuto}
               />
             )
           }

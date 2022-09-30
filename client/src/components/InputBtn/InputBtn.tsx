@@ -5,13 +5,14 @@ interface IInputBtnProps {
   onNewMessage: (e:string) => void;
   onClickKey: any;
   setOnTyping: any;
+  isAuto: boolean;
 }
 
 const InputBtn: FC<IInputBtnProps> = (props) => {
   const [ newMessageText, setNewMessageText ] = useState('');
 
   useEffect(() => {
-    console.log('props.onClickKey :>> ', props.onClickKey);
+    if (!props.onClickKey) return;
     handleChange(false, props.onClickKey);
   }, [props.onClickKey]);
 

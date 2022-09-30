@@ -28,8 +28,9 @@ module.exports = {
     'react/jsx-uses-react': 'off',
     'react/react-in-jsx-scope': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    indent: ['error', 2],
-    '@typescript-eslint/indent': ['error', 2],
-    'max-len': ['error', { code: 120 }],
+    indent: 'off',
+    // indent: ['error', 2],
+    // '@typescript-eslint/indent': ['error', 2],
+    'max-len': ['error', { code: 320 }],
   },
 }
