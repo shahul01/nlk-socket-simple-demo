@@ -273,6 +273,7 @@ const Chat: FC<IChatProps> = (props) => {
             setOnTyping={setOnTyping}
             isAuto={isAuto}
           />
+          <Cursor />
           {
             //  && !isAuto
             isKeyboard && (
