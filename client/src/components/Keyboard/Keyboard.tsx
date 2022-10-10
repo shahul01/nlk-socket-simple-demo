@@ -5,6 +5,7 @@ import styles from './Keyboard.module.scss';
 
 interface IKeyboardProps {
   isAuto: boolean;
+  // COMMT: To chat to InputBtn
   clickKey: string;
   onClickKey(currKey: string): void;
 }
@@ -16,13 +17,8 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
     console.log('props.clickKey :>> ', props.clickKey);
     if (!props?.clickKey) return;
     clickKeyRef.current = props?.clickKey;
-    if (!props.isAuto) {
-      props.onClickKey(clickKeyRef.current);
-    } else {
-      setTimeout(() => {
-        props.onClickKey(clickKeyRef.current);
-      }, 100);
-    }
+    props.onClickKey(clickKeyRef.current);
+
   }, [props.clickKey]);
 
   return (
@@ -31,8 +27,8 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
         Object.keys(keysDict)?.map((currKey, idx) => (
           <>
             <div
-              key={idx}
-              className={styles['key']}
+              key={currKey}
+              className={`ripple ${styles['key']}`}
               aria-hidden={true}
               onClick={() => props.onClickKey(currKey)}
             >

@@ -10,6 +10,26 @@ h1 {
 }
 
 /*
+ * ### Ripple ###
+*/
+
+.ripple {
+  background-position: center;
+  transition: background 0.65s;
+}
+.ripple:hover {
+  background: radial-gradient(
+    circle,
+    hsla(207, 90%, 54%, 0.8) 1%,
+    hsla(207, 90%, 54%, 0.4) 1%
+    ) center/15000%;
+}
+.ripple:active {
+  background-size: 100%;
+  transition: background 0s;
+}
+
+/*
  * ### Flex Box ###
 */
 

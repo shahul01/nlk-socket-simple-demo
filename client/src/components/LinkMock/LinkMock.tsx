@@ -17,13 +17,9 @@ interface ILinkMockProps {
 const LinkMock: FC<ILinkMockProps> = (props) => {
 
   const firstLoad = useRef(true);
-  const newKey = useRef(['']);
-  const receivedText = useRef('');
   const selectedText = useRef("Hello, there.");
-  const [ clickedKey, setClickedKey ] = useState('');
-  const [ isRefresh, setIsRefresh ] = useState(0);
-  const [ currTextState, setCurrTextState ] = useState('');
-  const [ isRefresh2, setIsRefresh2 ] = useState(0);
+  const receivedText = useRef('');
+  // const [ clickedKey, setClickedKey ] = useState('');
   const [ idx, setIdx ] = useState(0);
 
   useEffect(() => {
@@ -57,12 +53,10 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
           new Promise((res, rej) => {
             res(currText);
-          })
-          .then((res:any) => {
+          }).then((res:any) => {
               // if (isRefresh2 >= 10 || idx >= 10) return
               // setClickedKey(res);
               receivedText.current = receivedText.current + res;
-              setIsRefresh2(p=>p+1);
               return;
           });
         };
