@@ -24,7 +24,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
   useEffect(() => {
     if (firstLoad.current) {
-      activateLinkMock();
+      // activateLinkMock();
 
       firstLoad.current = false;
     };

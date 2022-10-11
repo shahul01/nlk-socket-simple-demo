@@ -4,6 +4,11 @@
 @forward 'variables.scss';
 @forward 'maps.scss';
 
+body {
+  height: 100vh;
+  color: hsl(0deg 0% 90%);
+  background-color: hsl(0deg 0% 10%);
+}
 
 h1 {
   color: $color;

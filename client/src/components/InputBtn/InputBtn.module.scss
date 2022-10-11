@@ -13,7 +13,7 @@
 
   input {
     @include input-btn;
-    background-color: #ddd;
+    background-color: hsl(0deg 0% 25%);
     width: 60vw;
     max-width: $chat-max-width;
   }
@@ -27,7 +27,7 @@
   button {
     @include input-btn;
     width: 100%;
-    background-color: #ddd;
+    background-color: hsl(0deg 0% 25%);
     @apply border border-l-gray-400;
   }
 
