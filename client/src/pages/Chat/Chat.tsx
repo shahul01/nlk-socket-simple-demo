@@ -2,6 +2,7 @@ import { Socket } from 'socket.io-client';
 import { FC, useEffect, useRef, useState } from 'react';
 import Messages from '../../components/Messages/Messages';
 import InputBtn from '../../components/InputBtn/InputBtn';
+import Cursor from '../../components/Cursor/Cursor';
 import LinkMock from '../../components/LinkMock/LinkMock';
 // import Keyboard from '../../components/Keyboard/Keyboard';
 import { keysDict } from '../../helpers/keyboard';
