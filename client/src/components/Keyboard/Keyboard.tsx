@@ -28,7 +28,7 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
           <>
             <div
               key={currKey}
-              ref={keyRef.current[idx]}
+              // ref={keyRef.current[idx]}
               className={`ripple ${styles['key']}`}
               aria-hidden={true}
               onClick={() => props.onClickKey(currKey)}
@@ -36,7 +36,7 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
               {currKey}
             </div>
             {(currKey === 'p' || currKey === 'l' || currKey === 'm') && (
-              <div key={currKey} className={styles['line-break']}>
+              <div key={currKey+'line-break'} className={styles['line-break']}>
               </div>
             )}
           </>

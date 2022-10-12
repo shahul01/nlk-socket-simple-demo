@@ -1,4 +1,7 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { incrementKeyClickCount } from '../LinkMock/LinkMockSlice';
+import { RootState } from '../../store/store';
 import styles from './InputBtn.module.scss';
 
 interface IInputBtnProps {
@@ -9,12 +12,43 @@ interface IInputBtnProps {
 }
 
 const InputBtn: FC<IInputBtnProps> = (props) => {
+  const dispatch = useDispatch();
+  const firstRender = useRef(true);
+  const textValueRef = useRef('');
+  const { sentLetter } = useSelector((state:RootState) => state.linkMock);
+  // const { text, currTextIdx } = useSelector((state:RootState) => state.text);
+  const temp = {text: '', currTextIdx: 0};
+  const { text, currTextIdx } = temp;
   const [ newMessageText, setNewMessageText ] = useState('');
+
+  useEffect(() => {
+    if (firstRender.current) {
+      firstRender.current = false;
+      return;
+    };
+
+    updateTextValue();
+
+  }, [sentLetter]);
 
   useEffect(() => {
     if (!props.onClickKey) return;
     handleChange(false, props.onClickKey);
+
   }, [props.onClickKey]);
+
+  function updateTextValue() {
+    // textValueRef.current += sentLetter?.letter;
+    setNewMessageText(prev=>prev + sentLetter?.letter);
+
+    if (text[currTextIdx] === sentLetter?.letter) {
+      dispatch(
+        incrementKeyClickCount()
+      );
+    };
+
+    return;
+  };
 
   function handleChange(isManual:boolean, e: React.ChangeEvent<HTMLInputElement>|string) {
     if (isManual && typeof(e)!=='string') setNewMessageText(e?.target?.value);

@@ -5,8 +5,8 @@ export interface ILinkMockState {
   clickedKeyRdx: string;
   isCurrentRef: boolean;
   keyAxes: object;
-  sentText: {
-    currLetter: string;
+  sentLetter: {
+    letter: string;
   };
   keyClickCount: number;
 }
@@ -15,8 +15,8 @@ const initialState:ILinkMockState = {
   clickedKeyRdx: '', // COMMT: why?
   isCurrentRef: false,
   keyAxes: {},
-  sentText: {
-    currLetter: '',
+  sentLetter: {
+    letter: '',
   },
   keyClickCount: 0
 };
@@ -34,8 +34,8 @@ export const linkMockSlice = createSlice({
     setKeyAxes: (state, action) => {
       state.keyAxes = action.payload;
     },
-    setSentText: (state, action) => {
-      state.sentText.currLetter = action.payload?.currLetter;
+    setSentLetter: (state, action) => {
+      state.sentLetter.letter = action.payload?.letter;
     },
     incrementKeyClickCount: state => {
       state.keyClickCount += 1;
@@ -47,7 +47,7 @@ export const {
   setClickedKeyRdx,
   toggleIsCurrentRef,
   setKeyAxes,
-  setSentText,
+  setSentLetter,
   incrementKeyClickCount
 
 } = linkMockSlice.actions;
