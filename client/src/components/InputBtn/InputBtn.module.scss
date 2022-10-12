@@ -28,7 +28,7 @@
     @include input-btn;
     width: 100%;
     background-color: hsl(0deg 0% 25%);
-    @apply border border-l-gray-400;
+    @apply border border-black;
   }
 
   button:hover,
