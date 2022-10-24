@@ -1,10 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
+import { IKeyAxes } from '../../types/global';
 
 export interface ILinkMockState {
   clickedKeyRdx: string;
   isCurrentRef: boolean;
-  keyAxes: object;
+  keyAxes: IKeyAxes;
   sentLetter: {
     letter: string;
   };
@@ -14,7 +15,17 @@ export interface ILinkMockState {
 const initialState:ILinkMockState = {
   clickedKeyRdx: '', // COMMT: why?
   isCurrentRef: false,
-  keyAxes: {},
+  keyAxes: {
+    x: 0,
+    y: 0,
+    height: 0,
+    width: 0,
+    top: 0,
+    right: 0,
+    bottom: 0,
+    left: 0,
+    forceUpdate: 0,
+  },
   sentLetter: {
     letter: '',
   },

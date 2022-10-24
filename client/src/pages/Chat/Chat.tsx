@@ -245,15 +245,15 @@ const Chat: FC<IChatProps> = (props) => {
       console.log('currKey 1', currKey);
       setClickedKey(keysDict[currKey]);
     } else {
-
       // COMMT: Auto mode
       setIsAuto(prev => !prev);
       currKey.split('')?.forEach((el) => {
         const newVal = keysDict[el] || ' ';
         setClickedKey(newVal);
       })
-    }
+    };
     return;
+
   };
 
   return (

@@ -1,5 +1,5 @@
 
-import { FC, useEffect, useRef, useState } from 'react';
+import { createRef, FC, useEffect, useRef, useState } from 'react';
 import { keysDict } from '../../helpers/keyboard';
 import styles from './Keyboard.module.scss';
 
@@ -8,14 +8,22 @@ interface IKeyboardProps {
   // COMMT: To chat to InputBtn
   clickKey: string;
   onClickKey(currKey: string): void;
+  allKeyRef: any;
 }
 
 const Keyboard: FC<IKeyboardProps> = (props) => {
+  // < Array<HTMLDivElement|string|null> >
+  const allKeyRef = useRef<any>(keysDict);
   const clickKeyRef = useRef('');
+
+  useEffect(() => {
+    props.allKeyRef(allKeyRef);
+  }, [allKeyRef]);
 
   useEffect(() => {
     console.log('props.clickKey :>> ', props.clickKey);
     if (!props?.clickKey) return;
+
     clickKeyRef.current = props?.clickKey;
     props.onClickKey(clickKeyRef.current);
 
@@ -28,7 +36,7 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
           <>
             <div
               key={currKey}
-              // ref={keyRef.current[idx]}
+              ref={el => allKeyRef.current[currKey] = el}
               className={`ripple ${styles['key']}`}
               aria-hidden={true}
               onClick={() => props.onClickKey(currKey)}
