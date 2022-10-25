@@ -3,11 +3,13 @@ import { createRef, FC, useEffect, useRef, useState } from 'react';
 import { keysDict } from '../../helpers/keyboard';
 import styles from './Keyboard.module.scss';
 
+type TCurrKeyObj = {[key:string]:string};
+
 interface IKeyboardProps {
   isAuto: boolean;
   // COMMT: To chat to InputBtn
   clickKey: string;
-  onClickKey(currKey: string): void;
+  onClickKey(arg0:TCurrKeyObj): void;
   allKeyRef: any;
 }
 
@@ -22,13 +24,14 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
 
   useEffect(() => {
     const letter = props?.clickKey;
-    console.log('@@@@ props.clickKey :>> ', typeof(letter));
-    if (!props?.clickKey) return;
+    if (!letter) return;
+    console.log('@@@@ props.clickKey :>> ', letter);
 
     clickKeyRef.current = letter;
-    props.onClickKey(clickKeyRef.current);
+    props.onClickKey({key:clickKeyRef.current});
 
   }, [props.clickKey]);
+
 
   return (
     <div className={styles['keys-container']} >
@@ -40,7 +43,7 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
               ref={el => allKeyRef.current[currKey] = el}
               className={`ripple ${styles['key']}`}
               aria-hidden={true}
-              onClick={() => props.onClickKey(currKey)}
+              onClick={() => props.onClickKey({'key':currKey})}
             >
               {currKey}
             </div>

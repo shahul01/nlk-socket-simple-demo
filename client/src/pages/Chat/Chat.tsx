@@ -44,7 +44,7 @@ const Chat: FC<IChatProps> = (props) => {
   const timeout:any = useRef(null);
   const isKeyboard = true;
   const [ isAuto, setIsAuto ] = useState(false);
-  const [ clickedKey, setClickedKey ] = useState('');
+  const [ clickedKey, setClickedKey ] = useState({key: ''});
   // const timeout = useRef<NodeJS.Timeout | null>(null);
 
 
@@ -167,6 +167,11 @@ const Chat: FC<IChatProps> = (props) => {
 
   }, []);
 
+  useEffect(() => {
+    console.log(`@#@# clickedKey Chat: `, clickedKey);
+
+  }, [clickedKey]);
+
 
   function getMessageData(from:TFrom, data:string|IClientMessageData):IClientMessageData {
 
@@ -242,23 +247,25 @@ const Chat: FC<IChatProps> = (props) => {
     if (keysDict[currKey]==='Enter') return;
     // COMMT: TODO: send space
 
-    if (currKey.length === 0) {
-      setClickedKey(keysDict[currKey]);
+    console.log(`currKey: `, currKey);
+
+    if (currKey.key?.length === 0) {
+      setClickedKey({key:keysDict[currKey.key]});
     } else {
 
       // COMMT: Auto mode
       setIsAuto(prev => !prev);
-      currKey.split('')?.forEach((currLetter:any) => {
+      currKey.key?.split('')?.forEach((currLetter:any) => {
         let newVal = ' ';
         // COMMT: key ref instead of key
         if (typeof(keysDict[currLetter]) === 'object') {
-          // @ts-expect-error 'innerText' not exist on 'string'
+          // @ts-expect-error 'innerText' not exist on 'string'.
           newVal = keysDict[currLetter]?.innerText;
         } else if (typeof(keysDict[currLetter]) === 'string') {
           newVal = keysDict[currLetter];
         };
 
-        setClickedKey(newVal);
+        setClickedKey({key:newVal});
       })
     };
     return;

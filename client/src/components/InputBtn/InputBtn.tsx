@@ -14,7 +14,6 @@ interface IInputBtnProps {
 const InputBtn: FC<IInputBtnProps> = (props) => {
   const dispatch = useDispatch();
   const firstRender = useRef(true);
-  const textValueRef = useRef('');
   const { sentLetter } = useSelector((state:RootState) => state.linkMock);
   // const { text, currTextIdx } = useSelector((state:RootState) => state.text);
   const temp = {text: '', currTextIdx: 0};
@@ -22,8 +21,9 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
   const [ newMessageText, setNewMessageText ] = useState('');
 
   useEffect(() => {
-    console.log(`props InputBtn: `, props);
-  }, [props]);
+    console.log(`props InputBtn: `, props.clickedKey);
+
+  }, [props.clickedKey]);
 
   useEffect(() => {
     if (firstRender.current) {
@@ -37,7 +37,7 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
 
   useEffect(() => {
     if (!props.clickedKey) return;
-    handleChange(false, props.clickedKey);
+    handleChange(false, props.clickedKey.key);
 
   }, [props.clickedKey]);
 

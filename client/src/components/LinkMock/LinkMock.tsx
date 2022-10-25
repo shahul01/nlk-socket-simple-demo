@@ -13,8 +13,10 @@ import Keyboard from '../Keyboard/Keyboard';
 import { IKeyAxes } from '../../types/global';
 import { RootState } from '../../store/store';
 
+type TCurrKeyObj = {[key:string]:string};
+
 interface ILinkMockProps {
-  onClickKey(el:string): void;
+  onClickKey(arg0:TCurrKeyObj): void;
   isAuto: boolean;
 }
 
@@ -25,7 +27,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     general: true,
     keyClickCount: true
   });
-  const selectedText = useRef("llo,there.");
+  const selectedText = useRef("ello,there.");
   const receivedText = useRef('');
   const isSentAll = useRef(false);
   // const [ clickedKey, setClickedKey ] = useState('');
@@ -68,7 +70,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       currLocationKeys?.forEach(async (currText:any, currTextIdx) => {
 
         if ( curSelTextIdx === keyClickCount && currSelText === currText ) {
-          console.log(`#=#=#: `, typeof(currText), curSelTextIdx, keyClickCount);
+          // console.log(`#=#=#: `, typeof(currText), curSelTextIdx, keyClickCount);
           if (!Object.keys(allKey.current)?.length) return;
           // @ts-expect-error 'any type'
           const keyRect = allKey.current?.[currText]?.getBoundingClientRect();
@@ -107,6 +109,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
   return (
     <>
+      {JSON.stringify(receivedText.current, null, 2)}
       <Keyboard
         isAuto={props.isAuto}
         // clickKey={clickedKey}
