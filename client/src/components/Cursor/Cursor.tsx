@@ -30,7 +30,7 @@ const Cursor: FC<ICursorProps> = (props) => {
   }, [cursorPos, keyAxes]);
 
   useEffect(() => {
-    console.log(`keyAxes Cursor: `,  keyAxes.y, keyAxes.x);
+    // console.log(`keyAxes Cursor: `,  keyAxes.y, keyAxes.x);
 
   }, [keyAxes]);
 
@@ -50,6 +50,10 @@ const Cursor: FC<ICursorProps> = (props) => {
         // left: passivelyScroll(prev),
         left: goDirectlyToClickableBtn,
       }));
+
+      dispatch(
+        incrementKeyClickCount()
+      );
 
 
     }, cursorSpeed);
@@ -73,9 +77,9 @@ const Cursor: FC<ICursorProps> = (props) => {
 
       isMoveCursor.current = false;
 
-      dispatch(
-        incrementKeyClickCount()
-      );
+      // dispatch(
+      //   incrementKeyClickCount()
+      // );
 
     } else if (
       cursorPos.left !== keyAxes?.x

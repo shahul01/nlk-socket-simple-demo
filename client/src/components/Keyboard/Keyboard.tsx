@@ -21,10 +21,11 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
   }, [allKeyRef]);
 
   useEffect(() => {
-    console.log('props.clickKey :>> ', props.clickKey);
+    const letter = props?.clickKey;
+    console.log('@@@@ props.clickKey :>> ', typeof(letter));
     if (!props?.clickKey) return;
 
-    clickKeyRef.current = props?.clickKey;
+    clickKeyRef.current = letter;
     props.onClickKey(clickKeyRef.current);
 
   }, [props.clickKey]);

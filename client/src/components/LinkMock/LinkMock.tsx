@@ -25,7 +25,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     general: true,
     keyClickCount: true
   });
-  const selectedText = useRef("hello,there.");
+  const selectedText = useRef("llo,there.");
   const receivedText = useRef('');
   const isSentAll = useRef(false);
   // const [ clickedKey, setClickedKey ] = useState('');
@@ -41,12 +41,13 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       isContinue.current = true;
       activateLinkMock();
 
-    }
+    };
   }, [allKey, keyClickCount]);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setReceivedTextIdx((p:number)=>p+1);
+
     }, 1000);
 
     return() => clearInterval(timer);
@@ -67,11 +68,12 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       currLocationKeys?.forEach(async (currText:any, currTextIdx) => {
 
         if ( curSelTextIdx === keyClickCount && currSelText === currText ) {
-          console.log(`#=#=#: `, currText, curSelTextIdx, keyClickCount);
+          console.log(`#=#=#: `, typeof(currText), curSelTextIdx, keyClickCount);
           if (!Object.keys(allKey.current)?.length) return;
           // @ts-expect-error 'any type'
           const keyRect = allKey.current?.[currText]?.getBoundingClientRect();
           if (!keyRect) return;
+
           const forceUpdateCount = keyAxes.forceUpdate;
           const newKeyAxes:IKeyAxes = {
             top: keyRect?.top,
@@ -84,19 +86,21 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
             y: keyRect?.y,
             forceUpdate: forceUpdateCount+1
           };
+          dispatch(setKeyAxes(newKeyAxes));
+
+          // const res = await currText;
+          // console.log(`receivedText.current: `, receivedText.current);
+          receivedText.current = receivedText.current + currText;
+          // console.log(`currText: `, typeof(currText));
           currTextPos+=1;
 
-          dispatch(setKeyAxes(newKeyAxes));
           // isContinue.current = false;
 
         };
         return;
 
-
       });
-
     });
-
 
   };
 

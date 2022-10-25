@@ -235,20 +235,29 @@ const Chat: FC<IChatProps> = (props) => {
 
   };
 
-  function handleClickKey(currKey:string) {
+  function handleClickKey(currKey: any) {
     // COMMT: TODO: add toggle to symbol KB layout
     if (keysDict[currKey]==='$') return;
     // COMMT: TODO: send data
     if (keysDict[currKey]==='Enter') return;
+    // COMMT: TODO: send space
 
     if (currKey.length === 0) {
-      console.log('currKey 1', currKey);
       setClickedKey(keysDict[currKey]);
     } else {
+
       // COMMT: Auto mode
       setIsAuto(prev => !prev);
-      currKey.split('')?.forEach((el) => {
-        const newVal = keysDict[el] || ' ';
+      currKey.split('')?.forEach((currLetter:any) => {
+        let newVal = ' ';
+        // COMMT: key ref instead of key
+        if (typeof(keysDict[currLetter]) === 'object') {
+          // @ts-expect-error 'innerText' not exist on 'string'
+          newVal = keysDict[currLetter]?.innerText;
+        } else if (typeof(keysDict[currLetter]) === 'string') {
+          newVal = keysDict[currLetter];
+        };
+
         setClickedKey(newVal);
       })
     };
@@ -269,7 +278,7 @@ const Chat: FC<IChatProps> = (props) => {
             {isTypingText ? <p>{typingUser || 'A user'} is typing...</p> : ''}
           </div>
           <InputBtn
-            onClickKey={clickedKey}
+            clickedKey={clickedKey}
             onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
             setOnTyping={setOnTyping}
             isAuto={isAuto}

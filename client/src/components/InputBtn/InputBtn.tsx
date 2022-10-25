@@ -6,7 +6,7 @@ import styles from './InputBtn.module.scss';
 
 interface IInputBtnProps {
   onNewMessage: (e:string) => void;
-  onClickKey: any;
+  clickedKey: any;
   setOnTyping: any;
   isAuto: boolean;
 }
@@ -22,6 +22,10 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
   const [ newMessageText, setNewMessageText ] = useState('');
 
   useEffect(() => {
+    console.log(`props InputBtn: `, props);
+  }, [props]);
+
+  useEffect(() => {
     if (firstRender.current) {
       firstRender.current = false;
       return;
@@ -32,10 +36,10 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
   }, [sentLetter]);
 
   useEffect(() => {
-    if (!props.onClickKey) return;
-    handleChange(false, props.onClickKey);
+    if (!props.clickedKey) return;
+    handleChange(false, props.clickedKey);
 
-  }, [props.onClickKey]);
+  }, [props.clickedKey]);
 
   function updateTextValue() {
     // textValueRef.current += sentLetter?.letter;
