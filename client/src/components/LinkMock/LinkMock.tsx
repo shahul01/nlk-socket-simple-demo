@@ -27,11 +27,11 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     general: true,
     keyClickCount: true
   });
-  const selectedText = useRef("ello,there.");
+  const selectedText = useRef("Hello,world.");
   const receivedText = useRef('');
   const isSentAll = useRef(false);
-  // const [ clickedKey, setClickedKey ] = useState('');
   const { keyAxes, sentLetter, keyClickCount } = useSelector((state:RootState) => state.linkMock);
+  const [ clickKey, setClickKey ] = useState({});
   const [ receivedTextIdx, setReceivedTextIdx ] = useState(0);
   const [ allKey, setAllKey ] = useState({current:{}});
   const isContinue = useRef(false);
@@ -40,20 +40,35 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     if (firstRender.current.keyClickCount) {
       firstRender.current.keyClickCount = false;
     } else {
-      isContinue.current = true;
+      // isContinue.current = true;
       activateLinkMock();
 
     };
   }, [allKey, keyClickCount]);
 
   useEffect(() => {
-    const timer = setInterval(() => {
+    let timerCount = 0;
+    const timer: ReturnType<typeof setInterval> = setInterval(() => {
+      if (timerCount > selectedText.current?.length) {
+        return clearInterval(timer);
+      };
+
       setReceivedTextIdx((p:number)=>p+1);
+      timerCount+=1;
 
     }, 1000);
 
     return() => clearInterval(timer);
   }, []);
+
+  useEffect(() => {
+    const newKey = receivedText.current?.substring(receivedTextIdx-1, receivedTextIdx);
+
+    if (!newKey) return;
+    setClickKey({'key': newKey});
+
+  }, [receivedText, receivedTextIdx ]);
+
 
   function activateLinkMock() {
     if (isSentAll.current) return;
@@ -67,10 +82,12 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       // COMMT: Loops through ['f', 'g', 'h'], ['q', 'w', 'e'] etc.
       //  COMMT: and if selected text matches searched text then
       //  COMMT: dispatch it to keyboard for auto typing
-      currLocationKeys?.forEach(async (currText:any, currTextIdx) => {
+      currLocationKeys?.forEach( (currText:any, currTextIdx) => {
+
+        if (currSelText === currText) {
+        };
 
         if ( curSelTextIdx === keyClickCount && currSelText === currText ) {
-          // console.log(`#=#=#: `, typeof(currText), curSelTextIdx, keyClickCount);
           if (!Object.keys(allKey.current)?.length) return;
           // @ts-expect-error 'any type'
           const keyRect = allKey.current?.[currText]?.getBoundingClientRect();
@@ -91,9 +108,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
           dispatch(setKeyAxes(newKeyAxes));
 
           // const res = await currText;
-          // console.log(`receivedText.current: `, receivedText.current);
           receivedText.current = receivedText.current + currText;
-          // console.log(`currText: `, typeof(currText));
           currTextPos+=1;
 
           // isContinue.current = false;
@@ -109,11 +124,11 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
   return (
     <>
-      {JSON.stringify(receivedText.current, null, 2)}
+      {/* {JSON.stringify(receivedText.current, null, 2)} */}
       <Keyboard
         isAuto={props.isAuto}
         // clickKey={clickedKey}
-        clickKey={receivedText.current?.substring(receivedTextIdx-1, receivedTextIdx)}
+        clickKey={clickKey}
         onClickKey={props.onClickKey}
         allKeyRef={(val:any) => setAllKey(val)}
       />

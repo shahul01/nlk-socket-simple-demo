@@ -31,21 +31,26 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
       return;
     };
 
+    if (!props.clickedKey?.key) return;
+    console.log(`sentLetter: `, sentLetter);
     updateTextValue();
 
-  }, [sentLetter]);
+  }, [sentLetter.letter]);
 
   useEffect(() => {
-    if (!props.clickedKey) return;
+    if (!props.clickedKey?.key) return;
     handleChange(false, props.clickedKey.key);
 
   }, [props.clickedKey]);
 
+
   function updateTextValue() {
+    if (!props.clickedKey?.key) return;
     // textValueRef.current += sentLetter?.letter;
     setNewMessageText(prev=>prev + sentLetter?.letter);
 
     if (text[currTextIdx] === sentLetter?.letter) {
+      // COMMT: Doesnt even work!
       dispatch(
         incrementKeyClickCount()
       );

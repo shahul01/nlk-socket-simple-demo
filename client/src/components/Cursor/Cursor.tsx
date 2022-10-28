@@ -27,7 +27,7 @@ const Cursor: FC<ICursorProps> = (props) => {
   useEffect(() => {
     cursorMoveOrPause();
 
-  }, [cursorPos, keyAxes]);
+  }, [keyAxes]);
 
   useEffect(() => {
     // console.log(`keyAxes Cursor: `,  keyAxes.y, keyAxes.x);
@@ -43,7 +43,7 @@ const Cursor: FC<ICursorProps> = (props) => {
     const goDirectlyToClickableBtn = keyAxes?.x;
 
     timer.current = setInterval(() => {
-      if (!isMoveCursor.current) return;
+      if (!isMoveCursor.current) return clearInterval(timer.current as NodeJS.Timer);
 
       setCursorPos(prev => ({
         top: keyAxes?.y+posAdjustment,
@@ -54,9 +54,10 @@ const Cursor: FC<ICursorProps> = (props) => {
       dispatch(
         incrementKeyClickCount()
       );
-
+      isMoveCursor.current = false;
 
     }, cursorSpeed);
+
   };
 
   function cursorMoveOrPause() {
@@ -64,28 +65,24 @@ const Cursor: FC<ICursorProps> = (props) => {
     if (!keyAxes?.x) return;
     const differenceX = cursorPos.left - keyAxes?.x;
 
+    // || (
+    //   differenceX >= 0
+    //   && differenceX <= 2
+    // )
     if (
       (
         cursorPos.left === keyAxes?.x
         && cursorPos.top === keyAxes?.y
       )
-      || (
-        differenceX >= 0
-        && differenceX <= 2
-      )
     ) {
-
       isMoveCursor.current = false;
-
-      // dispatch(
-      //   incrementKeyClickCount()
-      // );
 
     } else if (
       cursorPos.left !== keyAxes?.x
       || cursorPos.top !==keyAxes?.y
     ) {
       isMoveCursor.current = true;
+
     };
 
   };

@@ -168,7 +168,7 @@ const Chat: FC<IChatProps> = (props) => {
   }, []);
 
   useEffect(() => {
-    console.log(`@#@# clickedKey Chat: `, clickedKey);
+    // console.log(`#=#= clickedKey Chat: `, clickedKey);
 
   }, [clickedKey]);
 
@@ -266,7 +266,7 @@ const Chat: FC<IChatProps> = (props) => {
         };
 
         setClickedKey({key:newVal});
-      })
+      });
     };
     return;
 

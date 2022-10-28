@@ -1,5 +1,5 @@
 
-import { createRef, FC, useEffect, useRef, useState } from 'react';
+import { createRef, FC, MouseEventHandler, useEffect, useRef, useState } from 'react';
 import { keysDict } from '../../helpers/keyboard';
 import styles from './Keyboard.module.scss';
 
@@ -8,7 +8,7 @@ type TCurrKeyObj = {[key:string]:string};
 interface IKeyboardProps {
   isAuto: boolean;
   // COMMT: To chat to InputBtn
-  clickKey: string;
+  clickKey: {[key:string]:string};
   onClickKey(arg0:TCurrKeyObj): void;
   allKeyRef: any;
 }
@@ -23,14 +23,29 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
   }, [allKeyRef]);
 
   useEffect(() => {
-    const letter = props?.clickKey;
-    if (!letter) return;
-    console.log('@@@@ props.clickKey :>> ', letter);
+    // COMMT: Why: Automatic KB
 
-    clickKeyRef.current = letter;
+    const letter = props?.clickKey;
+    if (!letter?.key) return;
+    clickKeyRef.current = letter?.key;
     props.onClickKey({key:clickKeyRef.current});
 
+    // COMMT: using RTK
+    // dispatch(
+    //   setSentLetter({letter:props?.clickKey})
+    //   setClickedKey({key:props?.clickKey})
+    // );
+
   }, [props.clickKey]);
+
+  function handleClick(event:any) {
+    // COMMT: Why: Manual KB
+    const {innerText} = event.target as HTMLElement;
+    props.onClickKey({'key': innerText});
+
+    console.log(`innerText: `, innerText);
+
+  };
 
 
   return (
@@ -43,7 +58,7 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
               ref={el => allKeyRef.current[currKey] = el}
               className={`ripple ${styles['key']}`}
               aria-hidden={true}
-              onClick={() => props.onClickKey({'key':currKey})}
+              onClick={handleClick}
             >
               {currKey}
             </div>
