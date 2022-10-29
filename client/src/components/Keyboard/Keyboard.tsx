@@ -15,7 +15,8 @@ interface IKeyboardProps {
 
 const Keyboard: FC<IKeyboardProps> = (props) => {
   // < Array<HTMLDivElement|string|null> >
-  const allKeyRef = useRef<any>(keysDict);
+  const localKB = {...keysDict};
+  const allKeyRef = useRef<any>(localKB);
   const clickKeyRef = useRef('');
 
   useEffect(() => {
@@ -51,7 +52,7 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
   return (
     <div className={styles['keys-container']} >
       {
-        Object.keys(keysDict)?.map((currKey, idx) => (
+        Object.keys(localKB)?.map((currKey, idx) => (
           <>
             <div
               key={currKey}

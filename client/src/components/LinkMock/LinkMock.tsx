@@ -8,7 +8,7 @@
 import { FC, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setKeyAxes } from './LinkMockSlice';
-import { keysGeneralLocation, locationKeysDict } from '../../helpers/keyboard';
+import { keysDictReversed, keysGeneralLocation, locationKeysDict } from '../../helpers/keyboard';
 import Keyboard from '../Keyboard/Keyboard';
 import { IKeyAxes } from '../../types/global';
 import { RootState } from '../../store/store';
@@ -27,7 +27,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     general: true,
     keyClickCount: true
   });
-  const selectedText = useRef("Hello,world.");
+  const selectedText = useRef("Hello, world.");
   const receivedText = useRef('');
   const isSentAll = useRef(false);
   const { keyAxes, sentLetter, keyClickCount } = useSelector((state:RootState) => state.linkMock);
@@ -72,8 +72,9 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
   function activateLinkMock() {
     if (isSentAll.current) return;
-    let currTextPos = 0;
-    selectedText.current?.toLowerCase()?.split('')?.forEach((currSelText, curSelTextIdx) => {
+    let currKeyPos = 0;
+    selectedText.current?.toLowerCase()?.split('')?.forEach((currSelText, currSelTextIdx) => {
+      // COMMT: Why: Loops over selectedText letters to match Kb letters and send the pos to Cursor.
       // COMMT: Takes 'h', 'e' etc and returns '2b', '1a' etc.
       const currGenLocation:string = keysGeneralLocation[currSelText];
       // COMMT: Takes '2b', '1a' etc and returns ['f', 'g', 'h'], ['q', 'w', 'e'] etc.
@@ -82,15 +83,17 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       // COMMT: Loops through ['f', 'g', 'h'], ['q', 'w', 'e'] etc.
       //  COMMT: and if selected text matches searched text then
       //  COMMT: dispatch it to keyboard for auto typing
-      currLocationKeys?.forEach( (currText:any, currTextIdx) => {
+      currLocationKeys?.forEach( (currKey:any, currKeyIdx) => {
 
-        if (currSelText === currText) {
-        };
+        if ( currSelTextIdx === keyClickCount && currSelText === currKey ) {
 
-        if ( curSelTextIdx === keyClickCount && currSelText === currText ) {
+
           if (!Object.keys(allKey.current)?.length) return;
-          // @ts-expect-error 'any type'
-          const keyRect = allKey.current?.[currText]?.getBoundingClientRect();
+          // const localKeyRef = keysDict[allKey.current];
+          const keysDictRev = keysDictReversed();
+          const currKeyCode = keysDictRev[currKey];
+          // @ts-expect-error 'any type';
+          const keyRect = allKey.current?.[currKeyCode]?.getBoundingClientRect();
           if (!keyRect) return;
 
           const forceUpdateCount = keyAxes.forceUpdate;
@@ -107,9 +110,8 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
           };
           dispatch(setKeyAxes(newKeyAxes));
 
-          // const res = await currText;
-          receivedText.current = receivedText.current + currText;
-          currTextPos+=1;
+          receivedText.current = receivedText.current + currKey;
+          currKeyPos+=1;
 
           // isContinue.current = false;
 
