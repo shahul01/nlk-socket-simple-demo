@@ -38,7 +38,7 @@ const Cursor: FC<ICursorProps> = (props) => {
   function cursorMove() {
     // const cursorStep = 20; // COMMT: max 20 as step should be less than btn width
     const cursorSpeed = 1000;
-    const posAdjustment = 16/2; // 1.2 * 16
+    const posAdjustment = {top: (16/2), left: 7}; // 1.2 * 16
     // const passivelyScroll = (prev:ICursorPos) => prev.left+cursorStep;
     const goDirectlyToClickableBtn = keyAxes?.x;
 
@@ -46,9 +46,9 @@ const Cursor: FC<ICursorProps> = (props) => {
       if (!isMoveCursor.current) return clearInterval(timer.current as NodeJS.Timer);
 
       setCursorPos(prev => ({
-        top: keyAxes?.y+posAdjustment,
+        top: keyAxes?.y + posAdjustment.top,
         // left: passivelyScroll(prev),
-        left: goDirectlyToClickableBtn,
+        left: goDirectlyToClickableBtn + posAdjustment.left,
       }));
 
       dispatch(
@@ -86,6 +86,7 @@ const Cursor: FC<ICursorProps> = (props) => {
     };
 
   };
+
 
   return (
     <div

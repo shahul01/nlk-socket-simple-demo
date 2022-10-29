@@ -30,6 +30,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
   const selectedText = useRef("Hello, world.");
   const receivedText = useRef('');
   const isSentAll = useRef(false);
+  const currKeyToAdd = useRef('');
   const { keyAxes, sentLetter, keyClickCount } = useSelector((state:RootState) => state.linkMock);
   const [ clickKey, setClickKey ] = useState({});
   const [ receivedTextIdx, setReceivedTextIdx ] = useState(0);
@@ -69,6 +70,11 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
   }, [receivedText, receivedTextIdx ]);
 
+  useEffect(() => {
+    receivedText.current = receivedText.current + currKeyToAdd.current;
+
+    // keyClickCount
+  }, [keyAxes]);
 
   function activateLinkMock() {
     if (isSentAll.current) return;
@@ -89,7 +95,6 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
 
           if (!Object.keys(allKey.current)?.length) return;
-          // const localKeyRef = keysDict[allKey.current];
           const keysDictRev = keysDictReversed();
           const currKeyCode = keysDictRev[currKey];
           // @ts-expect-error 'any type';
@@ -109,8 +114,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
             forceUpdate: forceUpdateCount+1
           };
           dispatch(setKeyAxes(newKeyAxes));
-
-          receivedText.current = receivedText.current + currKey;
+          currKeyToAdd.current = currKey;
           currKeyPos+=1;
 
           // isContinue.current = false;

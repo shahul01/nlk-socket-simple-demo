@@ -28,8 +28,11 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
 
     const letter = props?.clickKey;
     if (!letter?.key) return;
-    clickKeyRef.current = letter?.key;
-    props.onClickKey({key:clickKeyRef.current});
+    setTimeout(() => {
+      clickKeyRef.current = letter?.key;
+      props.onClickKey({key:clickKeyRef.current});
+
+    }, 200);
 
     // COMMT: using RTK
     // dispatch(
