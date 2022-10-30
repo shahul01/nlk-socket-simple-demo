@@ -8,22 +8,21 @@ interface IInputBtnProps {
   onNewMessage: (e:string) => void;
   clickedKey: any;
   setOnTyping: any;
-  isAuto: boolean;
 }
 
 const InputBtn: FC<IInputBtnProps> = (props) => {
   const dispatch = useDispatch();
   const firstRender = useRef(true);
-  const { sentLetter } = useSelector((state:RootState) => state.linkMock);
+  const { sentLetter, isAuto } = useSelector((state:RootState) => state.linkMock);
   // const { text, currTextIdx } = useSelector((state:RootState) => state.text);
   const temp = {text: '', currTextIdx: 0};
   const { text, currTextIdx } = temp;
   const [ newMessageText, setNewMessageText ] = useState('');
 
   useEffect(() => {
-    console.log(`props InputBtn: `, props.clickedKey);
+    // console.log(`props InputBtn: `, props);
 
-  }, [props.clickedKey]);
+  }, [props]);
 
   useEffect(() => {
     if (firstRender.current) {
@@ -51,9 +50,9 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
 
     if (text[currTextIdx] === sentLetter?.letter) {
       // COMMT: Doesnt even work!
-      dispatch(
-        incrementKeyClickCount()
-      );
+      // dispatch(
+      //   incrementKeyClickCount()
+      // );
     };
 
     return;

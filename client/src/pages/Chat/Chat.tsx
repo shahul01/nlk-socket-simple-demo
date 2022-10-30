@@ -1,14 +1,17 @@
 import { Socket } from 'socket.io-client';
-import { FC, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
+import { useSelector, useDispatch} from 'react-redux';
 import Messages from '../../components/Messages/Messages';
 import InputBtn from '../../components/InputBtn/InputBtn';
 import Cursor from '../../components/Cursor/Cursor';
 import LinkMock from '../../components/LinkMock/LinkMock';
 // import Keyboard from '../../components/Keyboard/Keyboard';
+import { setIsAuto } from '../../components/LinkMock/LinkMockSlice';
 import { keysDict } from '../../helpers/keyboard';
 import { uuid } from '../../helpers/misc';
 import { TStateCount, TFrom, ESocketEventsDict, IClientMessageData, IUser } from '../../types/global';
 import styles from './Chat.module.scss';
+import { RootState } from '../../store/store';
 
 interface IChatProps {
   socket: Socket;
@@ -16,21 +19,12 @@ interface IChatProps {
 
 const Chat: FC<IChatProps> = (props) => {
 
+  const dispatch = useDispatch();
   const tempData:IClientMessageData[] = [
-    {
-      id: 1,
-      from: 'self',
-      username: 'Me',
-      messageText: 'Hello'
-    },
-    {
-      id: 2,
-      from: 'others',
-      username: 'Others1',
-      messageText: 'Hi'
-    }
+    { id: 1, from: 'self', username: 'Me', messageText: 'Hello' }
   ];
-
+  const timeout:any = useRef(null);
+  const { isAuto } = useSelector((state:RootState) => state.linkMock);
   const [ isConnected, setIsConnected ] = useState(false);
   const [ messageList, setMessageList ] = useState<IClientMessageData[]>([]);
   const [ onNewMessage, setOnNewMessage ] = useState(0);
@@ -41,9 +35,8 @@ const Chat: FC<IChatProps> = (props) => {
   const name = useRef(`user-${uuid(3)}`);
   const room = 'default';
   const users:IUser[] = [];
-  const timeout:any = useRef(null);
   const isKeyboard = true;
-  const [ isAuto, setIsAuto ] = useState(false);
+  // const [ isAuto, setIsAuto ] = useState(false);
   const [ clickedKey, setClickedKey ] = useState({key: ''});
   // const timeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -247,14 +240,13 @@ const Chat: FC<IChatProps> = (props) => {
     if (keysDict[currKey]==='Enter') return;
     // COMMT: TODO: send space
 
-    console.log(`currKey: `, currKey);
+    // console.log(`currKey: `, currKey);
 
     if (currKey.key?.length === 0) {
       setClickedKey({key:keysDict[currKey.key]});
     } else {
 
       // COMMT: Auto mode
-      setIsAuto(prev => !prev);
       currKey.key?.split('')?.forEach((currLetter:any) => {
         let newVal = ' ';
         // COMMT: key ref instead of key
@@ -272,34 +264,48 @@ const Chat: FC<IChatProps> = (props) => {
 
   };
 
+  function handleCheckbox(e:ChangeEvent<HTMLInputElement>) {
+    const value = e?.target?.checked;
+    // setIsAuto(value);
+    dispatch(
+      setIsAuto(value)
+    );
+  };
+
+
   return (
     <div>
       <p>Chat</p>
       <br /><hr /><br />
+      <div className={styles['chat-chart-container']}>
+        <div className={styles['chat-container']}>
+          <Messages messageList={messageList} onNewMessage={onNewMessage} />
 
-      <div className={styles['chat-container']}>
-        <Messages messageList={messageList} onNewMessage={onNewMessage} />
-
-        <div >
-          <div>
-            {isTypingText ? <p>{typingUser || 'A user'} is typing...</p> : ''}
+          <div >
+            <div>
+              {isTypingText ? <p>{typingUser || 'A user'} is typing...</p> : ''}
+            </div>
+            <InputBtn
+              clickedKey={clickedKey}
+              onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
+              setOnTyping={setOnTyping}
+            />
+            <Cursor />
+            {
+              isKeyboard && (
+                <LinkMock
+                  onClickKey={handleClickKey}
+                />
+              )
+            }
           </div>
-          <InputBtn
-            clickedKey={clickedKey}
-            onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
-            setOnTyping={setOnTyping}
-            isAuto={isAuto}
-          />
-          <Cursor />
-          {
-            //  && !isAuto
-            isKeyboard && (
-              <LinkMock
-                onClickKey={handleClickKey}
-                isAuto={isAuto}
-              />
-            )
-          }
+
+        </div>
+
+        <div className={styles['chart-container']}>
+            <div className={styles['checkbox-text']}>
+              <input type="checkbox" onChange={handleCheckbox} />
+            </div>
         </div>
 
       </div>

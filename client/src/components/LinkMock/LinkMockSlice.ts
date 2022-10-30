@@ -10,6 +10,7 @@ export interface ILinkMockState {
     letter: string;
   };
   keyClickCount: number;
+  isAuto: boolean;
 }
 
 const initialState:ILinkMockState = {
@@ -29,7 +30,8 @@ const initialState:ILinkMockState = {
   sentLetter: {
     letter: '',
   },
-  keyClickCount: 0
+  keyClickCount: 0,
+  isAuto: false
 };
 
 export const linkMockSlice = createSlice({
@@ -50,6 +52,9 @@ export const linkMockSlice = createSlice({
     },
     incrementKeyClickCount: state => {
       state.keyClickCount += 1;
+    },
+    setIsAuto: (state, action) => {
+      state.isAuto = action.payload;
     }
   },
 });
@@ -59,7 +64,8 @@ export const {
   toggleIsCurrentRef,
   setKeyAxes,
   setSentLetter,
-  incrementKeyClickCount
+  incrementKeyClickCount,
+  setIsAuto
 
 } = linkMockSlice.actions;
 

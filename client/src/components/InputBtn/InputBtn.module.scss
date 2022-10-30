@@ -26,9 +26,10 @@
 
   button {
     @include input-btn;
+    @apply border border-black;
+    @apply cursor-pointer select-none;
     width: 100%;
     background-color: hsl(0deg 0% 25%);
-    @apply border border-black;
   }
 
   button:hover,

@@ -1,5 +1,9 @@
 @use '../../styles/App.scss' as *;
 
+.chat-chart-container {
+  @apply flex_space-between_center;
+}
+
 .chat-container {
   // COMMT: using direct function w/ dynamic params
   // @include use-flex('flex_left_start');
@@ -15,4 +19,16 @@
   width: $chat-width;
   max-width: $chat-max-width;
   @apply border border-sky-800;
+}
+
+.chart-container {
+  height: 80vh;
+  width: $chat-width;
+  @apply border border-amber-600;
+}
+
+input[type="checkbox"] {
+  height: 1.3rem;
+  width: 1.3rem;
+  cursor: pointer;
 }

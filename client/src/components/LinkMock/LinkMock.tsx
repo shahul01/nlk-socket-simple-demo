@@ -17,7 +17,6 @@ type TCurrKeyObj = {[key:string]:string};
 
 interface ILinkMockProps {
   onClickKey(arg0:TCurrKeyObj): void;
-  isAuto: boolean;
 }
 
 const LinkMock: FC<ILinkMockProps> = (props) => {
@@ -27,15 +26,15 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     general: true,
     keyClickCount: true
   });
-  const selectedText = useRef("Hello, world.");
+  const selectedText = useRef("Hello, there.");
   const receivedText = useRef('');
   const isSentAll = useRef(false);
   const currKeyToAdd = useRef('');
-  const { keyAxes, sentLetter, keyClickCount } = useSelector((state:RootState) => state.linkMock);
+  const isContinue = useRef(false);
+  const { keyAxes, sentLetter, keyClickCount, isAuto } = useSelector((state:RootState) => state.linkMock);
   const [ clickKey, setClickKey ] = useState({});
   const [ receivedTextIdx, setReceivedTextIdx ] = useState(0);
   const [ allKey, setAllKey ] = useState({current:{}});
-  const isContinue = useRef(false);
 
   useEffect(() => {
     if (firstRender.current.keyClickCount) {
@@ -45,12 +44,12 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       activateLinkMock();
 
     };
-  }, [allKey, keyClickCount]);
+  }, [isAuto, allKey, keyClickCount]);
 
   useEffect(() => {
     let timerCount = 0;
     const timer: ReturnType<typeof setInterval> = setInterval(() => {
-      if (timerCount > selectedText.current?.length) {
+      if (!isAuto || timerCount > selectedText.current?.length) {
         return clearInterval(timer);
       };
 
@@ -60,7 +59,13 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     }, 1000);
 
     return() => clearInterval(timer);
-  }, []);
+  }, [isAuto]);
+
+  useEffect(() => {
+    receivedText.current = receivedText.current + currKeyToAdd.current;
+
+    // keyClickCount
+  }, [keyAxes, currKeyToAdd.current]);
 
   useEffect(() => {
     const newKey = receivedText.current?.substring(receivedTextIdx-1, receivedTextIdx);
@@ -68,16 +73,10 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     if (!newKey) return;
     setClickKey({'key': newKey});
 
-  }, [receivedText, receivedTextIdx ]);
-
-  useEffect(() => {
-    receivedText.current = receivedText.current + currKeyToAdd.current;
-
-    // keyClickCount
-  }, [keyAxes]);
+  }, [receivedTextIdx]);
 
   function activateLinkMock() {
-    if (isSentAll.current) return;
+    if (!isAuto || isSentAll.current) return;
     let currKeyPos = 0;
     selectedText.current?.toLowerCase()?.split('')?.forEach((currSelText, currSelTextIdx) => {
       // COMMT: Why: Loops over selectedText letters to match Kb letters and send the pos to Cursor.
@@ -89,10 +88,10 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       // COMMT: Loops through ['f', 'g', 'h'], ['q', 'w', 'e'] etc.
       //  COMMT: and if selected text matches searched text then
       //  COMMT: dispatch it to keyboard for auto typing
+
       currLocationKeys?.forEach( (currKey:any, currKeyIdx) => {
 
         if ( currSelTextIdx === keyClickCount && currSelText === currKey ) {
-
 
           if (!Object.keys(allKey.current)?.length) return;
           const keysDictRev = keysDictReversed();
@@ -113,6 +112,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
             y: keyRect?.y,
             forceUpdate: forceUpdateCount+1
           };
+
           dispatch(setKeyAxes(newKeyAxes));
           currKeyToAdd.current = currKey;
           currKeyPos+=1;
@@ -132,7 +132,6 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     <>
       {/* {JSON.stringify(receivedText.current, null, 2)} */}
       <Keyboard
-        isAuto={props.isAuto}
         // clickKey={clickedKey}
         clickKey={clickKey}
         onClickKey={props.onClickKey}

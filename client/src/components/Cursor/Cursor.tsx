@@ -15,7 +15,7 @@ const Cursor: FC<ICursorProps> = (props) => {
   const timer:MutableRefObject<NodeJS.Timer|null> = useRef(null);
   const isMoveCursor = useRef(true);
   // const pointRef = useSelector((state:RootState) => state.point?.pointRef);
-  const { keyAxes } = useSelector((state:RootState) => state.linkMock);
+  const { keyAxes, isAuto } = useSelector((state:RootState) => state.linkMock);
   const [ cursorPos, setCursorPos ] = useState(initialCursorState);
 
   useEffect(() => {
@@ -51,6 +51,7 @@ const Cursor: FC<ICursorProps> = (props) => {
         left: goDirectlyToClickableBtn + posAdjustment.left,
       }));
 
+      if (!isAuto) return;
       dispatch(
         incrementKeyClickCount()
       );

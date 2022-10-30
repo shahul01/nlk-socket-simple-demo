@@ -6,7 +6,6 @@ import styles from './Keyboard.module.scss';
 type TCurrKeyObj = {[key:string]:string};
 
 interface IKeyboardProps {
-  isAuto: boolean;
   // COMMT: To chat to InputBtn
   clickKey: {[key:string]:string};
   onClickKey(arg0:TCurrKeyObj): void;
