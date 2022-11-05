@@ -37,7 +37,7 @@ const Cursor: FC<ICursorProps> = (props) => {
 
   function cursorMove() {
     // const cursorStep = 20; // COMMT: max 20 as step should be less than btn width
-    const cursorSpeed = 1000;
+    const cursorSpeed = 400; // COMMT: less num increases speed.
     const posAdjustment = {top: (16/2), left: 7}; // 1.2 * 16
     // const passivelyScroll = (prev:ICursorPos) => prev.left+cursorStep;
     const goDirectlyToClickableBtn = keyAxes?.x;

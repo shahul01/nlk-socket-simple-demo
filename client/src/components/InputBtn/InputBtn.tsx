@@ -38,7 +38,8 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
 
   useEffect(() => {
     if (!props.clickedKey?.key) return;
-    handleChange(false, props.clickedKey.key);
+    // COMMT: Auto KB
+    handleChange(true, props.clickedKey.key);
 
   }, [props.clickedKey]);
 
@@ -58,9 +59,9 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
     return;
   };
 
-  function handleChange(isManual:boolean, e: React.ChangeEvent<HTMLInputElement>|string) {
-    if (isManual && typeof(e)!=='string') setNewMessageText(e?.target?.value);
-    if (!isManual) setNewMessageText(prev => prev + e);
+  function handleChange(isAuto:boolean, e: any) {
+    if (isAuto) setNewMessageText(prev => prev + e);
+    if (!isAuto && typeof(e)!=='string') setNewMessageText(e?.target?.value);
     props.setOnTyping((prev:number) => prev+1);
     return;
   };
@@ -72,11 +73,11 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
 
   return (
     <div className={styles['input-btn-container']}>
-      <input
-        type="text"
-        value={newMessageText}
-        onChange={(e) => handleChange(true, e)}
+      <textarea
+        rows={3}
         placeholder="Type here..."
+        value={newMessageText}
+        onChange={(e) => handleChange(false, e)}
       />
       <button
         onClick={handleSubmit}

@@ -11,7 +11,9 @@
   width: $chat-width;
   max-width: $chat-max-width;
 
-  input {
+  input,
+  textarea
+  {
     @include input-btn;
     background-color: hsl(0deg 0% 25%);
     width: 60vw;
@@ -19,7 +21,9 @@
   }
 
   input:hover,
-  input:focus
+  input:focus,
+  textarea:hover,
+  textarea:focus
   {
     outline: none;
   }
@@ -28,7 +32,8 @@
     @include input-btn;
     @apply border border-black;
     @apply cursor-pointer select-none;
-    width: 100%;
+    height: 5.57rem;
+    width: 4rem;
     background-color: hsl(0deg 0% 25%);
   }
 

@@ -31,7 +31,7 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
       clickKeyRef.current = letter?.key;
       props.onClickKey({key:clickKeyRef.current});
 
-    }, 200);
+    }, 350);
 
     // COMMT: using RTK
     // dispatch(

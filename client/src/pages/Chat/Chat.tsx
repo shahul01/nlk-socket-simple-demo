@@ -305,6 +305,7 @@ const Chat: FC<IChatProps> = (props) => {
         <div className={styles['chart-container']}>
             <div className={styles['checkbox-text']}>
               <input type="checkbox" onChange={handleCheckbox} />
+              <span>Enable Automatic Keyboard</span>
             </div>
         </div>
 

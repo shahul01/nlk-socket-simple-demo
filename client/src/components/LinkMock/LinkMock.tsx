@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setKeyAxes } from './LinkMockSlice';
 import { keysDictReversed, keysGeneralLocation, locationKeysDict } from '../../helpers/keyboard';
 import Keyboard from '../Keyboard/Keyboard';
+import { sampleTexts } from '../../helpers/misc';
 import { IKeyAxes } from '../../types/global';
 import { RootState } from '../../store/store';
 
@@ -26,7 +27,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     general: true,
     keyClickCount: true
   });
-  const selectedText = useRef("Hello, there.");
+  const selectedText = useRef(sampleTexts['matrixKungFu']);
   const receivedText = useRef('');
   const isSentAll = useRef(false);
   const currKeyToAdd = useRef('');
@@ -56,7 +57,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       setReceivedTextIdx((p:number)=>p+1);
       timerCount+=1;
 
-    }, 1000);
+    }, 400);
 
     return() => clearInterval(timer);
   }, [isAuto]);
@@ -83,6 +84,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       // COMMT: Takes 'h', 'e' etc and returns '2b', '1a' etc.
       const currGenLocation:string = keysGeneralLocation[currSelText];
       // COMMT: Takes '2b', '1a' etc and returns ['f', 'g', 'h'], ['q', 'w', 'e'] etc.
+      if (!currGenLocation) return;
       const currLocationKeys:string[] = Object?.values(locationKeysDict[currGenLocation]);
 
       // COMMT: Loops through ['f', 'g', 'h'], ['q', 'w', 'e'] etc.

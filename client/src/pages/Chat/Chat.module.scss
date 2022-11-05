@@ -31,4 +31,9 @@ input[type="checkbox"] {
   height: 1.3rem;
   width: 1.3rem;
   cursor: pointer;
+  outline: none;
+}
+
+.checkbox-text span {
+  user-select: none;
 }
