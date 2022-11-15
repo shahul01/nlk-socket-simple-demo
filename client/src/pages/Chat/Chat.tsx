@@ -20,11 +20,11 @@ interface IChatProps {
 const Chat: FC<IChatProps> = (props) => {
 
   const dispatch = useDispatch();
-  const tempData:IClientMessageData[] = [
-    { id: 1, from: 'self', username: 'Me', messageText: 'Hello' }
-  ];
+  // const tempData:IClientMessageData[] = [
+  //   { id: 1, from: 'self', username: 'Me', messageText: 'Hello' }
+  // ];
   const timeout:any = useRef(null);
-  const { isAuto } = useSelector((state:RootState) => state.linkMock);
+  // const { isAuto } = useSelector((state:RootState) => state.linkMock);
   const [ isConnected, setIsConnected ] = useState(false);
   const [ messageList, setMessageList ] = useState<IClientMessageData[]>([]);
   const [ onNewMessage, setOnNewMessage ] = useState(0);
@@ -34,9 +34,8 @@ const Chat: FC<IChatProps> = (props) => {
   const [ typingUser, setTypingUser ] = useState('');
   const name = useRef(`user-${uuid(3)}`);
   const room = 'default';
-  const users:IUser[] = [];
+  // const users:IUser[] = [];
   const isKeyboard = true;
-  // const [ isAuto, setIsAuto ] = useState(false);
   const [ clickedKey, setClickedKey ] = useState({key: ''});
   // const timeout = useRef<NodeJS.Timeout | null>(null);
 
@@ -48,8 +47,6 @@ const Chat: FC<IChatProps> = (props) => {
       {name:name.current, room},
       (type: 'name'|'error', callbackMessage: string) => {
         if (type === 'name' && callbackMessage === name.current) {
-          // console.log('### CONN ###', name)
-          // setIsTyping(true);
           setIsConnected(true);
         };
         if (type === 'error') console.error('Error: ', callbackMessage);
@@ -58,9 +55,7 @@ const Chat: FC<IChatProps> = (props) => {
 
     return () => {
       // handleJoinRoom()
-      // // @ts-expect-error: useEffect return type clashes with socket type
       props.socket?.off(ESocketEventsDict['joinRoom']);
-
     };
 
   }, []);
@@ -70,30 +65,41 @@ const Chat: FC<IChatProps> = (props) => {
     setIsTyping(true);
   }, [onTyping]);
 
+  // useEffect(() => {
+  //   console.log(`isTyping: `, isTyping);
+  // }, [isTyping]);
+
   // COMMT: Socket Event - send - typing
   useEffect(() => {
     if (!isConnected) return;
 
     function disableTyping() {
-      setIsTyping(false);
-      props.socket.emit(ESocketEventsDict['stopTyping'], {room});
+      props.socket.emit(
+        ESocketEventsDict['isTyping'],
+        {name:name.current, room, isTyping:false}
+      );
+      setIsTypingText(false);
+
     };
 
     if (!isTyping) {
-      setIsTyping(true);
+      // COMMT: setIsTyping true
+      setIsTyping(prev => !prev);
       props.socket.emit(
-        ESocketEventsDict['clientTyping'],
-        {name:name.current, room}
+        ESocketEventsDict['isTyping'],
+        {name:name.current, room, isTyping:true}
       );
-      timeout.current = setTimeout(disableTyping, 3000);
+      timeout.current = setTimeout(disableTyping, 2000);
+
     } else {
+      // COMMT: setIsTyping false
+      setIsTyping(prev => !prev);
       clearTimeout(timeout);
-      timeout.current = setTimeout(disableTyping, 3000);
+
     };
 
     return () => {
-      props.socket?.off(ESocketEventsDict['clientTyping']);
-      props.socket?.off(ESocketEventsDict['stopTyping']);
+      props.socket?.off(ESocketEventsDict['isTyping']);
     };
 
   }, [isConnected, onTyping]);
@@ -105,33 +111,21 @@ const Chat: FC<IChatProps> = (props) => {
     if typing username != currUsername istyping = true
   */
   useEffect(() => {
+
     props.socket.on(
-      ESocketEventsDict['serverTyping'], (callbackMessage:string) => {
-        // console.log('callbackMessage :>> ', callbackMessage);
-        if (callbackMessage !== name.current) {
-          setIsTypingText(true)
-          setTypingUser(callbackMessage);
-        };
+      ESocketEventsDict['isTyping'],
+      (name:string, isNewTyping:boolean) => {
+        setIsTyping(isNewTyping);
+        setIsTypingText(isNewTyping);
+        setTypingUser(name);
       }
-    )
+
+    );
 
     return () => {
-      props.socket?.off(ESocketEventsDict['serverTyping']);
-    }
-  }, [onTyping]);
-
-  // COMMT: Socket event - receive - stopTyping
-  useEffect(() => {
-    props.socket.on(
-      ESocketEventsDict['stopTyping'], () => {
-        setIsTypingText(false);
-      }
-    )
-
-    return () => {
-      props.socket?.off(ESocketEventsDict['stopTyping'])
+      props.socket?.off(ESocketEventsDict['isTyping']);
     };
-  }, []);
+  }, [onTyping]);
 
   // COMMT: Listen to socket and send new messages from the sent client to non sent client's messageList
   // COMMT: - via handleAddMessageToList()
@@ -164,7 +158,6 @@ const Chat: FC<IChatProps> = (props) => {
     // console.log(`#=#= clickedKey Chat: `, clickedKey);
 
   }, [clickedKey]);
-
 
   function getMessageData(from:TFrom, data:string|IClientMessageData):IClientMessageData {
 

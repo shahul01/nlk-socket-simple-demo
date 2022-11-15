@@ -31,6 +31,7 @@ export enum ESocketEventsDict {
   "clientTyping" = "clientTyping",
   "serverTyping" = "serverTyping",
   "stopTyping" = "stopTyping",
+  "isTyping" = "isTyping",
   "serverMessage" = "serverMessage",
   "clientMessage" = "clientMessage",
   "disconnect" = "disconnect",

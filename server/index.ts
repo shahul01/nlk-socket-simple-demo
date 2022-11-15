@@ -18,7 +18,7 @@ import indexRouter from './routes/indexRoutes';
 import { addUser, removeUser, getUser, getUsersInRoom } from './helpers/users';
 // import { socketEventsDict } from './helpers/socketEvents';
 import { consoleLine, uuid } from './helpers/misc';
-import { ESocketEventsDict, IUser, IServerMessageData } from './assets/types/global';
+import { ESocketEventsDict, IUser, IServerMessageData, IIsTyping } from './assets/types/global';
 
 // COMMT: Setup
 const app = express();
@@ -79,31 +79,19 @@ io.on(ESocketEventsDict['connect'], (socket) => {
     }
   );
 
-  // COMMT: When a user types
+  // COMMT: Whether a user is typing or not
   socket.on(
-    ESocketEventsDict['clientTyping'],
-    ({ name, room }: IUser) => {
+    ESocketEventsDict['isTyping'],
+    ({name,room,isTyping}: IIsTyping) => {
 
       socket
         .to(room)
         .emit(
-          ESocketEventsDict['serverTyping'],
-          name
-        )
+          ESocketEventsDict['isTyping'],
+          name,
+          isTyping
+        );
 
-    }
-  );
-
-  // COMMT: When a user stops typing
-  socket.on(
-    ESocketEventsDict['stopTyping'],
-    ({ 'room': room }: {'room': string}) => {
-      socket
-        .to(room)
-        .emit(
-          ESocketEventsDict['stopTyping']
-        )
-      console.log('stop typing msg received')
     }
   );
 

@@ -15,9 +15,10 @@
   textarea
   {
     @include input-btn;
-    background-color: hsl(0deg 0% 25%);
+    resize: none;
     width: 60vw;
     max-width: $chat-max-width;
+    background-color: hsl(0deg 0% 25%);
   }
 
   input:hover,

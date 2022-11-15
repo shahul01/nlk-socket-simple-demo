@@ -10,6 +10,7 @@ export enum ESocketEventsDict {
   "clientTyping" = "clientTyping",
   "serverTyping" = "serverTyping",
   "stopTyping" = "stopTyping",
+  "isTyping" = "isTyping",
   "serverMessage" = "serverMessage",
   "clientMessage" = "clientMessage",
   "disconnect" = "disconnect",
@@ -28,4 +29,10 @@ export interface IServerMessageData {
   username: string;
   // room?: string;
   messageText: string;
+}
+
+export interface IIsTyping {
+  name: string;
+  room: string;
+  isTyping: boolean;
 }

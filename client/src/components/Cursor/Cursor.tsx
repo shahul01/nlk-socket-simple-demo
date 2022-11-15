@@ -92,7 +92,7 @@ const Cursor: FC<ICursorProps> = (props) => {
   return (
     <div
       className={styles['cursor']}
-      style={{top:`${cursorPos.top}px`, left:`${cursorPos.left}px`}}
+      style={{display: `${isAuto ? 'block' : 'none'}`, top:`${cursorPos.top}px`, left:`${cursorPos.left}px`}}
     >
     </div>
   )
