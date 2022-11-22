@@ -52,10 +52,10 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
 
 
   return (
-    <div className={styles['keys-container']} >
+    <div  className={styles['keys-container']}>
       {
         Object.keys(localKB)?.map((currKey, idx) => (
-          <>
+          <span key={currKey} className={currKey}>
             <div
               key={currKey}
               ref={el => allKeyRef.current[currKey] = el}
@@ -65,12 +65,17 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
             >
               {currKey}
             </div>
-            {(currKey === 'p' || currKey === 'l' || currKey === 'm') && (
-              <div key={currKey+'line-break'} className={styles['line-break']}>
-              </div>
-            )}
-          </>
+            {
+              (currKey === 'p' || currKey === 'l' || currKey === 'm') && (
+                <div key={currKey+'-line-break'} className={styles['line-break']}>
+                  {/* <br /> */}
+                </div>
+              )
+            }
+          </span>
+
         ))
+
       }
     </div>
   )
