@@ -11,6 +11,17 @@ export const keysDictReversed = () => {
   );
 };
 
+const getKeyboardLines = () => {
+  const localKBArr = Object.keys(keysDict);
+  return [
+    localKBArr.slice(0,10),
+    localKBArr.slice(10,19),
+    localKBArr.slice(19,26),
+    localKBArr.slice(26)
+  ]
+};
+export const keyboardLines = getKeyboardLines();
+
 export const keysGeneralLocation:{[key:string]:string} = {
   'q':'1a', 'w':'1a', 'e':'1a', 'r':'1b', 't':'1b', 'y':'1b', 'u':'1b', 'i':'1c', 'o':'1c', 'p':'1c',
   'a':'2a', 's':'2a', 'd':'2a', 'f':'2b', 'g':'2b', 'h':'2b', 'j':'2c', 'k':'2c', 'l':'2c',

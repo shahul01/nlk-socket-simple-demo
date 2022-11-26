@@ -1,0 +1,17 @@
+
+.keyboard-lines {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: auto;
+  width: 100%;
+}
+
+.key {
+  flex-grow: 1;
+  width: 1.27rem;
+  border: 1px solid black;
+  padding: 4px 0px;
+  text-align: center;
+  @apply cursor-pointer select-none;
+}

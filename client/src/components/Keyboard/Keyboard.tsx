@@ -1,6 +1,7 @@
 
 import { createRef, FC, MouseEventHandler, useEffect, useRef, useState } from 'react';
-import { keysDict } from '../../helpers/keyboard';
+import KeyboardLines from './keyboardLines/keyboardLines';
+import { keysDict, keyboardLines } from '../../helpers/keyboard';
 import styles from './Keyboard.module.scss';
 
 type TCurrKeyObj = {[key:string]:string};
@@ -52,31 +53,27 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
 
 
   return (
-    <div  className={styles['keys-container']}>
-      {
-        Object.keys(localKB)?.map((currKey, idx) => (
-          <span key={currKey} className={currKey}>
-            <div
-              key={currKey}
-              ref={el => allKeyRef.current[currKey] = el}
-              className={`ripple ${styles['key']}`}
-              aria-hidden={true}
-              onClick={handleClick}
-            >
-              {currKey}
-            </div>
-            {
-              (currKey === 'p' || currKey === 'l' || currKey === 'm') && (
-                <div key={currKey+'-line-break'} className={styles['line-break']}>
-                  {/* <br /> */}
-                </div>
-              )
-            }
-          </span>
-
-        ))
-
-      }
+    <div  className={styles['keyboard']}>
+      <KeyboardLines
+        currLine={keyboardLines[0]}
+        allKeyRef={allKeyRef}
+        handleClick={handleClick}
+        />
+      <KeyboardLines
+        currLine={keyboardLines[1]}
+        allKeyRef={allKeyRef}
+        handleClick={handleClick}
+        />
+      <KeyboardLines
+        currLine={keyboardLines[2]}
+        allKeyRef={allKeyRef}
+        handleClick={handleClick}
+        />
+      <KeyboardLines
+        currLine={keyboardLines[3]}
+        allKeyRef={allKeyRef}
+        handleClick={handleClick}
+        />
     </div>
   )
 };

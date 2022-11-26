@@ -1,26 +1,8 @@
 @use '../../styles/App.scss' as *;
 
-.keys-container  {
+.keyboard  {
   display: flex;
-  flex-wrap: wrap;
-  // justify-content: space-between;
-  // align-items: center;
-  // @apply my-2 mx-2;
-  @apply m-auto;
-  width: 224px;
-
-}
-
-.line-break {
-  // width: 100%;
-  margin-right: 31px;
-}
-
-.key {
-  flex-grow: 1;
-  width: 1.27rem;
-  border: 1px solid black;
-  padding: 4px 2px;
-  text-align: center;
-  @apply cursor-pointer select-none;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
 }
