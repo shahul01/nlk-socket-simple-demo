@@ -24,6 +24,7 @@ const Chat: FC<IChatProps> = (props) => {
   //   { id: 1, from: 'self', username: 'Me', messageText: 'Hello' }
   // ];
   const timeout:any = useRef(null);
+  const firstRender = useRef({joinRoom:true});
   // const { isAuto } = useSelector((state:RootState) => state.linkMock);
   const [ isConnected, setIsConnected ] = useState(false);
   const [ messageList, setMessageList ] = useState<IClientMessageData[]>([]);
@@ -42,16 +43,24 @@ const Chat: FC<IChatProps> = (props) => {
 
   // COMMT: Socket event - Join Room
   useEffect(() => {
-    props.socket.emit(
-      ESocketEventsDict['joinRoom'],
-      {name:name.current, room},
-      (type: 'name'|'error', callbackMessage: string) => {
-        if (type === 'name' && callbackMessage === name.current) {
-          setIsConnected(true);
-        };
-        if (type === 'error') console.error('Error: ', callbackMessage);
-      }
-    );
+
+    if (firstRender.current.joinRoom) {
+      firstRender.current.joinRoom = false;
+    } else {
+
+      props.socket.emit(
+        ESocketEventsDict['joinRoom'],
+        {name:name.current, room},
+        (type: 'name'|'error', callbackMessage: string) => {
+          if (type === 'name' && callbackMessage === name.current) {
+            setIsConnected(true);
+          };
+          if (type === 'error') console.error('Error: ', callbackMessage);
+        }
+      );
+
+    };
+
 
     return () => {
       // handleJoinRoom()

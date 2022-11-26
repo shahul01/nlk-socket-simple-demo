@@ -17,7 +17,7 @@ export const addUser = ({ id, name, room }: IUser) => {
   const user = { id, name, room};
   users.push(user);
 
-  return { user }
+  return { user };
 };
 
 export const removeUser = (socketId:string) => {
