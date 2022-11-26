@@ -1,13 +1,14 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { incrementKeyClickCount } from '../LinkMock/LinkMockSlice';
 import { RootState } from '../../store/store';
 import styles from './InputBtn.module.scss';
+import { TStateCount } from '../../types/global';
 
 interface IInputBtnProps {
   onNewMessage: (e:string) => void;
-  clickedKey: any;
-  setOnTyping: any;
+  clickedKey: {key:string};
+  setOnTyping: React.Dispatch<React.SetStateAction<TStateCount>>;
 }
 
 const InputBtn: FC<IInputBtnProps> = (props) => {
@@ -39,7 +40,7 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
   useEffect(() => {
     if (!props.clickedKey?.key) return;
     // COMMT: Auto KB
-    handleChange(true, props.clickedKey.key);
+    handleChange(true, null);
 
   }, [props.clickedKey]);
 
@@ -59,9 +60,9 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
     return;
   };
 
-  function handleChange(isAuto:boolean, e: any) {
-    if (isAuto) setNewMessageText(prev => prev + e);
-    if (!isAuto && typeof(e)!=='string') setNewMessageText(e?.target?.value);
+  function handleChange(isAuto:boolean, e: ChangeEvent<HTMLTextAreaElement>|null) {
+    if (isAuto) setNewMessageText(prev => prev + props.clickedKey.key);
+    if (!isAuto && e) setNewMessageText(e?.target?.value);
     props.setOnTyping((prev:number) => prev+1);
     return;
   };
