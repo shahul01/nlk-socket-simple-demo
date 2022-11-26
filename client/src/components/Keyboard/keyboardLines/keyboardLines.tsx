@@ -15,7 +15,7 @@ const KeyboardLines = (props:IKeyboardLinesProps) => {
       {
         props.currLine?.map((currKey, idx) => (
           <div
-            key={idx}
+            key={currKey}
             ref={el => props.allKeyRef.current[currKey] = el}
             className={`ripple ${styles['key']}`}
             aria-hidden={true}
