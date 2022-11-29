@@ -1,22 +1,24 @@
 
-import { createRef, FC, MouseEventHandler, useEffect, useRef, useState } from 'react';
+import { FC, MutableRefObject, SetStateAction, useEffect, useRef, useState } from 'react';
 import KeyboardLines from './keyboardLines/keyboardLines';
 import { keysDict, keyboardLines } from '../../helpers/keyboard';
 import styles from './Keyboard.module.scss';
 
 type TCurrKeyObj = {[key:string]:string};
+type TAllKeyRef = MutableRefObject<{[currKey:string]:HTMLDivElement|string|null}>;
 
 interface IKeyboardProps {
   // COMMT: To chat to InputBtn
+  kbRef: (arg0:HTMLDivElement) => void;
   clickKey: {[key:string]:string};
   onClickKey(arg0:TCurrKeyObj): void;
-  allKeyRef: any;
+  allKeyRef: (val:TAllKeyRef) => void;
 }
 
 const Keyboard: FC<IKeyboardProps> = (props) => {
   // < Array<HTMLDivElement|string|null> >
   const localKB = {...keysDict};
-  const allKeyRef = useRef<any>(localKB);
+  const allKeyRef = useRef(localKB);
   const clickKeyRef = useRef('');
 
   useEffect(() => {
@@ -42,6 +44,12 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
 
   }, [props.clickKey]);
 
+  function updateKBRef(currRef:HTMLDivElement|null) {
+    if (currRef) {
+      props.kbRef(currRef)
+    };
+  };
+
   function handleClick(event:any) {
     // COMMT: Why: Manual KB
     const {innerText} = event.target as HTMLElement;
@@ -55,25 +63,29 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
   return (
     <div  className={styles['keyboard']}>
       <KeyboardLines
+        ref={(currRef) => updateKBRef(currRef)}
         currLine={keyboardLines[0]}
         allKeyRef={allKeyRef}
         handleClick={handleClick}
-        />
+      />
       <KeyboardLines
+        ref={(currRef) => updateKBRef(currRef)}
         currLine={keyboardLines[1]}
         allKeyRef={allKeyRef}
         handleClick={handleClick}
-        />
+      />
       <KeyboardLines
+        ref={(currRef) => updateKBRef(currRef)}
         currLine={keyboardLines[2]}
         allKeyRef={allKeyRef}
         handleClick={handleClick}
-        />
+      />
       <KeyboardLines
+        ref={(currRef) => updateKBRef(currRef)}
         currLine={keyboardLines[3]}
         allKeyRef={allKeyRef}
         handleClick={handleClick}
-        />
+      />
     </div>
   )
 };

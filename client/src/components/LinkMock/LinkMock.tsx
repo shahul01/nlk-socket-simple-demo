@@ -5,16 +5,18 @@
  *
  */
 
-import { FC, useEffect, useRef, useState } from 'react';
+import { FC, MutableRefObject, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { setKeyAxes } from './LinkMockSlice';
-import { keysDictReversed, keysGeneralLocation, locationKeysDict } from '../../helpers/keyboard';
 import Keyboard from '../Keyboard/Keyboard';
+import { setKeyAxes } from './LinkMockSlice';
+import { keysDict, keysDictReversed, keysGeneralLocation, locationKeysDict } from '../../helpers/keyboard';
 import { sampleTexts } from '../../helpers/misc';
 import { IKeyAxes } from '../../types/global';
 import { RootState } from '../../store/store';
 
 type TCurrKeyObj = {[key:string]:string};
+type TNewKBRef = MutableRefObject<{[key:string]:HTMLDivElement|string}>;
+// type TAllKeyRef = MutableRefObject<{[currKey:string]:HTMLDivElement|string|null}>;
 
 interface ILinkMockProps {
   onClickKey(arg0:TCurrKeyObj): void;
@@ -31,11 +33,12 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
   const receivedText = useRef('');
   const isSentAll = useRef(false);
   const currKeyToAdd = useRef('');
-  const isContinue = useRef(false);
+  const newKBRef:TNewKBRef = useRef({...keysDict});
+  // const isContinue = useRef(false);
   const { keyAxes, sentLetter, keyClickCount, isAuto } = useSelector((state:RootState) => state.linkMock);
   const [ clickKey, setClickKey ] = useState({});
   const [ receivedTextIdx, setReceivedTextIdx ] = useState(0);
-  const [ allKey, setAllKey ] = useState({current:{}});
+  // const [ allKey, setAllKey ] = useState({current:{}});
 
   useEffect(() => {
     if (firstRender.current.keyClickCount) {
@@ -45,7 +48,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       activateLinkMock();
 
     };
-  }, [isAuto, allKey, keyClickCount]);
+  }, [isAuto, newKBRef, keyClickCount]);
 
   useEffect(() => {
     let timerCount = 0;
@@ -76,11 +79,23 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
   }, [receivedTextIdx]);
 
+  function updateNewKBRef(currRef:HTMLDivElement) {
+    if (currRef && currRef?.textContent) {
+      const currKey:string|null = currRef?.textContent;
+      newKBRef.current[currKey] = currRef;
+      // updateAllKey();
+    };
+  };
+
+  // function updateAllKey() {
+  //   setAllKey(newKBRef);
+  // };
+
   function activateLinkMock() {
     if (!isAuto || isSentAll.current) return;
     let currKeyPos = 0;
     selectedText.current?.toLowerCase()?.split('')?.forEach((currSelText, currSelTextIdx) => {
-      // COMMT: Why: Loops over selectedText letters to match Kb letters and send the pos to Cursor.
+      // COMMT: Why: Loops over selectedText letters to match KB letters and send the pos to Cursor.
       // COMMT: Takes 'h', 'e' etc and returns '2b', '1a' etc.
       const currGenLocation:string = keysGeneralLocation[currSelText];
       // COMMT: Takes '2b', '1a' etc and returns ['f', 'g', 'h'], ['q', 'w', 'e'] etc.
@@ -91,15 +106,17 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       //  COMMT: and if selected text matches searched text then
       //  COMMT: dispatch it to keyboard for auto typing
 
-      currLocationKeys?.forEach( (currKey:any, currKeyIdx) => {
+
+      currLocationKeys?.forEach( (currKey:string, currKeyIdx) => {
 
         if ( currSelTextIdx === keyClickCount && currSelText === currKey ) {
 
-          if (!Object.keys(allKey.current)?.length) return;
+          if (!Object.keys(newKBRef.current)?.length) return;
           const keysDictRev = keysDictReversed();
           const currKeyCode = keysDictRev[currKey];
-          // @ts-expect-error 'any type';
-          const keyRect = allKey.current?.[currKeyCode]?.getBoundingClientRect();
+          const currKeyDiv = newKBRef.current?.[currKeyCode];
+          if (typeof(currKeyDiv) !== 'object') return;
+          const keyRect = currKeyDiv?.getBoundingClientRect();
           if (!keyRect) return;
 
           const forceUpdateCount = keyAxes.forceUpdate;
@@ -129,15 +146,16 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
   };
 
-
   return (
     <>
       {/* {JSON.stringify(receivedText.current, null, 2)} */}
+      {/* {'kbRef - ' + JSON.stringify(newKBRef.current, null, 2)} */}
       <Keyboard
         // clickKey={clickedKey}
+        kbRef={ (currRef:HTMLDivElement) => updateNewKBRef(currRef) }
         clickKey={clickKey}
         onClickKey={props.onClickKey}
-        allKeyRef={(val:any) => setAllKey(val)}
+        allKeyRef={() => {''}}
       />
     </>
   )

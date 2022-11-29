@@ -1,22 +1,24 @@
-import { MouseEventHandler, useEffect, useState } from 'react';
+import { FC, forwardRef, LegacyRef, MouseEventHandler, MutableRefObject, useEffect, useState } from 'react';
 import styles from './keyboardLines.module.scss';
+
+// type TAllKeyRef = MutableRefObject<{ [x: string]: string; }>;
 
 interface IKeyboardLinesProps {
   currLine: string[];
-  allKeyRef: any;
-  handleClick: MouseEventHandler<HTMLDivElement> | undefined;
+  allKeyRef: MutableRefObject<{[currKey:string]:HTMLDivElement|string|null}>;
+  handleClick: MouseEventHandler<HTMLDivElement>;
 }
 
-const KeyboardLines = (props:IKeyboardLinesProps) => {
+const KeyboardLines = forwardRef((props:IKeyboardLinesProps,ref:LegacyRef<HTMLDivElement>) => {
 
   return (
 
     <div className={styles['keyboard-lines']}>
       {
-        props.currLine?.map((currKey, idx) => (
+        props.currLine?.map((currKey) => (
           <div
             key={currKey}
-            ref={el => props.allKeyRef.current[currKey] = el}
+            ref={ref}
             className={`ripple ${styles['key']}`}
             aria-hidden={true}
             onClick={props.handleClick}
@@ -27,7 +29,7 @@ const KeyboardLines = (props:IKeyboardLinesProps) => {
       }
     </div>
   )
-};
+});
 
-
+KeyboardLines.displayName = 'KeyboardLines';
 export default KeyboardLines;
