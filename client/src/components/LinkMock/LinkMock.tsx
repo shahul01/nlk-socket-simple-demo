@@ -5,7 +5,7 @@
  *
  */
 
-import { FC, MutableRefObject, SetStateAction, useEffect, useRef, useState } from 'react';
+import { FC, MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Keyboard from '../Keyboard/Keyboard';
 import { setKeyAxes } from './LinkMockSlice';
@@ -16,7 +16,6 @@ import { RootState } from '../../store/store';
 
 type TCurrKeyObj = {[key:string]:string};
 type TNewKBRef = MutableRefObject<{[key:string]:HTMLDivElement|string}>;
-// type TAllKeyRef = MutableRefObject<{[currKey:string]:HTMLDivElement|string|null}>;
 
 interface ILinkMockProps {
   onClickKey(arg0:TCurrKeyObj): void;
@@ -149,7 +148,6 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
   return (
     <>
       {/* {JSON.stringify(receivedText.current, null, 2)} */}
-      {/* {'kbRef - ' + JSON.stringify(newKBRef.current, null, 2)} */}
       <Keyboard
         // clickKey={clickedKey}
         kbRef={ (currRef:HTMLDivElement) => updateNewKBRef(currRef) }

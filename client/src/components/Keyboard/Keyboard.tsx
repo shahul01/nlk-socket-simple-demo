@@ -1,5 +1,5 @@
 
-import { ChangeEvent, FC, MouseEvent, MouseEventHandler, MutableRefObject, SetStateAction, useEffect, useRef, useState } from 'react';
+import { FC, MouseEvent, MutableRefObject, useEffect, useRef, useState } from 'react';
 import KeyboardLines from './keyboardLines/keyboardLines';
 import { keysDict, keyboardLines } from '../../helpers/keyboard';
 import styles from './Keyboard.module.scss';
@@ -16,7 +16,6 @@ interface IKeyboardProps {
 }
 
 const Keyboard: FC<IKeyboardProps> = (props) => {
-  // < Array<HTMLDivElement|string|null> >
   const localKB = {...keysDict};
   const allKeyRef = useRef(localKB);
   const clickKeyRef = useRef('');
@@ -52,7 +51,6 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
 
   function handleClick(event:MouseEvent) {
     // COMMT: Why: Manual KB
-    console.log(`### KB: `, (event));
     const eventTarget = event?.target as HTMLDivElement;
     const innerText = eventTarget?.innerText;
     console.log(`innerText: `, innerText);

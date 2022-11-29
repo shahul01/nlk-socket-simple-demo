@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io-client';
-import { ChangeEvent, FC, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch} from 'react-redux';
 import Messages from '../../components/Messages/Messages';
 import InputBtn from '../../components/InputBtn/InputBtn';
@@ -23,7 +23,7 @@ const Chat: FC<IChatProps> = (props) => {
   // const tempData:IClientMessageData[] = [
   //   { id: 1, from: 'self', username: 'Me', messageText: 'Hello' }
   // ];
-  const timeout:any = useRef(null);
+  const timeout = useRef<NodeJS.Timeout|null>(null);
   const firstRender = useRef({joinRoom:true});
   // const { isAuto } = useSelector((state:RootState) => state.linkMock);
   const [ isConnected, setIsConnected ] = useState(false);
@@ -103,7 +103,7 @@ const Chat: FC<IChatProps> = (props) => {
     } else {
       // COMMT: setIsTyping false
       setIsTyping(prev => !prev);
-      clearTimeout(timeout);
+      clearTimeout(timeout.current as NodeJS.Timeout);
 
     };
 
@@ -235,11 +235,11 @@ const Chat: FC<IChatProps> = (props) => {
 
   };
 
-  function handleClickKey(currKey: any) {
+  function handleClickKey(currKey: {[key:string]:string}) {
     // COMMT: TODO: add toggle to symbol KB layout
-    if (keysDict[currKey]==='$') return;
+    if (keysDict.currKey === '$') return;
     // COMMT: TODO: send data
-    if (keysDict[currKey]==='Enter') return;
+    if (keysDict.currKey === 'Enter') return;
     // COMMT: TODO: send space
 
     // console.log(`currKey: `, currKey);
@@ -249,17 +249,14 @@ const Chat: FC<IChatProps> = (props) => {
     } else {
 
       // COMMT: Auto mode
-      currKey.key?.split('')?.forEach((currLetter:any) => {
-        let newVal = ' ';
+      currKey.key?.split('')?.forEach((currLetter:string) => {
+        let newVal = ' '; // COMMT: adds space, TODO: find better way
         // COMMT: key ref instead of key
-        if (typeof(keysDict[currLetter]) === 'object') {
-          // @ts-expect-error 'innerText' not exist on 'string'.
-          newVal = keysDict[currLetter]?.innerText;
-        } else if (typeof(keysDict[currLetter]) === 'string') {
+        if (typeof(keysDict[currLetter]) === 'string') {
           newVal = keysDict[currLetter];
         };
 
-        setClickedKey({key:newVal});
+        setClickedKey({ key: newVal });
       });
     };
     return;

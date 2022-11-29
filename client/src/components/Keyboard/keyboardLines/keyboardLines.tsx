@@ -7,7 +7,6 @@ interface IKeyboardLinesProps {
   currLine: string[];
   allKeyRef: MutableRefObject<{[currKey:string]:HTMLDivElement|string|null}>;
   handleClick: MouseEventHandler<HTMLDivElement>;
-  //| (event: MouseEventHandler<HTMLDivElement> ) => void
 }
 
 const KeyboardLines = forwardRef((props:IKeyboardLinesProps,ref:LegacyRef<HTMLDivElement>) => {
