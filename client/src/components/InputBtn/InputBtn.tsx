@@ -51,7 +51,7 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
     setNewMessageText(prev=>prev + sentLetter?.letter);
 
     if (text[currTextIdx] === sentLetter?.letter) {
-      // COMMT: Doesnt even work!
+      // COMMT: Doesn't even work! TODO: Make it work
       // dispatch(
       //   incrementKeyClickCount()
       // );

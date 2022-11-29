@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io-client';
-import { ChangeEvent, FC, MutableRefObject, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, MutableRefObject, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch} from 'react-redux';
 import Messages from '../../components/Messages/Messages';
 import InputBtn from '../../components/InputBtn/InputBtn';
@@ -38,7 +38,6 @@ const Chat: FC<IChatProps> = (props) => {
   // const users:IUser[] = [];
   const isKeyboard = true;
   const [ clickedKey, setClickedKey ] = useState({key: ''});
-  // const timeout = useRef<NodeJS.Timeout | null>(null);
 
 
   // COMMT: Socket event - Join Room
@@ -146,25 +145,27 @@ const Chat: FC<IChatProps> = (props) => {
       messageText : ''
     };
 
-    const handleServerMessageEvent = () => {
-      return handleAddMessageToList(messageDataHolder.from, messageDataHolder);
+    type THandleServerMessageEvent = (() => SetStateAction<number>) | undefined;
+    const handleServerMessageEvent = ():THandleServerMessageEvent => {
+      handleAddMessageToList(messageDataHolder.from, messageDataHolder);
+      return;
     };
 
     props.socket.on(ESocketEventsDict['serverMessage'], (message) => {
-      if (message.from === 'self') return console.log('Client message directly added already.');
+      // if (message.from === 'self') return console.log('Client message directly added already.');
       messageDataHolder = message;
       return handleServerMessageEvent();
     });
 
     return () => {
-      // @ts-expect-error: useEffect return type clashes with socket type
+      // // @ts-expect-error: useEffect return type clashes with socket type
       props.socket?.off(ESocketEventsDict['serverMessage'], handleServerMessageEvent())
     };
 
   }, []);
 
   useEffect(() => {
-    // console.log(`#=#= clickedKey Chat: `, clickedKey);
+    // console.log(`clickedKey Chat: `, clickedKey);
 
   }, [clickedKey]);
 
@@ -204,7 +205,7 @@ const Chat: FC<IChatProps> = (props) => {
   };
 
   // COMMT: get text from sent client and socket to add to messageList
-  function handleAddMessageToList(from:TFrom, data:IClientMessageData|string):void {
+  function handleAddMessageToList(from:TFrom, data:IClientMessageData|string):(SetStateAction<number>)|void {
 
     const newMessageData = getMessageData(from, data);
 
@@ -229,9 +230,7 @@ const Chat: FC<IChatProps> = (props) => {
       )
     };
 
-    setOnNewMessage(prev => prev+1);
-
-    return;
+    return setOnNewMessage(prev => prev+1);
 
   };
 
