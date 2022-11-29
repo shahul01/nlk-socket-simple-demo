@@ -7,6 +7,7 @@ interface IKeyboardLinesProps {
   currLine: string[];
   allKeyRef: MutableRefObject<{[currKey:string]:HTMLDivElement|string|null}>;
   handleClick: MouseEventHandler<HTMLDivElement>;
+  //| (event: MouseEventHandler<HTMLDivElement> ) => void
 }
 
 const KeyboardLines = forwardRef((props:IKeyboardLinesProps,ref:LegacyRef<HTMLDivElement>) => {
@@ -21,7 +22,7 @@ const KeyboardLines = forwardRef((props:IKeyboardLinesProps,ref:LegacyRef<HTMLDi
             ref={ref}
             className={`ripple ${styles['key']}`}
             aria-hidden={true}
-            onClick={props.handleClick}
+            onClick={(e) => props.handleClick(e)}
             >
             {currKey}
           </div>

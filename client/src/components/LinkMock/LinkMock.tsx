@@ -80,8 +80,8 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
   }, [receivedTextIdx]);
 
   function updateNewKBRef(currRef:HTMLDivElement) {
-    if (currRef && currRef?.textContent) {
-      const currKey:string|null = currRef?.textContent;
+    if (currRef && currRef?.innerText) {
+      const currKey:string|null = currRef?.innerText;
       newKBRef.current[currKey] = currRef;
       // updateAllKey();
     };

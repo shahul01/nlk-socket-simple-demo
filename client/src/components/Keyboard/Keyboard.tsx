@@ -1,5 +1,5 @@
 
-import { FC, MutableRefObject, SetStateAction, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, MouseEvent, MouseEventHandler, MutableRefObject, SetStateAction, useEffect, useRef, useState } from 'react';
 import KeyboardLines from './keyboardLines/keyboardLines';
 import { keysDict, keyboardLines } from '../../helpers/keyboard';
 import styles from './Keyboard.module.scss';
@@ -50,18 +50,20 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
     };
   };
 
-  function handleClick(event:any) {
+  function handleClick(event:MouseEvent) {
     // COMMT: Why: Manual KB
-    const {innerText} = event.target as HTMLElement;
-    props.onClickKey({'key': innerText});
-
+    console.log(`### KB: `, (event));
+    const eventTarget = event?.target as HTMLDivElement;
+    const innerText = eventTarget?.innerText;
     console.log(`innerText: `, innerText);
 
+    props.onClickKey({'key': innerText});
   };
 
 
   return (
     <div  className={styles['keyboard']}>
+      {/* // COMMT: QWERTYUIOP */}
       <KeyboardLines
         ref={(currRef) => updateKBRef(currRef)}
         currLine={keyboardLines[0]}
