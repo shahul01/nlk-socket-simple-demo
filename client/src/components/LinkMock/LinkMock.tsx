@@ -150,9 +150,9 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       {/* {JSON.stringify(receivedText.current, null, 2)} */}
       <Keyboard
         // clickKey={clickedKey}
-        kbRef={ (currRef:HTMLDivElement) => updateNewKBRef(currRef) }
         clickKey={clickKey}
         onClickKey={props.onClickKey}
+        kbRef={ (currRef:HTMLDivElement) => updateNewKBRef(currRef) }
       />
     </>
   )

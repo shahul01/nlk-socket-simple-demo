@@ -8,13 +8,12 @@ type TCurrKeyObj = {[key:string]:string};
 
 interface IKeyboardProps {
   // COMMT: To chat to InputBtn
-  kbRef: (arg0:HTMLDivElement) => void;
   clickKey: {[key:string]:string};
   onClickKey(arg0:TCurrKeyObj): void;
+  kbRef: (arg0:HTMLDivElement) => void;
 }
 
 const Keyboard: FC<IKeyboardProps> = (props) => {
-  const localKB = {...keysDict};
   const clickKeyRef = useRef('');
 
   useEffect(() => {
