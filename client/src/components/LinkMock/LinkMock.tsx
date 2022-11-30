@@ -153,7 +153,6 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
         kbRef={ (currRef:HTMLDivElement) => updateNewKBRef(currRef) }
         clickKey={clickKey}
         onClickKey={props.onClickKey}
-        allKeyRef={() => {''}}
       />
     </>
   )

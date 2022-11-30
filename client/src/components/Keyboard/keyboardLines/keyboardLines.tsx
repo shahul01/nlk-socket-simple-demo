@@ -1,11 +1,8 @@
 import { FC, forwardRef, LegacyRef, MouseEventHandler, MutableRefObject, useEffect, useState } from 'react';
 import styles from './keyboardLines.module.scss';
 
-// type TAllKeyRef = MutableRefObject<{ [x: string]: string; }>;
-
 interface IKeyboardLinesProps {
   currLine: string[];
-  allKeyRef: MutableRefObject<{[currKey:string]:HTMLDivElement|string|null}>;
   handleClick: MouseEventHandler<HTMLDivElement>;
 }
 

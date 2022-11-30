@@ -5,24 +5,17 @@ import { keysDict, keyboardLines } from '../../helpers/keyboard';
 import styles from './Keyboard.module.scss';
 
 type TCurrKeyObj = {[key:string]:string};
-type TAllKeyRef = MutableRefObject<{[currKey:string]:HTMLDivElement|string|null}>;
 
 interface IKeyboardProps {
   // COMMT: To chat to InputBtn
   kbRef: (arg0:HTMLDivElement) => void;
   clickKey: {[key:string]:string};
   onClickKey(arg0:TCurrKeyObj): void;
-  allKeyRef: (val:TAllKeyRef) => void;
 }
 
 const Keyboard: FC<IKeyboardProps> = (props) => {
   const localKB = {...keysDict};
-  const allKeyRef = useRef(localKB);
   const clickKeyRef = useRef('');
-
-  useEffect(() => {
-    props.allKeyRef(allKeyRef);
-  }, [allKeyRef]);
 
   useEffect(() => {
     // COMMT: Why: Automatic KB
@@ -63,28 +56,24 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
     <div  className={styles['keyboard']}>
       {/* // COMMT: QWERTYUIOP */}
       <KeyboardLines
-        ref={(currRef) => updateKBRef(currRef)}
         currLine={keyboardLines[0]}
-        allKeyRef={allKeyRef}
         handleClick={handleClick}
+        ref={(currRef) => updateKBRef(currRef)}
       />
       <KeyboardLines
-        ref={(currRef) => updateKBRef(currRef)}
         currLine={keyboardLines[1]}
-        allKeyRef={allKeyRef}
         handleClick={handleClick}
+        ref={(currRef) => updateKBRef(currRef)}
       />
       <KeyboardLines
-        ref={(currRef) => updateKBRef(currRef)}
         currLine={keyboardLines[2]}
-        allKeyRef={allKeyRef}
         handleClick={handleClick}
+        ref={(currRef) => updateKBRef(currRef)}
       />
       <KeyboardLines
-        ref={(currRef) => updateKBRef(currRef)}
         currLine={keyboardLines[3]}
-        allKeyRef={allKeyRef}
         handleClick={handleClick}
+        ref={(currRef) => updateKBRef(currRef)}
       />
     </div>
   )
