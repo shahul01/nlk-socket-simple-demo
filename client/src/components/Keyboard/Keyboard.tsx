@@ -1,7 +1,7 @@
 
-import { FC, MouseEvent, MutableRefObject, useEffect, useRef, useState } from 'react';
+import { FC, MouseEvent, useEffect, useRef, useState } from 'react';
 import KeyboardLines from './keyboardLines/keyboardLines';
-import { keysDict, keyboardLines } from '../../helpers/keyboard';
+import { keyboardLines } from '../../helpers/keyboard';
 import styles from './Keyboard.module.scss';
 
 type TCurrKeyObj = {[key:string]:string};
@@ -25,7 +25,7 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
       clickKeyRef.current = letter?.key;
       props.onClickKey({key:clickKeyRef.current});
 
-    }, 350);
+    }, 400);
 
     // COMMT: using RTK
     // dispatch(

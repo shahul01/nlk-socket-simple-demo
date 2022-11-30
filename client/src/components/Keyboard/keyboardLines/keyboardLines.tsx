@@ -1,4 +1,4 @@
-import { FC, forwardRef, LegacyRef, MouseEventHandler, MutableRefObject, useEffect, useState } from 'react';
+import { FC, forwardRef, LegacyRef, MouseEventHandler, useEffect, useState } from 'react';
 import styles from './keyboardLines.module.scss';
 
 interface IKeyboardLinesProps {
