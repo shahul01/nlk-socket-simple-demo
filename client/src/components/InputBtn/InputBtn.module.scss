@@ -6,8 +6,7 @@
 
 .input-btn-container {
   @apply flex_space-between_center;
-  // @apply p-2;
-  // width: 100%;
+  padding: 0 2px;
   width: $chat-width;
   max-width: $chat-max-width;
 
@@ -33,7 +32,7 @@
     @include input-btn;
     @apply border border-black;
     @apply cursor-pointer select-none;
-    height: 5.57rem;
+    height: 5.65rem;
     width: 4rem;
     background-color: hsl(0deg 0% 25%);
   }

@@ -1,8 +1,6 @@
 @use '../../styles/App.scss' as *;
 
-.chat-chart-container {
-  @apply flex_space-between_center;
-}
+// COMMT: Go to client/src/styles/App.scss to see more sass codes...
 
 .chat-container {
   // COMMT: using direct function w/ dynamic params
@@ -10,10 +8,9 @@
 
   // COMMT: using tailwind @apply on sass loop + mixin;
   @apply flex_space-between_start; // tailwind + sass
+  flex-direction: column; // raw css
 
   @apply mx-4;
-  flex-direction: column; // raw css
-  // height: 100vh;
   height: 80vh;
   max-height: 34rem;
   width: $chat-width;
@@ -21,10 +18,10 @@
   @apply border border-sky-800;
 }
 
-.chart-container {
-  height: 80vh;
-  width: $chat-width;
-  @apply border border-amber-600;
+.checkbox-text {
+  margin: 0 1rem 1rem 1rem;
+  @apply flex_left_center;
+  gap: 1rem;
 }
 
 input[type="checkbox"] {

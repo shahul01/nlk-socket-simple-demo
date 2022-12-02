@@ -25,7 +25,7 @@ const Chat: FC<IChatProps> = (props) => {
   // ];
   const timeout = useRef<NodeJS.Timeout|null>(null);
   const firstRender = useRef({joinRoom:true});
-  // const { isAuto } = useSelector((state:RootState) => state.linkMock);
+  const { isAuto } = useSelector((state:RootState) => state.linkMock);
   const [ isConnected, setIsConnected ] = useState(false);
   const [ messageList, setMessageList ] = useState<IClientMessageData[]>([]);
   const [ onNewMessage, setOnNewMessage ] = useState(0);
@@ -275,7 +275,13 @@ const Chat: FC<IChatProps> = (props) => {
     <div>
       <p>Chat</p>
       <br /><hr /><br />
-      <div className={styles['chat-chart-container']}>
+      <div className={styles['checkbox-chat-container']}>
+
+        <div className={styles['checkbox-text']}>
+          <input type="checkbox" onChange={handleCheckbox} />
+          <span>Enable Automatic Keyboard</span>
+        </div>
+
         <div className={styles['chat-container']}>
           <Messages messageList={messageList} onNewMessage={onNewMessage} />
 
@@ -298,13 +304,6 @@ const Chat: FC<IChatProps> = (props) => {
             }
           </div>
 
-        </div>
-
-        <div className={styles['chart-container']}>
-            <div className={styles['checkbox-text']}>
-              <input type="checkbox" onChange={handleCheckbox} />
-              <span>Enable Automatic Keyboard</span>
-            </div>
         </div>
 
       </div>
