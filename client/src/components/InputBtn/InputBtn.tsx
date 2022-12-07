@@ -14,7 +14,7 @@ interface IInputBtnProps {
 const InputBtn: FC<IInputBtnProps> = (props) => {
   const dispatch = useDispatch();
   const firstRender = useRef(true);
-  const { sentLetter, isAuto } = useSelector((state:RootState) => state.linkMock);
+  const { isAuto, clickedKeyRdx, sentLetter } = useSelector((state:RootState) => state.linkMock);
   // const { text, currTextIdx } = useSelector((state:RootState) => state.text);
   const temp = {text: '', currTextIdx: 0};
   const { text, currTextIdx } = temp;
@@ -23,7 +23,7 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
   useEffect(() => {
     // console.log(`props InputBtn: `, props);
 
-  }, [props]);
+  }, []);
 
   useEffect(() => {
     if (firstRender.current) {
@@ -38,11 +38,14 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
   }, [sentLetter.letter]);
 
   useEffect(() => {
-    if (!props.clickedKey?.key) return;
+    // props.clickedKey?.key
+    if (!clickedKeyRdx) return;
     // COMMT: Auto KB
+    console.log(`3. IB clickedKey : `, clickedKeyRdx, sentLetter?.letter);
     handleChange(true, null);
 
-  }, [props.clickedKey]);
+    // props.clickedKey
+  }, [clickedKeyRdx]);
 
 
   function updateTextValue() {
@@ -61,7 +64,7 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
   };
 
   function handleChange(isAuto:boolean, e: ChangeEvent<HTMLTextAreaElement>|null) {
-    if (isAuto) setNewMessageText(prev => prev + props.clickedKey.key);
+    if (isAuto) setNewMessageText(prev => prev + clickedKeyRdx);
     if (!isAuto && e) setNewMessageText(e?.target?.value);
     props.setOnTyping((prev:number) => prev+1);
     return;

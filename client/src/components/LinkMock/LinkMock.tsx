@@ -8,7 +8,7 @@
 import { FC, MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Keyboard from '../Keyboard/Keyboard';
-import { setKeyAxes } from './LinkMockSlice';
+import { setClickedKeyRdx, setKeyAxes } from './LinkMockSlice';
 import { keysDict, keysDictReversed, keysGeneralLocation, locationKeysDict } from '../../helpers/keyboard';
 import { sampleTexts } from '../../helpers/misc';
 import { IKeyAxes } from '../../types/global';
@@ -34,7 +34,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
   const currKeyToAdd = useRef('');
   const newKBRef:TNewKBRef = useRef({...keysDict});
   // const isContinue = useRef(false);
-  const { keyAxes, sentLetter, keyClickCount, isAuto } = useSelector((state:RootState) => state.linkMock);
+  const { isAuto, keyAxes, sentLetter, keyClickCount, cursorSpeed } = useSelector((state:RootState) => state.linkMock);
   const [ clickKey, setClickKey ] = useState({});
   const [ receivedTextIdx, setReceivedTextIdx ] = useState(0);
   // const [ allKey, setAllKey ] = useState({current:{}});
@@ -49,34 +49,22 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     };
   }, [isAuto, newKBRef, keyClickCount]);
 
-  useEffect(() => {
-    let timerCount = 0;
-    const timer: ReturnType<typeof setInterval> = setInterval(() => {
-      if (!isAuto || timerCount > selectedText.current?.length) {
-        return clearInterval(timer);
-      };
 
-      setReceivedTextIdx((p:number)=>p+1);
-      timerCount+=1;
-
-    }, 400);
-
-    return() => clearInterval(timer);
-  }, [isAuto]);
+  // COMMT:
+    // isAuto
+    // → receivedTextIdx
+    // LinkMock
+      // → keyAxes
+      // →  currKeyToAdd → receivedText → clickKey
 
   useEffect(() => {
     receivedText.current = receivedText.current + currKeyToAdd.current;
-
-    // keyClickCount
-  }, [keyAxes, currKeyToAdd.current]);
-
-  useEffect(() => {
     const newKey = receivedText.current?.substring(receivedTextIdx-1, receivedTextIdx);
 
     if (!newKey) return;
     setClickKey({'key': newKey});
 
-  }, [receivedTextIdx]);
+  }, [keyAxes, currKeyToAdd.current]);
 
   function updateNewKBRef(currRef:HTMLDivElement) {
     if (currRef && currRef?.innerText) {
@@ -106,9 +94,10 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       //  COMMT: dispatch it to keyboard for auto typing
 
 
-      currLocationKeys?.forEach( (currKey:string, currKeyIdx) => {
+      currLocationKeys?.forEach( (currKey:string) => {
 
         if ( currSelTextIdx === keyClickCount && currSelText === currKey ) {
+          console.log('1. LM ck : ', currKey);
 
           if (!Object.keys(newKBRef.current)?.length) return;
           const keysDictRev = keysDictReversed();
@@ -130,8 +119,12 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
             y: keyRect?.y,
             forceUpdate: forceUpdateCount+1
           };
+          dispatch(
+            setClickedKeyRdx(currKey)
+          );
 
           dispatch(setKeyAxes(newKeyAxes));
+          setReceivedTextIdx((p:number)=>p+1);
           currKeyToAdd.current = currKey;
           currKeyPos+=1;
 

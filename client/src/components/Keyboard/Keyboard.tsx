@@ -1,8 +1,10 @@
 
 import { FC, MouseEvent, useEffect, useRef, useState } from 'react';
+import { useSelector } from 'react-redux';
 import KeyboardLines from './keyboardLines/keyboardLines';
 import { keyboardLines } from '../../helpers/keyboard';
 import styles from './Keyboard.module.scss';
+import { RootState } from '../../store/store';
 
 type TCurrKeyObj = {[key:string]:string};
 
@@ -15,17 +17,20 @@ interface IKeyboardProps {
 
 const Keyboard: FC<IKeyboardProps> = (props) => {
   const clickKeyRef = useRef('');
+  const { clickedKeyRdx, cursorSpeed } = useSelector((state:RootState) => state.linkMock);
 
   useEffect(() => {
     // COMMT: Why: Automatic KB
 
-    const letter = props?.clickKey;
-    if (!letter?.key) return;
+    // const letter = props?.clickKey;
+    console.log(`2. KB letter : `, clickedKeyRdx);
+    if (!clickedKeyRdx) return;
     setTimeout(() => {
-      clickKeyRef.current = letter?.key;
+      clickKeyRef.current = clickedKeyRdx;
+      // console.log(`clicked KB: `, clickKeyRef.current);
       props.onClickKey({key:clickKeyRef.current});
 
-    }, 400);
+    }, ( cursorSpeed ));
 
     // COMMT: using RTK
     // dispatch(
@@ -33,7 +38,8 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
     //   setClickedKey({key:props?.clickKey})
     // );
 
-  }, [props.clickKey]);
+    // props.clickKey
+  }, [clickedKeyRdx]);
 
   function updateKBRef(currRef:HTMLDivElement|null) {
     if (currRef) {
@@ -45,7 +51,7 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
     // COMMT: Why: Manual KB
     const eventTarget = event?.target as HTMLDivElement;
     const innerText = eventTarget?.innerText;
-    console.log(`innerText: `, innerText);
+    console.log(`clicked KB: `, innerText);
 
     props.onClickKey({'key': innerText});
   };

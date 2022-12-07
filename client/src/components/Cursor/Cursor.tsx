@@ -15,13 +15,13 @@ const Cursor: FC<ICursorProps> = (props) => {
   const timer:MutableRefObject<NodeJS.Timer|null> = useRef(null);
   const isMoveCursor = useRef(true);
   // const pointRef = useSelector((state:RootState) => state.point?.pointRef);
-  const { keyAxes, isAuto } = useSelector((state:RootState) => state.linkMock);
+  const { isAuto, keyAxes, cursorSpeed } = useSelector((state:RootState) => state.linkMock);
   const [ cursorPos, setCursorPos ] = useState(initialCursorState);
 
   useEffect(() => {
     cursorMove();
 
-    return () => clearInterval(timer.current as NodeJS.Timeout);
+    return () => clearInterval(timer.current as NodeJS.Timeout)
   }, [isMoveCursor, keyAxes]);
 
   useEffect(() => {
@@ -36,14 +36,14 @@ const Cursor: FC<ICursorProps> = (props) => {
 
 
   function cursorMove() {
+    // const cursorSpeed = 400; // COMMT: less num increases speed.
     // const cursorStep = 20; // COMMT: max 20 as step should be less than btn width
-    const cursorSpeed = 400; // COMMT: less num increases speed.
     const posAdjustment = {top: (16/2), left: 7}; // 1.2 * 16
     // const passivelyScroll = (prev:ICursorPos) => prev.left+cursorStep;
     const goDirectlyToClickableBtn = keyAxes?.x;
 
     timer.current = setInterval(() => {
-      if (!isMoveCursor.current) return clearInterval(timer.current as NodeJS.Timer);
+      if (!isMoveCursor.current || !(keyAxes?.top + keyAxes?.left) ) return clearInterval(timer.current as NodeJS.Timer);
 
       setCursorPos(prev => ({
         top: keyAxes?.y + posAdjustment.top,

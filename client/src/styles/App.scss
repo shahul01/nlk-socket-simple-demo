@@ -20,14 +20,14 @@ h1 {
 
 .ripple {
   background-position: center;
-  transition: background 0.65s;
+  transition: background 0.45s;
 }
 .ripple:hover {
   background: radial-gradient(
     circle,
     hsla(207, 90%, 54%, 0.8) 1%,
     hsla(207, 90%, 54%, 0.4) 1%
-    ) center/15000%;
+  ) center/15000%;
 }
 .ripple:active {
   background-size: 100%;

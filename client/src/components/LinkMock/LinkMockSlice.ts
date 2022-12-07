@@ -4,17 +4,21 @@ import { IKeyAxes } from '../../types/global';
 
 export interface ILinkMockState {
   clickedKeyRdx: string;
+  isAuto: boolean;
   isCurrentRef: boolean;
   keyAxes: IKeyAxes;
   sentLetter: {
     letter: string;
   };
+  cursorSpeed: number;
   keyClickCount: number;
-  isAuto: boolean;
 }
 
+// COMMT: why clickedKeyRdx?
+// COMMT: cursorSpeed - less num increases speed.
 const initialState:ILinkMockState = {
-  clickedKeyRdx: '', // COMMT: why?
+  clickedKeyRdx: '',
+  isAuto: false,
   isCurrentRef: false,
   keyAxes: {
     x: 0,
@@ -30,8 +34,8 @@ const initialState:ILinkMockState = {
   sentLetter: {
     letter: '',
   },
+  cursorSpeed: 300,
   keyClickCount: 0,
-  isAuto: false
 };
 
 export const linkMockSlice = createSlice({
@@ -39,7 +43,7 @@ export const linkMockSlice = createSlice({
   initialState,
   reducers: {
     setClickedKeyRdx: (state, action: PayloadAction<string>) => {
-      state.clickedKeyRdx += action.payload
+      state.clickedKeyRdx = action.payload
     },
     toggleIsCurrentRef: state => {
       state.isCurrentRef = !state.isCurrentRef;
