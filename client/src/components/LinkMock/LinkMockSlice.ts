@@ -3,15 +3,12 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { IKeyAxes } from '../../types/global';
 
 export interface ILinkMockState {
-  clickedKeyRdx: {
-    key: string;
-  }
   isAuto: boolean;
   isCurrentRef: boolean;
   keyAxes: IKeyAxes;
-  sentLetter: {
-    letter: string;
-  };
+  clickedKeyRdx: {
+    key: string;
+  }
   cursorSpeed: number;
   keyClickCount: number;
 }
@@ -19,9 +16,6 @@ export interface ILinkMockState {
 // COMMT: why clickedKeyRdx: to pass clickedKey to itself (LinkMock) and other components like Keyboard
 // COMMT: cursorSpeed - less num increases speed.
 const initialState:ILinkMockState = {
-  clickedKeyRdx: {
-    key: '',
-  },
   isAuto: false,
   isCurrentRef: false,
   keyAxes: {
@@ -35,10 +29,10 @@ const initialState:ILinkMockState = {
     left: 0,
     forceUpdate: 0,
   },
-  sentLetter: {
-    letter: '',
+  clickedKeyRdx: {
+    key: '',
   },
-  cursorSpeed: 300,
+  cursorSpeed: 30,
   keyClickCount: 0,
 };
 
@@ -46,8 +40,8 @@ export const linkMockSlice = createSlice({
   name: 'linkMock',
   initialState,
   reducers: {
-    setClickedKeyRdx: (state, action: PayloadAction<{key:string}>) => {
-      state.clickedKeyRdx.key = action.payload?.key
+    setIsAuto: (state, action) => {
+      state.isAuto = action.payload;
     },
     toggleIsCurrentRef: state => {
       state.isCurrentRef = !state.isCurrentRef;
@@ -55,14 +49,11 @@ export const linkMockSlice = createSlice({
     setKeyAxes: (state, action) => {
       state.keyAxes = action.payload;
     },
-    setSentLetter: (state, action) => {
-      state.sentLetter.letter = action.payload?.letter;
+    setClickedKeyRdx: (state, action: PayloadAction<{key:string}>) => {
+      state.clickedKeyRdx.key = action.payload?.key
     },
     incrementKeyClickCount: state => {
       state.keyClickCount += 1;
-    },
-    setIsAuto: (state, action) => {
-      state.isAuto = action.payload;
     }
   },
 });
@@ -71,7 +62,6 @@ export const {
   setClickedKeyRdx,
   toggleIsCurrentRef,
   setKeyAxes,
-  setSentLetter,
   incrementKeyClickCount,
   setIsAuto
 
