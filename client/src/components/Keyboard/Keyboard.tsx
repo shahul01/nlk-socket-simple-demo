@@ -23,10 +23,10 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
     // COMMT: Why: Automatic KB
 
     // const letter = props?.clickKey;
-    console.log(`2. KB letter : `, clickedKeyRdx);
-    if (!clickedKeyRdx) return;
+    console.log(`2. KB letter : `, clickedKeyRdx?.key);
+    if (!clickedKeyRdx?.key) return;
     setTimeout(() => {
-      clickKeyRef.current = clickedKeyRdx;
+      clickKeyRef.current = clickedKeyRdx?.key;
       // console.log(`clicked KB: `, clickKeyRef.current);
       props.onClickKey({key:clickKeyRef.current});
 
@@ -39,7 +39,7 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
     // );
 
     // props.clickKey
-  }, [clickedKeyRdx]);
+  }, [clickedKeyRdx?.key]);
 
   function updateKBRef(currRef:HTMLDivElement|null) {
     if (currRef) {

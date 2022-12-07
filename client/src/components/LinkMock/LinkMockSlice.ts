@@ -3,7 +3,9 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { IKeyAxes } from '../../types/global';
 
 export interface ILinkMockState {
-  clickedKeyRdx: string;
+  clickedKeyRdx: {
+    key: string;
+  }
   isAuto: boolean;
   isCurrentRef: boolean;
   keyAxes: IKeyAxes;
@@ -14,10 +16,12 @@ export interface ILinkMockState {
   keyClickCount: number;
 }
 
-// COMMT: why clickedKeyRdx?
+// COMMT: why clickedKeyRdx: to pass clickedKey to itself (LinkMock) and other components like Keyboard
 // COMMT: cursorSpeed - less num increases speed.
 const initialState:ILinkMockState = {
-  clickedKeyRdx: '',
+  clickedKeyRdx: {
+    key: '',
+  },
   isAuto: false,
   isCurrentRef: false,
   keyAxes: {
@@ -42,8 +46,8 @@ export const linkMockSlice = createSlice({
   name: 'linkMock',
   initialState,
   reducers: {
-    setClickedKeyRdx: (state, action: PayloadAction<string>) => {
-      state.clickedKeyRdx = action.payload
+    setClickedKeyRdx: (state, action: PayloadAction<{key:string}>) => {
+      state.clickedKeyRdx.key = action.payload?.key
     },
     toggleIsCurrentRef: state => {
       state.isCurrentRef = !state.isCurrentRef;

@@ -31,10 +31,9 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
   const selectedText = useRef(sampleTexts['matrixKungFu']);
   const receivedText = useRef('');
   const isSentAll = useRef(false);
-  const currKeyToAdd = useRef('');
   const newKBRef:TNewKBRef = useRef({...keysDict});
   // const isContinue = useRef(false);
-  const { isAuto, keyAxes, sentLetter, keyClickCount, cursorSpeed } = useSelector((state:RootState) => state.linkMock);
+  const { isAuto, clickedKeyRdx, keyAxes, keyClickCount } = useSelector((state:RootState) => state.linkMock);
   const [ clickKey, setClickKey ] = useState({});
   const [ receivedTextIdx, setReceivedTextIdx ] = useState(0);
   // const [ allKey, setAllKey ] = useState({current:{}});
@@ -52,19 +51,19 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
   // COMMT:
     // isAuto
-    // → receivedTextIdx
-    // LinkMock
+    // → LinkMock
       // → keyAxes
-      // →  currKeyToAdd → receivedText → clickKey
+      // → clickedKeyRdx → receivedText → clickKey
 
   useEffect(() => {
-    receivedText.current = receivedText.current + currKeyToAdd.current;
+    receivedText.current = receivedText.current + clickedKeyRdx?.key;
     const newKey = receivedText.current?.substring(receivedTextIdx-1, receivedTextIdx);
 
     if (!newKey) return;
+    // console.log('newKey', newKey);
     setClickKey({'key': newKey});
 
-  }, [keyAxes, currKeyToAdd.current]);
+  }, [clickedKeyRdx?.key]);
 
   function updateNewKBRef(currRef:HTMLDivElement) {
     if (currRef && currRef?.innerText) {
@@ -80,7 +79,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
   function activateLinkMock() {
     if (!isAuto || isSentAll.current) return;
-    let currKeyPos = 0;
+    // let currKeyPos = 0;
     selectedText.current?.toLowerCase()?.split('')?.forEach((currSelText, currSelTextIdx) => {
       // COMMT: Why: Loops over selectedText letters to match KB letters and send the pos to Cursor.
       // COMMT: Takes 'h', 'e' etc and returns '2b', '1a' etc.
@@ -119,15 +118,12 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
             y: keyRect?.y,
             forceUpdate: forceUpdateCount+1
           };
-          dispatch(
-            setClickedKeyRdx(currKey)
-          );
 
           dispatch(setKeyAxes(newKeyAxes));
           setReceivedTextIdx((p:number)=>p+1);
-          currKeyToAdd.current = currKey;
-          currKeyPos+=1;
+          dispatch(setClickedKeyRdx({key:currKey}));
 
+          // currKeyPos+=1;
           // isContinue.current = false;
 
         };

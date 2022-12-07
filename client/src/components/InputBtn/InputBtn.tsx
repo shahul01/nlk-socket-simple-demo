@@ -39,13 +39,13 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
 
   useEffect(() => {
     // props.clickedKey?.key
-    if (!clickedKeyRdx) return;
+    if (!clickedKeyRdx?.key) return;
     // COMMT: Auto KB
-    console.log(`3. IB clickedKey : `, clickedKeyRdx, sentLetter?.letter);
+    console.log(`3. IB clickedKey : `, clickedKeyRdx?.key, sentLetter?.letter);
     handleChange(true, null);
 
     // props.clickedKey
-  }, [clickedKeyRdx]);
+  }, [clickedKeyRdx?.key]);
 
 
   function updateTextValue() {
@@ -64,7 +64,7 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
   };
 
   function handleChange(isAuto:boolean, e: ChangeEvent<HTMLTextAreaElement>|null) {
-    if (isAuto) setNewMessageText(prev => prev + clickedKeyRdx);
+    if (isAuto) setNewMessageText(prev => prev + clickedKeyRdx?.key);
     if (!isAuto && e) setNewMessageText(e?.target?.value);
     props.setOnTyping((prev:number) => prev+1);
     return;
