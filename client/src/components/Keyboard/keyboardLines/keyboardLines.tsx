@@ -16,10 +16,10 @@ const KeyboardLines = forwardRef((props:IKeyboardLinesProps,ref:LegacyRef<HTMLDi
           <div
             key={currKey}
             ref={ref}
-            className={`ripple ${styles['key']}`}
+            className={`button ripple ${styles['key']}`}
             aria-hidden={true}
             onClick={props.handleClick}
-            >
+          >
             {currKey}
           </div>
         ))

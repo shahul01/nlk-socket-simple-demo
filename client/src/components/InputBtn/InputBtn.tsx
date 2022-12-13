@@ -36,12 +36,12 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
   return (
     <div className={styles['input-btn-container']}>
       <textarea
-        rows={3}
         placeholder="Type here..."
         value={newMessageText}
         onChange={(e) => handleChange(false, e)}
       />
       <button
+        className='ripple'
         onClick={handleSubmit}
       >
         ⮞

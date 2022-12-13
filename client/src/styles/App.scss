@@ -14,24 +14,84 @@ h1 {
   color: $color;
 }
 
+button,
+.button
+{
+  @apply p-2;
+  @apply border border-black;
+  position: relative;
+  width: 100%;
+  max-width: 4rem;
+  background-color: hsl(0deg 0% 25%);
+  z-index: 5;
+  @apply cursor-pointer select-none;
+  transition: all 0.20s ease-in;
+}
+
+button:hover,
+button:focus,
+.button:hover,
+.button:focus
+{
+  opacity: 0.9;
+  outline: none;
+}
+
+
 /*
  * ### Ripple ###
 */
 
-.ripple {
-  background-position: center;
-  transition: background 0.45s;
+@keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+  }
+  100% {
+    // width: 150px;
+    // height: 150px;
+    width: 120%;
+    height: 100%;
+    opacity: 0;
+  }
 }
-.ripple:hover {
-  background: radial-gradient(
-    circle,
-    hsla(207, 90%, 54%, 0.8) 1%,
-    hsla(207, 90%, 54%, 0.4) 1%
-  ) center/15000%;
+
+@-webkit-keyframes ripple {
+  0% {
+    width: 0;
+    height: 0;
+    opacity: 0.5;
+  }
+  100% {
+    // width: 150px;
+    // height: 150px;
+    width: 120%;
+    height: 100%;
+    opacity: 0;
+  }
 }
-.ripple:active {
-  background-size: 100%;
-  transition: background 0s;
+
+.ripple:before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  transform: translate(-50%, -50%);
+  border-radius: 100%;
+  background-color: currentColor;
+  visibility: hidden;
+  z-index: 1;
+}
+.ripple:not(:active):before {
+  -webkit-animation: ripple 0.4s cubic-bezier(0, 0, 0.2, 1);
+          animation: ripple 0.4s cubic-bezier(0, 0, 0.2, 1);
+  transition: visibility 0.4s step-end;
+}
+.ripple:active:before {
+  visibility: visible;
 }
 
 /*
