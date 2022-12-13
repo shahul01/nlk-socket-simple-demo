@@ -6,6 +6,6 @@ export const uuid = (noOfDigits=6) => {
 
 export const sampleTexts = {
   // eslint-disable-next-line max-len
-  'matrixKungFu': "NEEO: I know kung fu. MORPHEUS: Show me. This is a sparring program, similar to the programmed reality of Matrix. It has the same basic rules. Rules like gravity. What you must learn is that these rules are no different than the rules of a computer system. Some of them can be bent. Others can be broken. Hit me, if you can.",
+  'matrixKungFu': "NEO: I know kung fu. MORPHEUS: Show me. This is a sparring program, similar to the programmed reality of Matrix. It has the same basic rules. Rules like gravity. What you must learn is that these rules are no different than the rules of a computer system. Some of them can be bent. Others can be broken. Hit me, if you can.",
 
 };

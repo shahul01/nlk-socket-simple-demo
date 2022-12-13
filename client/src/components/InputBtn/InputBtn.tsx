@@ -19,7 +19,7 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
     if (!clickedKeyRdx?.key) return;
     handleChange(true, null);
 
-  }, [clickedKeyRdx?.key]);
+  }, [clickedKeyRdx]);
 
   function handleChange(isAuto:boolean, e: ChangeEvent<HTMLTextAreaElement>|null) {
     if (isAuto) setNewMessageText(prev => prev + clickedKeyRdx?.key);

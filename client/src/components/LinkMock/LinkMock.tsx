@@ -63,7 +63,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     // console.log('newKey', newKey);
     setClickKey({'key': newKey});
 
-  }, [clickedKeyRdx?.key]);
+  }, [clickedKeyRdx]);
 
   function updateNewKBRef(currRef:HTMLDivElement) {
     if (currRef && currRef?.innerText) {
@@ -79,6 +79,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
   function activateLinkMock() {
     if (!isAuto || isSentAll.current) return;
+    const keysDictRev = keysDictReversed();
     // let currKeyPos = 0;
     selectedText.current?.toLowerCase()?.split('')?.forEach((currSelText, currSelTextIdx) => {
       // COMMT: Why: Loops over selectedText letters to match KB letters and send the pos to Cursor.
@@ -86,25 +87,26 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
       const currGenLocation:string = keysGeneralLocation[currSelText];
       // COMMT: Takes '2b', '1a' etc and returns ['f', 'g', 'h'], ['q', 'w', 'e'] etc.
       if (!currGenLocation) return;
+
       const currLocationKeys:string[] = Object?.values(locationKeysDict[currGenLocation]);
 
       // COMMT: Loops through ['f', 'g', 'h'], ['q', 'w', 'e'] etc.
       //  COMMT: and if selected text matches searched text then
       //  COMMT: dispatch it to keyboard for auto typing
 
-
+      let breakPointInnerLoop = false;
       currLocationKeys?.forEach( (currKey:string) => {
 
         if ( currSelTextIdx === keyClickCount && currSelText === currKey ) {
-          console.log('1. LM ck : ', currKey);
+          // console.log('1. LM currKey : ', currKey);
 
           if (!Object.keys(newKBRef.current)?.length) return;
-          const keysDictRev = keysDictReversed();
           const currKeyCode = keysDictRev[currKey];
           const currKeyDiv = newKBRef.current?.[currKeyCode];
           if (typeof(currKeyDiv) !== 'object') return;
           const keyRect = currKeyDiv?.getBoundingClientRect();
           if (!keyRect) return;
+          breakPointInnerLoop = true;
 
           const forceUpdateCount = keyAxes.forceUpdate;
           const newKeyAxes:IKeyAxes = {
@@ -126,8 +128,10 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
           // currKeyPos+=1;
           // isContinue.current = false;
 
+          return;
         };
-        return;
+
+        if (breakPointInnerLoop) return;
 
       });
     });

@@ -8,6 +8,7 @@ export interface ILinkMockState {
   keyAxes: IKeyAxes;
   clickedKeyRdx: {
     key: string;
+    forceUpdate: number;
   }
   cursorSpeed: number;
   keyClickCount: number;
@@ -31,8 +32,9 @@ const initialState:ILinkMockState = {
   },
   clickedKeyRdx: {
     key: '',
+    forceUpdate: 0
   },
-  cursorSpeed: 30,
+  cursorSpeed: 300,
   keyClickCount: 0,
 };
 
@@ -51,6 +53,7 @@ export const linkMockSlice = createSlice({
     },
     setClickedKeyRdx: (state, action: PayloadAction<{key:string}>) => {
       state.clickedKeyRdx.key = action.payload?.key
+      state.clickedKeyRdx.forceUpdate += 1;
     },
     incrementKeyClickCount: state => {
       state.keyClickCount += 1;
