@@ -66,7 +66,6 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
   }, [clickedKeyRdx]);
 
   function updateNewKBRef(currRef:HTMLDivElement) {
-    // console.log(`currRef: `, currRef);
     if (currRef && currRef?.innerText) {
       const currKey:string|null = currRef?.innerText;
       if (!currKey) return;
@@ -138,7 +137,6 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
   return (
     <>
-      {/* {JSON.stringify(receivedText.current, null, 2)} */}
       <Keyboard
         // clickKey={clickedKey}
         clickKey={clickKey}
