@@ -66,16 +66,14 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
   }, [clickedKeyRdx]);
 
   function updateNewKBRef(currRef:HTMLDivElement) {
+    // console.log(`currRef: `, currRef);
     if (currRef && currRef?.innerText) {
       const currKey:string|null = currRef?.innerText;
+      if (!currKey) return;
       newKBRef.current[currKey] = currRef;
       // updateAllKey();
     };
   };
-
-  // function updateAllKey() {
-  //   setAllKey(newKBRef);
-  // };
 
   function activateLinkMock() {
     if (!isAuto || isSentAll.current) return;

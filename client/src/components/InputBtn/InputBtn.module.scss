@@ -29,6 +29,7 @@
 
   button {
     @include input-btn;
+    width: 100%;
   }
 
 }

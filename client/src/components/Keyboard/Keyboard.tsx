@@ -1,11 +1,10 @@
 
-import { FC, MouseEvent, useEffect, useRef, useState } from 'react';
+import { FC, Fragment, MouseEvent, MutableRefObject, useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import KeyboardLines from './keyboardLines/keyboardLines';
-import { keyboardLines } from '../../helpers/keyboard';
-import styles from './Keyboard.module.scss';
-import { RootState } from '../../store/store';
+import { keysDict } from '../../helpers/keyboard';
 import { setClickedKeyRdx } from '../LinkMock/LinkMockSlice';
+import { RootState } from '../../store/store';
+import styles from './Keyboard.module.scss';
 
 type TCurrKeyObj = {[key:string]:string};
 
@@ -17,6 +16,7 @@ interface IKeyboardProps {
 }
 
 const Keyboard: FC<IKeyboardProps> = (props) => {
+  const localKB = Object.keys({...keysDict});
   const clickKeyRef = useRef('');
   const dispatch = useDispatch();
   const { clickedKeyRdx, cursorSpeed } = useSelector((state:RootState) => state.linkMock);
@@ -42,12 +42,6 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
     // props.clickKey
   }, [clickedKeyRdx]);
 
-  function updateKBRef(currRef:HTMLDivElement|null) {
-    if (currRef) {
-      props.kbRef(currRef)
-    };
-  };
-
   function handleClick(event:MouseEvent) {
     // COMMT: Why: Manual KB
     const eventTarget = event?.target as HTMLDivElement;
@@ -60,27 +54,28 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
 
   return (
     <div  className={styles['keyboard']}>
-      {/* // COMMT: QWERTYUIOP */}
-      <KeyboardLines
-        currLine={keyboardLines[0]}
-        handleClick={handleClick}
-        ref={(currRef) => updateKBRef(currRef)}
-      />
-      <KeyboardLines
-        currLine={keyboardLines[1]}
-        handleClick={handleClick}
-        ref={(currRef) => updateKBRef(currRef)}
-      />
-      <KeyboardLines
-        currLine={keyboardLines[2]}
-        handleClick={handleClick}
-        ref={(currRef) => updateKBRef(currRef)}
-      />
-      <KeyboardLines
-        currLine={keyboardLines[3]}
-        handleClick={handleClick}
-        ref={(currRef) => updateKBRef(currRef)}
-      />
+      {
+        localKB.map(currKey => (
+          <Fragment key={currKey} >
+            <div
+              ref={(ref:HTMLDivElement) => props.kbRef(ref)}
+              className={`button ripple ${styles['key']}`}
+              aria-hidden={true}
+              onClick={handleClick}
+            >
+              {currKey}
+            </div>
+
+            {(
+              currKey === 'p'
+              || currKey === 'l'
+              || currKey === 'm'
+            ) && (
+              <div className={styles['line-break']}></div>
+            )}
+          </Fragment>
+        ))
+      }
     </div>
   )
 };
