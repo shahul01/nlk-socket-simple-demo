@@ -11,17 +11,12 @@ import Keyboard from '../Keyboard/Keyboard';
 import { setClickedKeyRdx, setKeyAxes } from './LinkMockSlice';
 import { keysDict, keysDictReversed, keysGeneralLocation, locationKeysDict } from '../../helpers/keyboard';
 import { sampleTexts } from '../../helpers/misc';
-import { IKeyAxes } from '../../types/global';
 import { RootState } from '../../store/store';
+import { IKeyAxes } from '../../types/global';
 
-type TCurrKeyObj = {[key:string]:string};
 type TNewKBRef = MutableRefObject<{[key:string]:HTMLDivElement|string}>;
 
-interface ILinkMockProps {
-  onClickKey(arg0:TCurrKeyObj): void;
-}
-
-const LinkMock: FC<ILinkMockProps> = (props) => {
+const LinkMock: FC = (props) => {
 
   const dispatch = useDispatch();
   const firstRender = useRef({
@@ -29,13 +24,9 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     keyClickCount: true
   });
   const selectedText = useRef(sampleTexts['matrixKungFu']);
-  const receivedText = useRef('');
   const isSentAll = useRef(false);
   const newKBRef:TNewKBRef = useRef({...keysDict});
-  // const isContinue = useRef(false);
-  const { isAuto, clickedKeyRdx, keyAxes, keyClickCount } = useSelector((state:RootState) => state.linkMock);
-  const [ clickKey, setClickKey ] = useState({});
-  const [ receivedTextIdx, setReceivedTextIdx ] = useState(0);
+  const { isAuto, keyAxes, keyClickCount } = useSelector((state:RootState) => state.linkMock);
   // const [ allKey, setAllKey ] = useState({current:{}});
 
   useEffect(() => {
@@ -49,22 +40,6 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
   }, [isAuto, newKBRef, keyClickCount]);
 
 
-  // COMMT:
-    // isAuto
-    // → LinkMock
-      // → keyAxes
-      // → clickedKeyRdx → receivedText → clickKey
-
-  useEffect(() => {
-    receivedText.current = receivedText.current + clickedKeyRdx?.key;
-    const newKey = receivedText.current?.substring(receivedTextIdx-1, receivedTextIdx);
-
-    if (!newKey) return;
-    // console.log('newKey', newKey);
-    setClickKey({'key': newKey});
-
-  }, [clickedKeyRdx]);
-
   function updateNewKBRef(currRef:HTMLDivElement) {
     if (currRef && currRef?.innerText) {
       const currKey:string|null = currRef?.innerText;
@@ -76,8 +51,6 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
 
   function activateLinkMock() {
     if (!isAuto || isSentAll.current) return;
-    const keysDictRev = keysDictReversed();
-    // let currKeyPos = 0;
     selectedText.current?.toLowerCase()?.split('')?.forEach((currSelText, currSelTextIdx) => {
       // COMMT: Why: Loops over selectedText letters to match KB letters and send the pos to Cursor.
       // COMMT: Takes 'h', 'e' etc and returns '2b', '1a' etc.
@@ -98,7 +71,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
           // console.log('1. LM currKey : ', currKey);
 
           if (!Object.keys(newKBRef.current)?.length) return;
-          const currKeyCode = keysDictRev[currKey];
+          const currKeyCode = keysDictReversed[currKey];
           const currKeyDiv = newKBRef.current?.[currKeyCode];
           if (typeof(currKeyDiv) !== 'object') return;
           const keyRect = currKeyDiv?.getBoundingClientRect();
@@ -119,11 +92,7 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
           };
 
           dispatch(setKeyAxes(newKeyAxes));
-          setReceivedTextIdx((p:number)=>p+1);
           dispatch(setClickedKeyRdx({key:currKey}));
-
-          // currKeyPos+=1;
-          // isContinue.current = false;
 
           return;
         };
@@ -139,8 +108,6 @@ const LinkMock: FC<ILinkMockProps> = (props) => {
     <>
       <Keyboard
         // clickKey={clickedKey}
-        clickKey={clickKey}
-        onClickKey={props.onClickKey}
         kbRef={ (currRef:HTMLDivElement) => updateNewKBRef(currRef) }
       />
     </>

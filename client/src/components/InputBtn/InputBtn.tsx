@@ -1,31 +1,40 @@
 import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
-import styles from './InputBtn.module.scss';
 import { TStateCount } from '../../types/global';
+import styles from './InputBtn.module.scss';
 
 interface IInputBtnProps {
-  onNewMessage: (e:string) => void;
   clickedKey: {key:string};
+  onNewMessage: (e:string) => void;
   setOnTyping: React.Dispatch<React.SetStateAction<TStateCount>>;
 }
 
 const InputBtn: FC<IInputBtnProps> = (props) => {
-  const { clickedKeyRdx } = useSelector((state:RootState) => state.linkMock);
+  const { isAuto, clickedKeyRdx, cursorSpeed } = useSelector((state:RootState) => state.linkMock);
   const [ newMessageText, setNewMessageText ] = useState('');
-
 
   useEffect(() => {
     if (!clickedKeyRdx?.key) return;
-    handleChange(true, null);
+    handleChange(null);
 
   }, [clickedKeyRdx]);
 
-  function handleChange(isAuto:boolean, e: ChangeEvent<HTMLTextAreaElement>|null) {
-    if (isAuto) setNewMessageText(prev => prev + clickedKeyRdx?.key);
-    if (!isAuto && e) setNewMessageText(e?.target?.value);
-    props.setOnTyping((prev:number) => prev+1);
-    return;
+  function handleChange(e: ChangeEvent<HTMLTextAreaElement>|null) {
+    if (e) {
+      // COMMT: Manual typing
+      setNewMessageText(e?.target?.value);
+    } else if (!isAuto) {
+      // COMMT: Manual clicking on screen kb
+      setNewMessageText(prev => prev + clickedKeyRdx?.key);
+    } else {
+      // COMMT: Auto clicking
+      setTimeout(() => {
+        setNewMessageText(prev => prev + clickedKeyRdx?.key);
+      }, cursorSpeed);
+    };
+
+    return props.setOnTyping((prev:number) => prev+1);
   };
 
   function handleSubmit() {
@@ -38,7 +47,7 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
       <textarea
         placeholder="Type here..."
         value={newMessageText}
-        onChange={(e) => handleChange(false, e)}
+        onChange={(e) => handleChange(e)}
       />
       <button
         className='ripple'

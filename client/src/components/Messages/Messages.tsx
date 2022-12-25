@@ -17,16 +17,13 @@ const Messages: FC<IMessagesProps> = (props) => {
   }, [props?.onNewMessage]);
 
   function scrollToBottom() {
-    if (MessageRef?.current) {
+    if (!MessageRef?.current) return;
 
-      MessageRef.current.scrollTo({
-        top: MessageRef.current?.scrollHeight,
-        behavior: 'smooth',
-      });
+    return MessageRef.current.scrollTo({
+      top: MessageRef.current?.scrollHeight,
+      behavior: 'smooth',
+    });
 
-    };
-
-    return;
   };
 
   return (

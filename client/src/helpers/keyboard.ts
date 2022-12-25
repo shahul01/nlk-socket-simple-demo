@@ -1,15 +1,18 @@
-export const keysDict:{[key:string]:string} = {
+type TObject = {[key:string]:string};
+
+export const keysDict:TObject = {
   'q':'q', 'w':'w', 'e':'e', 'r':'r', 't':'t', 'y':'y', 'u':'u', 'i':'i', 'o':'o', 'p':'p',
   'a':'a', 's':'s', 'd':'d', 'f':'f', 'g':'g', 'h':'h', 'j':'j', 'k':'k', 'l':'l',
   'z':'z', 'x':'x', 'c':'c', 'v':'v', 'b':'b', 'n':'n', 'm':'m',
   ':':':', ',':',', 'Space':' ', '.':'.', '↵':'Enter'
 };
 
-export const keysDictReversed = () => {
+const getKeysDictReversed = () => {
   return Object.fromEntries(
     Object.entries(keysDict).map(currKey => currKey.reverse())
   );
 };
+export const keysDictReversed = getKeysDictReversed();
 
 const getKeyboardLines = () => {
   const localKBArr = Object.keys(keysDict);

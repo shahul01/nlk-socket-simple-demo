@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io-client';
-import { ChangeEvent, FC, MutableRefObject, SetStateAction, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, FC, SetStateAction, useEffect, useRef, useState } from 'react';
 import { useSelector, useDispatch} from 'react-redux';
 import Messages from '../../components/Messages/Messages';
 import InputBtn from '../../components/InputBtn/InputBtn';
@@ -7,9 +7,8 @@ import Cursor from '../../components/Cursor/Cursor';
 import LinkMock from '../../components/LinkMock/LinkMock';
 // import Keyboard from '../../components/Keyboard/Keyboard';
 import { setIsAuto } from '../../components/LinkMock/LinkMockSlice';
-import { keysDict } from '../../helpers/keyboard';
 import { uuid } from '../../helpers/misc';
-import { TStateCount, TFrom, ESocketEventsDict, IClientMessageData, IUser } from '../../types/global';
+import { TStateCount, TFrom, ESocketEventsDict, IClientMessageData } from '../../types/global';
 import styles from './Chat.module.scss';
 import { RootState } from '../../store/store';
 
@@ -158,7 +157,6 @@ const Chat: FC<IChatProps> = (props) => {
     });
 
     return () => {
-      // // @ts-expect-error: useEffect return type clashes with socket type
       props.socket?.off(ESocketEventsDict['serverMessage'], handleServerMessageEvent())
     };
 
@@ -234,34 +232,6 @@ const Chat: FC<IChatProps> = (props) => {
 
   };
 
-  function handleClickKey(currKey: {[key:string]:string}) {
-    // COMMT: TODO: add toggle to symbol KB layout
-    if (keysDict.currKey === '$') return;
-    // COMMT: TODO: send data
-    if (keysDict.currKey === 'Enter') return;
-    // COMMT: TODO: send space
-
-    // console.log(`currKey: `, currKey);
-
-    if (currKey.key?.length === 0) {
-      setClickedKey({key:keysDict[currKey.key]});
-    } else {
-
-      // COMMT: Auto mode
-      currKey.key?.split('')?.forEach((currLetter:string) => {
-        let newVal = ' '; // COMMT: adds space, TODO: find better way
-        // COMMT: key ref instead of key
-        if (typeof(keysDict[currLetter]) === 'string') {
-          newVal = keysDict[currLetter];
-        };
-
-        setClickedKey({ key: newVal });
-      });
-    };
-    return;
-
-  };
-
   function handleCheckbox(e:ChangeEvent<HTMLInputElement>) {
     const value = e?.target?.checked;
     // setIsAuto(value);
@@ -285,23 +255,17 @@ const Chat: FC<IChatProps> = (props) => {
         <div className={styles['chat-container']}>
           <Messages messageList={messageList} onNewMessage={onNewMessage} />
 
-          <div >
-            <div>
-              {isTypingText ? <p>{typingUser || 'A user'} is typing...</p> : ''}
-            </div>
+          <div>
+            <>
+              {isTypingText && <p>{typingUser || 'A user'} is typing...</p>}
+            </>
             <InputBtn
               clickedKey={clickedKey}
               onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
               setOnTyping={setOnTyping}
             />
             <Cursor />
-            {
-              isKeyboard && (
-                <LinkMock
-                  onClickKey={handleClickKey}
-                />
-              )
-            }
+            { isKeyboard && <LinkMock /> }
           </div>
 
         </div>
