@@ -46,8 +46,10 @@ io.on(ESocketEventsDict['connect'], (socket) => {
 
       try {
         const { error, user } = addUser({ id: socket?.id, name, room });
+        // console.log(`User data: `, getUser(socket.id));
 
         if (error) return callback('error', error);
+        if (!user?.room) return;
 
         // COMMT: Important code
         socket.join(user?.room);
@@ -134,12 +136,19 @@ io.on(ESocketEventsDict['connect'], (socket) => {
   // COMMT: Disconnect user on leaving / refreshing
   socket.on(
     ESocketEventsDict['disconnect'],
-    (user:IUser ) => {
-      socket
-        .to(user?.room)
-        .emit(`User ${user?.name} has left`)
-    },
-    removeUser(socket.id)
+      (reason:string) => {
+        const user = getUser(socket.id);
+        socket
+          .to(user?.room)
+          .emit(ESocketEventsDict['serverMessage'],{
+            id: uuid(6),
+            from: 'admin',
+            username: 'admin',
+            messageText: `User ${user?.name} has left the chat.`,
+          });
+        removeUser(socket.id);
+        // console.log(`User ${user?.name} in ${user?.room} has left the chat.`);
+      },
   );
 
 });

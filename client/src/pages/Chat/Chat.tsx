@@ -12,6 +12,7 @@ import { TStateCount, TFrom, ESocketEventsDict, IClientMessageData } from '../..
 import styles from './Chat.module.scss';
 import { RootState } from '../../store/store';
 
+type THandleServerMessageEvent = (() => SetStateAction<number>) | undefined;
 interface IChatProps {
   socket: Socket;
 }
@@ -41,27 +42,14 @@ const Chat: FC<IChatProps> = (props) => {
 
   // COMMT: Socket event - Join Room
   useEffect(() => {
-
     if (firstRender.current.joinRoom) {
       firstRender.current.joinRoom = false;
     } else {
-
-      props.socket.emit(
-        ESocketEventsDict['joinRoom'],
-        {name:name.current, room},
-        (type: 'name'|'error', callbackMessage: string) => {
-          if (type === 'name' && callbackMessage === name.current) {
-            setIsConnected(true);
-          };
-          if (type === 'error') console.error('Error: ', callbackMessage);
-        }
-      );
+      emitJoinRoom();
 
     };
-
-
     return () => {
-      // handleJoinRoom()
+      // emitJoinRoom()
       props.socket?.off(ESocketEventsDict['joinRoom']);
     };
 
@@ -72,38 +60,12 @@ const Chat: FC<IChatProps> = (props) => {
     setIsTyping(true);
   }, [onTyping]);
 
-  // useEffect(() => {
-  //   console.log(`isTyping: `, isTyping);
-  // }, [isTyping]);
-
   // COMMT: Socket Event - send - typing
   useEffect(() => {
     if (!isConnected) return;
 
-    function disableTyping() {
-      props.socket.emit(
-        ESocketEventsDict['isTyping'],
-        {name:name.current, room, isTyping:false}
-      );
-      setIsTypingText(false);
-
-    };
-
-    if (!isTyping) {
-      // COMMT: setIsTyping true
-      setIsTyping(prev => !prev);
-      props.socket.emit(
-        ESocketEventsDict['isTyping'],
-        {name:name.current, room, isTyping:true}
-      );
-      timeout.current = setTimeout(disableTyping, 2000);
-
-    } else {
-      // COMMT: setIsTyping false
-      setIsTyping(prev => !prev);
-      clearTimeout(timeout.current as NodeJS.Timeout);
-
-    };
+    disableTyping();
+    emitIsTyping();
 
     return () => {
       props.socket?.off(ESocketEventsDict['isTyping']);
@@ -118,16 +80,7 @@ const Chat: FC<IChatProps> = (props) => {
     if typing username != currUsername istyping = true
   */
   useEffect(() => {
-
-    props.socket.on(
-      ESocketEventsDict['isTyping'],
-      (name:string, isNewTyping:boolean) => {
-        setIsTyping(isNewTyping);
-        setIsTypingText(isNewTyping);
-        setTypingUser(name);
-      }
-
-    );
+    onIsTyping();
 
     return () => {
       props.socket?.off(ESocketEventsDict['isTyping']);
@@ -144,7 +97,6 @@ const Chat: FC<IChatProps> = (props) => {
       messageText : ''
     };
 
-    type THandleServerMessageEvent = (() => SetStateAction<number>) | undefined;
     const handleServerMessageEvent = ():THandleServerMessageEvent => {
       handleAddMessageToList(messageDataHolder.from, messageDataHolder);
       return;
@@ -162,10 +114,59 @@ const Chat: FC<IChatProps> = (props) => {
 
   }, []);
 
-  useEffect(() => {
-    // console.log(`clickedKey Chat: `, clickedKey);
+  function emitJoinRoom() {
+    props.socket.emit(
+      ESocketEventsDict['joinRoom'],
+      {name:name.current, room},
+      (type: 'name'|'error', callbackMessage: string) => {
+        if (type === 'name' && callbackMessage === name.current) {
+          setIsConnected(true);
+        };
+        if (type === 'error') console.error('Error: ', callbackMessage);
+      }
+    );
 
-  }, [clickedKey]);
+  };
+
+  function disableTyping() {
+    props.socket.emit(
+      ESocketEventsDict['isTyping'],
+      {name:name.current, room, isTyping:false}
+    );
+    setIsTypingText(false);
+
+  };
+
+  function emitIsTyping() {
+    if (!isTyping) {
+      // COMMT: setIsTyping true
+      setIsTyping(prev => !prev);
+      props.socket.emit(
+        ESocketEventsDict['isTyping'],
+        {name:name.current, room, isTyping:true}
+      );
+      timeout.current = setTimeout(disableTyping, 2000);
+
+    } else {
+      // COMMT: setIsTyping false
+      setIsTyping(prev => !prev);
+      clearTimeout(timeout.current as NodeJS.Timeout);
+
+    };
+  };
+
+  function onIsTyping() {
+    props.socket.on(
+      ESocketEventsDict['isTyping'],
+      (name:string, isNewTyping:boolean) => {
+        setIsTyping(isNewTyping);
+        setIsTypingText(isNewTyping);
+        setTypingUser(name);
+      }
+
+    );
+
+  };
 
   function getMessageData(from:TFrom, data:string|IClientMessageData):IClientMessageData {
 
@@ -181,7 +182,7 @@ const Chat: FC<IChatProps> = (props) => {
       messageData = {
         id: uuid(6),
         from: from,
-        username: 'Sh',
+        username: name.current,
         messageText: data
 
       };
@@ -209,7 +210,7 @@ const Chat: FC<IChatProps> = (props) => {
 
     if (newMessageData.messageText === '') return;
 
-    // console.log('newMessageData', newMessageData);
+    console.log('newMessageData', newMessageData);
 
     const dataNotEmpty = Object.keys(newMessageData)?.length;
 
