@@ -19,7 +19,7 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
 
     // console.log(`2. KB clicked: `, innerText);
     return dispatch(
-      setClickedKeyRdx({key: keysDict[innerText]})
+      setClickedKeyRdx({ key: keysDict[innerText] })
     );
   };
 

@@ -2,9 +2,9 @@
  *  Socket.IO Server
  *
  *  Basic:
- *    Client message → Server → Server message → All clients
+ *    Client connected to Server → Client message → Server → Server message → All other clients in that room
  *
- *  Events Added: joinRoom, clientMessage
+ *  Events added: joinRoom, clientMessage, serverMessage, isTyping, disconnect
  *
 */
 

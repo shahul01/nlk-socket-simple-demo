@@ -92,7 +92,7 @@ const LinkMock: FC = (props) => {
           };
 
           dispatch(setKeyAxes(newKeyAxes));
-          dispatch(setClickedKeyRdx({key:currKey}));
+          dispatch(setClickedKeyRdx({ key:currKey }));
 
           return;
         };
