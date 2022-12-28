@@ -1,5 +1,6 @@
 import { io, Socket } from 'socket.io-client';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Nav from './components/Nav/Nav';
 import Home from './pages/Home/Home';
 import Chat from './pages/Chat/Chat';
 import './styles/App.scss';
@@ -12,6 +13,7 @@ const App = () => {
   return (
     <>
       <BrowserRouter>
+        <Nav />
         <Routes>
           <Route
             path="/"
