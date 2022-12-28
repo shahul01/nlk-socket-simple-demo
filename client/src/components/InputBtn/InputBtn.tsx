@@ -5,7 +5,6 @@ import { TStateCount } from '../../types/global';
 import styles from './InputBtn.module.scss';
 
 interface IInputBtnProps {
-  clickedKey: {key:string};
   onNewMessage: (e:string) => void;
   setOnTyping: React.Dispatch<React.SetStateAction<TStateCount>>;
 }

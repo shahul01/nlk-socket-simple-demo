@@ -8,9 +8,9 @@ import LinkMock from '../../components/LinkMock/LinkMock';
 // import Keyboard from '../../components/Keyboard/Keyboard';
 import { setIsAuto } from '../../components/LinkMock/LinkMockSlice';
 import { uuid } from '../../helpers/misc';
+import { RootState } from '../../store/store';
 import { TStateCount, TFrom, ESocketEventsDict, IClientMessageData } from '../../types/global';
 import styles from './Chat.module.scss';
-import { RootState } from '../../store/store';
 
 type THandleServerMessageEvent = (() => SetStateAction<number>) | undefined;
 interface IChatProps {
@@ -33,11 +33,10 @@ const Chat: FC<IChatProps> = (props) => {
   const [ isTyping, setIsTyping ] = useState(false);
   const [ isTypingText, setIsTypingText ] = useState(false);
   const [ typingUser, setTypingUser ] = useState('');
+  // const users:IUser[] = [];
   const name = useRef(`user-${uuid(3)}`);
   const room = 'default';
-  // const users:IUser[] = [];
   const isKeyboard = true;
-  const [ clickedKey, setClickedKey ] = useState({key: ''});
 
 
   // COMMT: Socket event - Join Room
@@ -260,7 +259,6 @@ const Chat: FC<IChatProps> = (props) => {
               {isTypingText && <p>{typingUser || 'A user'} is typing...</p>}
             </>
             <InputBtn
-              clickedKey={clickedKey}
               onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
               setOnTyping={setOnTyping}
             />
