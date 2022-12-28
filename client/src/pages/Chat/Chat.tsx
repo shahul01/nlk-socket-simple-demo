@@ -241,32 +241,30 @@ const Chat: FC<IChatProps> = (props) => {
 
 
   return (
-    <div>
-      <div className={styles['checkbox-chat-container']}>
+    <div className={styles['chat-container']}>
 
-        <div className={styles['checkbox-text']}>
-          <input type="checkbox" onChange={handleCheckbox} />
-          <span>Enable Automatic Keyboard</span>
-        </div>
+      <div className={styles['checkbox-text']}>
+        <input type="checkbox" onChange={handleCheckbox} />
+        <span>Enable Automatic Keyboard</span>
+      </div>
 
-        <div className={styles['chat-container']}>
-          <Messages messageList={messageList} onNewMessage={onNewMessage} />
+      <div className={styles['chatbox-container']}>
+        <Messages messageList={messageList} onNewMessage={onNewMessage} />
 
-          <div>
-            <>
-              {isTypingText && <p>{typingUser || 'A user'} is typing...</p>}
-            </>
-            <InputBtn
-              onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
-              setOnTyping={setOnTyping}
-            />
-            <Cursor />
-            { isKeyboard && <LinkMock /> }
-          </div>
-
+        <div>
+          <>
+            {isTypingText && <p>{typingUser || 'A user'} is typing...</p>}
+          </>
+          <InputBtn
+            onNewMessage={(messageText)=>handleAddMessageToList('self', messageText)}
+            setOnTyping={setOnTyping}
+          />
+          <Cursor />
+          { isKeyboard && <LinkMock /> }
         </div>
 
       </div>
+
     </div>
   )
 };

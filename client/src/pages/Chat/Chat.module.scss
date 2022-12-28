@@ -3,34 +3,39 @@
 // COMMT: Go to client/src/styles/App.scss to see more sass codes...
 
 .chat-container {
-  // COMMT: using direct function w/ dynamic params
-  // @include use-flex('flex_left_start');
+  margin-top: 20px;
 
-  // COMMT: using tailwind @apply on sass loop + mixin;
-  @apply flex_space-between_start; // tailwind + sass
-  flex-direction: column; // raw css
+  .checkbox-text {
+    margin: 0 1rem 1rem 1rem;
+    @apply flex_left_center;
+    gap: 1rem;
+  }
 
-  @apply mx-4;
-  height: 80vh;
-  max-height: 34rem;
-  width: $chat-width;
-  max-width: $chat-max-width;
-  @apply border border-sky-800;
-}
+  input[type="checkbox"] {
+    height: 1.3rem;
+    width: 1.3rem;
+    cursor: pointer;
+    outline: none;
+  }
 
-.checkbox-text {
-  margin: 0 1rem 1rem 1rem;
-  @apply flex_left_center;
-  gap: 1rem;
-}
+  span.checkbox-text {
+    user-select: none;
+  }
 
-input[type="checkbox"] {
-  height: 1.3rem;
-  width: 1.3rem;
-  cursor: pointer;
-  outline: none;
-}
+  .chatbox-container {
+    // COMMT: using direct function w/ dynamic params
+    // @include use-flex('flex_left_start');
 
-.checkbox-text span {
-  user-select: none;
+    // COMMT: using tailwind @apply on sass loop + mixin;
+    @apply flex_space-between_start; // tailwind + sass
+    flex-direction: column; // raw css
+
+    @apply mx-4;
+    height: 80vh;
+    max-height: 34rem;
+    width: $chat-width;
+    max-width: $chat-max-width;
+    @apply border border-sky-800;
+  }
+
 }
