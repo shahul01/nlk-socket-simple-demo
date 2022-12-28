@@ -1,4 +1,29 @@
+@use '../../styles/App.scss' as *;
 
-.curr-page {
-  text-decoration: underline;
+.nav-container {
+  border-bottom: 1px solid hsl(0deg, 0, 80%);
+  margin: 0rem 0.25rem 1.5rem;
+
+  .content {
+    @apply flex_space-between_center;
+    margin: 1rem 0.75rem;
+    user-select: none;
+  }
+
+  h1.curr-page-title {
+    @apply text-xl;
+    @apply font-bold;
+  }
+
+  .links {
+    @apply flex;
+    gap: 1rem;
+    // min-width: 40vw;
+  }
+
+  .curr-page {
+    text-decoration: underline;
+  }
+
 }
+

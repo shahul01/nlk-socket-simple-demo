@@ -1,42 +1,40 @@
 import { NavLink, useLocation } from 'react-router-dom';
 import { FC, useEffect, useState } from 'react';
 import { pageDict } from '../../helpers/pageRoutes';
+import { capitalizeFirstLetter } from '../../helpers/misc';
 import styles from './Nav.module.scss';
 
 interface INavProps {
 }
 
 const Nav: FC<INavProps> = (props) => {
-
-
-  const location = useLocation();
+  const { pathname } = useLocation();
   const [ currPage, setCurrPage ] = useState('');
-  const [ isCurrPage, setIsCurrPage ] = useState({});
 
   useEffect(() => {
     updateCurrPage();
 
-  }, [location]);
+  }, [pathname]);
 
   function updateCurrPage() {
-    const newPage = pageDict[location?.pathname];
-    if (!newPage && typeof(newPage) !== 'string') return;
-    const newPageCapitalized = newPage?.charAt(0)?.toUpperCase() + newPage.slice(1, newPage.length);
-    console.log(`location: `, location, newPage, newPageCapitalized.toLowerCase());
+    const newPage = pageDict[pathname];
+    if (!newPage) return;
+    const newPageCapitalized = capitalizeFirstLetter(newPage);
 
     setCurrPage(newPageCapitalized);
   };
 
+
   return (
     <div className={styles['nav-container']}>
       <div className={styles['content']}>
-        <h1 className='text-3xl font-bold'>
+        <h1 className={styles['curr-page-title']}>
           {currPage}
         </h1>
 
         <div className={styles['links']}>
           <NavLink
-            className={location.pathname === '/' && (
+            className={pathname === '/' && (
               styles['curr-page']
             )}
             to='/'
@@ -44,7 +42,7 @@ const Nav: FC<INavProps> = (props) => {
             Home
           </NavLink>
           <NavLink
-            className={location.pathname === '/chat' && (
+            className={pathname === '/chat' && (
               styles['curr-page']
             )}
             to='/chat'
@@ -55,7 +53,6 @@ const Nav: FC<INavProps> = (props) => {
         </div>
 
       </div>
-      <br /><hr /><br />
 
     </div>
   )
