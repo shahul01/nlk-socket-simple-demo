@@ -242,8 +242,6 @@ const Chat: FC<IChatProps> = (props) => {
 
   return (
     <div>
-      <p>Chat</p>
-      <br /><hr /><br />
       <div className={styles['checkbox-chat-container']}>
 
         <div className={styles['checkbox-text']}>
