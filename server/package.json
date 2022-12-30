@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "nodemon",
-    "start": "node index.ts",
+    "start": "ts-node index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
