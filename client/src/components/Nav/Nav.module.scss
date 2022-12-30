@@ -11,19 +11,24 @@
   }
 
   h1.curr-page-title {
-    @apply text-xl;
+    font-size: 1.85rem;
+    line-height: 1.75rem;
     @apply font-bold;
   }
 
   .links {
     @apply flex;
     gap: 1rem;
-    // min-width: 40vw;
+    font-size: 1.3rem;
+  }
+
+  .links :not(.curr-page):hover {
+    filter: opacity(0.87);
   }
 
   .curr-page {
+    filter: opacity(0.87);
     text-decoration: underline;
   }
 
 }
-

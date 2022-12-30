@@ -31,7 +31,9 @@ const Keyboard: FC<IKeyboardProps> = (props) => {
           <Fragment key={currKey} >
             <div
               ref={(ref:HTMLDivElement) => props.kbRef(ref)}
-              className={`button ripple ${styles['key']}`}
+              className={
+                `button ripple ${styles['key']} ${currKey=='Space' ? styles['space'] : ''}`
+              }
               aria-hidden={true}
               onClick={handleClick}
             >
