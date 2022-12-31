@@ -1,7 +1,7 @@
 import { IUser } from "assets/types/global";
 
+const userTemplate:IUser = { id: '', name: '', room: '' };
 const users: IUser[] = [];
-
 
 export const addUser = ({ id, name, room }: IUser) => {
   name = name?.trim().toLowerCase();
@@ -25,8 +25,8 @@ export const removeUser = (socketId:string) => {
   if (idx !== -1) return users.splice(idx, 1)?.[0];
 };
 
-export const getUser = (id:string):IUser => users.filter(currUser => currUser.id === id)?.[0];
+export const getUser = (id:string):IUser => users.find(currUser => currUser?.id === id) || userTemplate;
 
-export const getUsersInRoom = (room:string) => users.filter(currUser => currUser.room === room);
+export const getUsersInRoom = (room:string):IUser[] => users.filter(currUser => currUser.room === room) || [userTemplate];
 
 module.exports = { addUser, removeUser, getUser, getUsersInRoom };

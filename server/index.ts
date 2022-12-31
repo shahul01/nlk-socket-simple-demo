@@ -111,21 +111,23 @@ io.on(ESocketEventsDict['connect'], (socket) => {
           username: data?.username,
           messageText: data?.messageText
         };
-
-        const user:IUser = getUser(socket.id)
-
-        socket
-        .to(user?.room)
-        .emit(
-          ESocketEventsDict['serverMessage'],
-          serverMessageData
-        );
-
-        console.log(`user: `, user);
-        console.log(`user?.room: `, user?.room);
         console.log(`serverMessageData: `, serverMessageData);
 
-        callback(null);
+        const user:IUser = getUser(socket.id);
+        console.log(`user: `, user);
+
+        if (!user?.room) {
+          return callback('User not found in room.');
+        } else {
+          callback(null);
+        };
+
+        socket
+          .to(user?.room)
+          .emit(
+            ESocketEventsDict['serverMessage'],
+            serverMessageData
+          );
 
       } catch (err) {
         console.error(`Error: `, err);
