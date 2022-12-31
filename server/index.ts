@@ -10,6 +10,7 @@
 
 
 // COMMT: Imports
+import * as dotenv from 'dotenv';
 import cors from 'cors';
 import { Server } from 'socket.io';
 import express from 'express';
@@ -21,11 +22,13 @@ import { consoleLine, uuid } from './helpers/misc';
 import { ESocketEventsDict, IUser, IServerMessageData, IIsTyping } from './assets/types/global';
 
 // COMMT: Setup
+dotenv.config();
+const CLIENT_URL = process.env.CLIENT_URL;
 const app = express();
 const server = http.createServer(app);
 const io  = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: CLIENT_URL,
     // origin: "*",
     methods: ["GET", "POST"]
   }

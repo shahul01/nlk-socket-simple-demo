@@ -5,7 +5,8 @@ import Home from './pages/Home/Home';
 import Chat from './pages/Chat/Chat';
 import './styles/App.scss';
 
-const port = 'http://localhost:8000';
+const SERVER_URL = process.env.REACT_APP_SERVER_URL || 'http://localhost:8000';
+const port = SERVER_URL;
 const socket: Socket = io(port);
 
 const App = () => {
