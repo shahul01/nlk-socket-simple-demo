@@ -30,13 +30,13 @@ const LinkMock: FC = (props) => {
   // const [ allKey, setAllKey ] = useState({current:{}});
 
   useEffect(() => {
-    if (firstRender.current.keyClickCount) {
-      firstRender.current.keyClickCount = false;
-    } else {
+    // if (firstRender.current.keyClickCount) {
+    //   firstRender.current.keyClickCount = false;
+    // } else {
       // isContinue.current = true;
       activateLinkMock();
 
-    };
+    // };
   }, [isAuto, newKBRef, keyClickCount]);
 
 

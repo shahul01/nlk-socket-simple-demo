@@ -121,8 +121,9 @@ io.on(ESocketEventsDict['connect'], (socket) => {
           serverMessageData
         );
 
-        console.log(`serverMessageData: `, serverMessageData);
+        console.log(`user: `, user);
         console.log(`user?.room: `, user?.room);
+        console.log(`serverMessageData: `, serverMessageData);
 
         callback(null);
 

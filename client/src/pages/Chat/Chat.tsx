@@ -41,12 +41,12 @@ const Chat: FC<IChatProps> = (props) => {
 
   // COMMT: Socket event - Join Room
   useEffect(() => {
-    if (firstRender.current.joinRoom) {
-      firstRender.current.joinRoom = false;
-    } else {
+    // if (firstRender.current.joinRoom) {
+    //   firstRender.current.joinRoom = false;
+    // } else {
       emitJoinRoom();
 
-    };
+    // };
     return () => {
       // emitJoinRoom()
       props.socket?.off(ESocketEventsDict['joinRoom']);
