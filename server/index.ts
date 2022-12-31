@@ -23,15 +23,14 @@ import { ESocketEventsDict, IUser, IServerMessageData, IIsTyping } from './asset
 
 // COMMT: Setup
 dotenv.config();
-const CLIENT_URL = process.env?.CLIENT_URL || 'http://localhost:3000';
-console.log(`CLIENT_URL: `, CLIENT_URL);
+// const CLIENT_URL = process.env?.CLIENT_URL || 'http://localhost:3000';
 const app = express();
 const server = http.createServer(app);
 const io  = new Server(server, {
   cors: {
-    origin: CLIENT_URL,
-    // origin: "*",
-    methods: ["GET", "POST"]
+    // origin: CLIENT_URL,
+    origin: "*",
+    // methods: ["GET", "POST"]
   }
 });
 const port = process.env?.PORT || 8000;
@@ -50,7 +49,7 @@ io.on(ESocketEventsDict['connect'], (socket) => {
 
       try {
         const { error, user } = addUser({ id: socket?.id, name, room });
-        // console.log(`User data: `, getUser(socket.id));
+        console.log(`User data: `, getUser(socket.id));
 
         if (error) return callback('error', error);
         if (!user?.room) return callback('error', `No room: ${room}`);
@@ -89,7 +88,6 @@ io.on(ESocketEventsDict['connect'], (socket) => {
   socket.on(
     ESocketEventsDict['isTyping'],
     ({name,room,isTyping}: IIsTyping) => {
-
       socket
         .to(room)
         .emit(
@@ -124,6 +122,7 @@ io.on(ESocketEventsDict['connect'], (socket) => {
         );
 
         console.log(`serverMessageData: `, serverMessageData);
+        console.log(`user?.room: `, user?.room);
 
         callback(null);
 
