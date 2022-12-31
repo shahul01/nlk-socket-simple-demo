@@ -23,7 +23,8 @@ import { ESocketEventsDict, IUser, IServerMessageData, IIsTyping } from './asset
 
 // COMMT: Setup
 dotenv.config();
-const CLIENT_URL = process.env.CLIENT_URL;
+const CLIENT_URL = process.env?.CLIENT_URL || 'http://localhost:3000';
+console.log(`CLIENT_URL: `, CLIENT_URL);
 const app = express();
 const server = http.createServer(app);
 const io  = new Server(server, {
@@ -52,7 +53,7 @@ io.on(ESocketEventsDict['connect'], (socket) => {
         // console.log(`User data: `, getUser(socket.id));
 
         if (error) return callback('error', error);
-        if (!user?.room) return;
+        if (!user?.room) return callback('error', `No room: ${room}`);
 
         // COMMT: Important code
         socket.join(user?.room);
@@ -78,7 +79,7 @@ io.on(ESocketEventsDict['connect'], (socket) => {
 
       } catch (err) {
         console.error(`Error: `, err);
-        callback('error', JSON?.stringify(err));
+        callback('error', JSON.stringify(err));
 
       }
     }
@@ -116,7 +117,7 @@ io.on(ESocketEventsDict['connect'], (socket) => {
         const user:IUser = getUser(socket.id)
 
         socket
-        .to(user.room)
+        .to(user?.room)
         .emit(
           ESocketEventsDict['serverMessage'],
           serverMessageData
@@ -128,7 +129,7 @@ io.on(ESocketEventsDict['connect'], (socket) => {
 
       } catch (err) {
         console.error(`Error: `, err);
-        callback(JSON?.stringify(err));
+        callback(JSON.stringify(err));
 
       };
 
