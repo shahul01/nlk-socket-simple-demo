@@ -28,8 +28,6 @@
     //   "@types": ["src/types"],
     // }
   },
-  "include": [
-    "src"
-  ],
+  "include": ["src"],
   // "extends": "./tsconfig.paths.json"
 }

@@ -30,6 +30,12 @@
   button {
     @include input-btn;
     width: 100%;
+
+    img.send-icon {
+      height: 1.3rem;
+      width: 100%;
+    }
   }
+
 
 }

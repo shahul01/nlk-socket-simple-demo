@@ -2,6 +2,7 @@ import { ChangeEvent, FC, useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/store';
 import { TStateCount } from '../../types/global';
+import ArrowRightSend from '../../assets/icons/svg/arrowRightSend.svg';
 import styles from './InputBtn.module.scss';
 
 interface IInputBtnProps {
@@ -52,7 +53,12 @@ const InputBtn: FC<IInputBtnProps> = (props) => {
         className='ripple'
         onClick={handleSubmit}
       >
-        ⮞
+        <img
+          className={styles['send-icon']}
+          src={ArrowRightSend}
+          alt='Send Icon'
+        />
+
       </button>
     </div>
   )

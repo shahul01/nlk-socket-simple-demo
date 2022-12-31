@@ -34,17 +34,17 @@ const Nav: FC<INavProps> = (props) => {
 
         <div className={styles['links']}>
           <NavLink
-            className={pathname === '/' && (
+            className={pathname === '/' ? (
               styles['curr-page']
-            )}
+            ) : ''}
             to='/'
           >
             Home
           </NavLink>
           <NavLink
-            className={pathname === '/chat' && (
+            className={pathname === '/chat' ? (
               styles['curr-page']
-            )}
+            ) : ''}
             to='/chat'
           >
             Chat
