@@ -1,0 +1,19 @@
+@use '../../styles/App.scss' as *;
+
+.home-container {
+  @apply mx-7;
+  @apply flex_center_center;
+  height: 40vh;
+  font-size: 1.6rem;
+
+  .my-github-link {
+    @apply flex;
+    gap: 0.5rem;
+
+    a {
+      text-decoration: underline;
+    }
+
+  }
+
+}

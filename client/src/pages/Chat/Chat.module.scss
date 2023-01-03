@@ -3,10 +3,10 @@
 // COMMT: Go to client/src/styles/App.scss to see more sass codes...
 
 .chat-container {
-  margin-top: 20px;
+  @apply mx-7;
 
   .checkbox-text {
-    margin: 0 1rem 1rem 1rem;
+    margin-bottom: 1rem;
     @apply flex_left_center;
     gap: 1rem;
   }
@@ -30,7 +30,6 @@
     @apply flex_space-between_start; // tailwind + sass
     flex-direction: column; // raw css
 
-    @apply mx-4;
     height: 80vh;
     max-height: 34rem;
     width: $chat-width;

@@ -152,8 +152,11 @@ io.on(ESocketEventsDict['connect'], (socket) => {
             username: 'admin',
             messageText: `User ${user?.name} has left the chat.`,
           });
-        console.log(`Disconnected: ${socket.id}. ${user}`);
+        console.log(`Disconnected: ${socket.id}. ${JSON.stringify(user)}`);
         console.log(`reason: `, reason);
+        console.log(consoleLine);
+        console.log(consoleLine);
+
         removeUser(socket.id);
       },
   );

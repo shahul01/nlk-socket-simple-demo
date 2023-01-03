@@ -1,12 +1,20 @@
-import { Link } from 'react-router-dom';
-import React from 'react';
+import {FC, useState, useEffect} from 'react';
+import styles from './Home.module.scss';
 
-const Home = () => {
+const Home:FC = () => {
   return (
-    <div>
-      {/* <Link to="/chat" className="underline text-violet-700">
-        Go to Chat
-      </Link> */}
+    <div className={styles['home-container']}>
+
+      <div className={styles['my-github-link']}>
+        Created by
+        <a
+          href='https://github.com/shahul01'
+          target='_blank'
+          rel='noreferrer'
+        >
+          shahul01
+        </a>
+      </div>
 
     </div>
   )
