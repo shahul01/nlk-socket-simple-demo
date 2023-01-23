@@ -12,9 +12,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "types": [
-      "Node"
-    ],
+    "types": ["node"],
   },
   "exclude": [
     "node_modules",
