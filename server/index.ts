@@ -154,8 +154,8 @@ io.on(ESocketEventsDict['connect'], (socket) => {
           });
         console.log(`Disconnected: ${socket.id}. ${JSON.stringify(user)}`);
         console.log(`reason: `, reason);
-        console.log(consoleLine);
-        console.log(consoleLine);
+        console.log('---------------------------');
+        console.log('---------------------------');
 
         removeUser(socket.id);
       },
