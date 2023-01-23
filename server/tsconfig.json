@@ -4,6 +4,7 @@
     "target": "es5",
     "module": "commonjs",
     "strict": true,
+    "outDir": "./build",
     // "noUnusedLocals": true,
     // "noUnusedParameters": true,
     // "noImplicitReturns": true,
